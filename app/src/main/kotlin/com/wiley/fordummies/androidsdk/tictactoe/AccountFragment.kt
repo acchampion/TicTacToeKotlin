@@ -1,0 +1,78 @@
+package com.wiley.fordummies.androidsdk.tictactoe
+
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+
+/**
+ * Fragment for user account creation.
+ *
+ * Created by adamcchampion on 2017/08/05.
+ */
+@SuppressWarnings("LogNotTimber")
+class AccountFragment : Fragment(), View.OnClickListener {
+    private lateinit var mEtUsername: EditText
+    private lateinit var mEtPassword: EditText
+    private lateinit var mEtConfirm: EditText
+
+    private val TAG = javaClass.simpleName
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_account, container, false)
+
+        mEtUsername = v.findViewById(R.id.username)
+        mEtPassword = v.findViewById(R.id.password)
+        mEtConfirm = v.findViewById(R.id.password_confirm)
+        val btnAdd: Button = v.findViewById(R.id.done_button)
+        btnAdd.setOnClickListener(this)
+        val btnCancel: Button = v.findViewById(R.id.cancel_button)
+        btnCancel.setOnClickListener(this)
+
+        return v
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            subtitle = resources.getString(R.string.account)
+        }
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.done_button -> createAccount()
+            R.id.cancel_button -> {
+                mEtUsername.setText("")
+                mEtPassword.setText("")
+                mEtConfirm.setText("")
+            }
+        }
+    }
+
+    private fun createAccount() {
+        val username = mEtUsername.text.toString()
+        val password = mEtPassword.text.toString()
+        val confirm = mEtConfirm.text.toString()
+        if (password == confirm && username != "" && password != "" && confirm != "") {
+            val singleton = AccountSingleton.get(activity?.applicationContext)
+            val account = Account(username, password)
+            singleton.addAccount(account)
+            Toast.makeText(activity?.applicationContext, "New record inserted", Toast.LENGTH_SHORT).show()
+        } else if (username == "" || password == "" || confirm == "") {
+            Toast.makeText(activity?.applicationContext, "Missing entry", Toast.LENGTH_SHORT).show()
+        } else if (password != confirm) {
+            val manager = fragmentManager
+            val fragment = AccountErrorDialogFragment()
+            fragment.show(manager, "account_error")
+        } else {
+            Log.e(TAG, "An unknown account creation error occurred.")
+        }
+    }
+}
