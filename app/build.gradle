@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.1'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.wiley.fordummies.androidsdk.tictactoe"
         minSdkVersion 21

@@ -15,6 +15,7 @@ import android.widget.ImageView
 import java.io.File
 
 import android.app.Activity.RESULT_OK
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 
 /**
@@ -35,14 +36,20 @@ class ImagesFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_images, container, false)
 
-        imageView = v.findViewById(R.id.imageView) as ImageView
+        imageView = v.findViewById(R.id.imageView)
 
-        val buttonShow: Button = v.findViewById(R.id.buttonImageShow) as Button
+        val buttonShow: Button = v.findViewById(R.id.buttonImageShow)
         buttonShow.setOnClickListener(this)
-        val buttonCapture: Button = v.findViewById(R.id.buttonImageCapture) as Button
+        val buttonCapture: Button = v.findViewById(R.id.buttonImageCapture)
         buttonCapture.setOnClickListener(this)
-        val buttonExit: Button = v.findViewById(R.id.buttonImageExit) as Button
+        val buttonExit: Button = v.findViewById(R.id.buttonImageExit)
         buttonExit.setOnClickListener(this)
+
+        // Guard against no camera app (disable the "record" button).
+        val packageManager = activity?.packageManager
+        if (packageManager?.resolveActivity(mCaptureImageIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
+            buttonCapture.isEnabled = false
+        }
 
         return v
     }

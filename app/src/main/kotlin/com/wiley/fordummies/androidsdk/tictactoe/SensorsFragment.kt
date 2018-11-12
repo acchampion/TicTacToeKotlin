@@ -153,7 +153,7 @@ class SensorsFragment : Fragment(), SensorEventListener {
     private inner class SensorHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_sensor, parent, false)) {
         private lateinit var mSensor: Sensor
         private lateinit var mDescriptionStr: String
-        private val mSensorInfoTextView: TextView = itemView.findViewById<TextView>(R.id.sensor_data)
+        private val mSensorInfoTextView: TextView = itemView.findViewById(R.id.sensor_data)
 
         fun bind(sensor: Sensor) {
             mSensor = sensor

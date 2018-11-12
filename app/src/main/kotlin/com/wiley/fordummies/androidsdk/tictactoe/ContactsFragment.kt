@@ -47,7 +47,6 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mContactsListView = activity!!.findViewById(R.id.contact_list_view)
-
         requestContacts()
     }
 
