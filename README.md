@@ -1,5 +1,5 @@
-Tic-Tac-Toe for Android
-=======================
+Tic-Tac-Toe for Android (Kotlin)
+================================
 
 Play Tic-Tac-Toe on your Android smartphone! This app also demonstrates how to use various Android 
 programming techniques. It's the main reference for the course:
