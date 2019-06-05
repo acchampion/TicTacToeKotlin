@@ -5,9 +5,8 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.IBinder
-import android.util.Log
+import timber.log.Timber
 
-@SuppressWarnings("LogNotTimber")
 class MediaPlaybackService : Service() {
     internal lateinit var player: MediaPlayer
 
@@ -28,7 +27,7 @@ class MediaPlaybackService : Service() {
         if (extras != null) {
             val audioFileURIString = extras.getString("URIString")
             val audioFileURI = Uri.parse(audioFileURIString)
-            Log.d(TAG, "URI = " + audioFileURI.toString())
+            Timber.d(TAG, "URI = $audioFileURI")
             try {
                 player.reset()
                 player.setDataSource(this.applicationContext, audioFileURI)
@@ -39,7 +38,7 @@ class MediaPlaybackService : Service() {
             }
         }
 
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     override fun onDestroy() {

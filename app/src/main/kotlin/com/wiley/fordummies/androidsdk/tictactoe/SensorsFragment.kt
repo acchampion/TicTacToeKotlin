@@ -1,5 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
+import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -10,22 +11,18 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-import java.util.Hashtable
-
-import android.content.Context.SENSOR_SERVICE
+import timber.log.Timber
+import java.util.*
 
 /**
  * Fragment for viewing device sensors.
  *
  * Created by adamcchampion on 2017/08/14.
  */
-@SuppressWarnings("LogNotTimber")
 class SensorsFragment : Fragment(), SensorEventListener {
     private lateinit var mSensorRecyclerView: RecyclerView
     private lateinit var mAdapter: SensorAdapter
@@ -65,11 +62,11 @@ class SensorsFragment : Fragment(), SensorEventListener {
     }
 
     override fun onPause() {
-        Log.d(TAG, "Entering onPause")
+        Timber.d(TAG, "Entering onPause")
         super.onPause()
         // Stop updates when paused
         mSensorManager.unregisterListener(this)
-        Log.d(TAG, "Leaving onPause")
+        Timber.d(TAG, "Leaving onPause")
     }
 
 
@@ -115,15 +112,15 @@ class SensorsFragment : Fragment(), SensorEventListener {
             } // both distances are zero
 
         }
-        val sensorLogStr = "--- EVENT Raw Values ---\n" + sensorName + "\nDistance  Last= >" +
+        val sensorTimberStr = "--- EVENT Raw Values ---\n" + sensorName + "\nDistance  Last= >" +
                 distanceOfLastValue + "<\n" + "Distance  This= >" + distanceOfThisValue + "<\n" +
                 "Change = >" + change + "<\n" + "Percent = >" + percentageChange + "%\n" +
                 "Last value = " + lastValueString + "<\n" + sensorEventString
-        Log.d(TAG, sensorLogStr)
+        Timber.d(TAG, sensorTimberStr)
         if (lastValue == null || percentageChange > TOLERANCE) {
-            val percentLogStr = sensorName + "\n--- Event Changed --- \nChange = >" + change + "<\n" +
+            val percentTimberStr = sensorName + "\n--- Event Changed --- \nChange = >" + change + "<\n" +
                     "Percent = >" + percentageChange + "%\n" + sensorEventString
-            Log.d(TAG, percentLogStr)
+            Timber.d(TAG, percentTimberStr)
         }
     }
 

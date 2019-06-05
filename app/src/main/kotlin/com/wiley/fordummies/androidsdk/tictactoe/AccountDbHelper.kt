@@ -3,9 +3,8 @@ package com.wiley.fordummies.androidsdk.tictactoe
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-
 import com.wiley.fordummies.androidsdk.tictactoe.AccountDbSchema.AccountsTable
+import timber.log.Timber
 
 /**
  * Account database helper class.
@@ -14,9 +13,9 @@ import com.wiley.fordummies.androidsdk.tictactoe.AccountDbSchema.AccountsTable
  *
  * Created by adamcchampion on 2017/08/04.
  */
-@SuppressWarnings("LogNotTimber")
 class AccountDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
+    private val TAG = javaClass.simpleName
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + AccountsTable.NAME + "(" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -26,7 +25,7 @@ class AccountDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        Log.w("Example", "Example: upgrading database; dropping and recreating tables.")
+        Timber.w(TAG, "Example: upgrading database; dropping and recreating tables.")
         database.execSQL("DROP TABLE IF EXISTS " + AccountsTable.NAME)
         onCreate(database)
     }

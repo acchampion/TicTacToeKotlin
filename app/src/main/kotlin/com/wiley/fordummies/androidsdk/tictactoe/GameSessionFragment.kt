@@ -3,26 +3,23 @@ package com.wiley.fordummies.androidsdk.tictactoe
 import android.app.AlertDialog
 import android.app.KeyguardManager
 import android.content.Context
+import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.widget.TextView
-
-import java.util.Random
-
-import android.content.Context.KEYGUARD_SERVICE
 import android.view.*
+import android.widget.TextView
+import timber.log.Timber
+import java.util.*
 
 /**
  * Fragment where user plays Tic-Tac-Toe.
  *
  * Created by adamcchampion on 2017/08/19.
  */
-@SuppressWarnings("LogNotTimber")
 class GameSessionFragment : Fragment() {
 
     private lateinit var mBoard: Board
@@ -41,13 +38,13 @@ class GameSessionFragment : Fragment() {
 
     @Suppress("DEPRECATION")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "onCreateView()")
+        Timber.d(TAG, "onCreateView()")
         val v: View
         val rotation = activity?.windowManager?.defaultDisplay?.rotation
-        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-            v = inflater.inflate(R.layout.fragment_gamesession_land, container, false)
+        v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+            inflater.inflate(R.layout.fragment_gamesession_land, container, false)
         } else {
-            v = inflater.inflate(R.layout.fragment_game_session, container, false)
+            inflater.inflate(R.layout.fragment_game_session, container, false)
         }
 
         if (container != null) {
@@ -73,7 +70,7 @@ class GameSessionFragment : Fragment() {
     }
 
     private fun setupBoard(v: View) {
-        mBoard = v.findViewById<Board>(R.id.board)
+        mBoard = v.findViewById(R.id.board)
         val turnStatusView = v.findViewById<TextView>(R.id.gameInfo)
         val scoreView = v.findViewById<TextView>(R.id.scoreboard)
         mActiveGame = Game()
@@ -99,22 +96,22 @@ class GameSessionFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop()")
+        Timber.d(TAG, "onStop()")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(TAG, "onDestroyView()")
+        Timber.d(TAG, "onDestroyView()")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "onDestroy()")
+        Timber.d(TAG, "onDestroy()")
     }
 
 /*
     fun startSession() {
-        Log.d(TAG, "In startSession()")
+        Timber.d(TAG, "In startSession()")
         mScorePlayerOne = 0
         mScorePlayerTwo = 0
     }
@@ -141,7 +138,7 @@ class GameSessionFragment : Fragment() {
     }
 
     fun scheduleAndroidsTurn() {
-        Log.d(TAG, "Thread ID in scheduleAndroidsTurn:" + Thread.currentThread().id)
+        Timber.d(TAG, "Thread ID in scheduleAndroidsTurn:" + Thread.currentThread().id)
         mBoard.disableInput()
         if (!mTestMode) {
             val randomNumber = Random()
@@ -158,7 +155,7 @@ class GameSessionFragment : Fragment() {
     private fun androidTakesATurn() {
         val pickedX: Int
         val pickedY: Int
-        Log.d(TAG, "Thread ID in androidTakesATurn:" + Thread.currentThread().id)
+        Timber.d(TAG, "Thread ID in androidTakesATurn:" + Thread.currentThread().id)
 
         val gameGrid = mActiveGame.gameGrid
         val emptyBlocks = gameGrid.emptySquares
@@ -179,7 +176,7 @@ class GameSessionFragment : Fragment() {
     }
 
     fun humanTakesATurn(x: Int, y: Int) {/* human's turn */
-        Log.d(TAG, "Thread ID in humanTakesATurn:" + Thread.currentThread().id)
+        Timber.d(TAG, "Thread ID in humanTakesATurn:" + Thread.currentThread().id)
         val successfulPlay = mActiveGame.play(x, y)
         if (successfulPlay) {
             if (mGameView == null) {
@@ -226,7 +223,7 @@ class GameSessionFragment : Fragment() {
                 .setPositiveButton("Yes") { dialog, which -> run {
                     val inflater = LayoutInflater.from(activity)
                     if (mContainer != null) {
-                        Log.d(TAG, "Calling setupBoard() again")
+                        Timber.d(TAG, "Calling setupBoard() again")
 
                         mSavedInstanceState = Bundle()
                         onSaveInstanceState(mSavedInstanceState)
@@ -242,7 +239,7 @@ class GameSessionFragment : Fragment() {
                             }
                         }
                     } else {
-                        Log.d(TAG, "Could not restart game. mContainer or mSavedInstanceState were null")
+                        Timber.d(TAG, "Could not restart game. mContainer or mSavedInstanceState were null")
                     }
                     playNewGame()} }
                 .setNegativeButton("No") { dialog, which -> activity?.finish() }

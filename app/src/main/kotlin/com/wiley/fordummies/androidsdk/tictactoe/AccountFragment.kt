@@ -3,20 +3,19 @@ package com.wiley.fordummies.androidsdk.tictactoe
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import timber.log.Timber
 
 /**
  * Fragment for user account creation.
  *
  * Created by adamcchampion on 2017/08/05.
  */
-@SuppressWarnings("LogNotTimber")
 class AccountFragment : Fragment(), View.OnClickListener {
     private lateinit var mEtUsername: EditText
     private lateinit var mEtPassword: EditText
@@ -72,7 +71,7 @@ class AccountFragment : Fragment(), View.OnClickListener {
             val fragment = AccountErrorDialogFragment()
             fragment.show(manager, "account_error")
         } else {
-            Log.e(TAG, "An unknown account creation error occurred.")
+            Timber.e(TAG, "An unknown account creation error occurred.")
         }
     }
 }

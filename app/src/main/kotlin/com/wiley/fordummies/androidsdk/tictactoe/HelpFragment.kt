@@ -40,16 +40,10 @@ class HelpFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun hasNetworkConnection(): Boolean {
         val connectivityManager = activity?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        var networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-        val isWifiAvailable = networkInfo.isAvailable
-        val isWifiConnected = networkInfo.isConnected
-        networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-        val isMobileAvailable = networkInfo.isAvailable
-        val isMobileConnected = networkInfo.isConnected
-        return (isMobileAvailable && isMobileConnected) || (isWifiAvailable && isWifiConnected)
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting
     }
 
     private fun launchBrowser(url: String) {

@@ -2,12 +2,8 @@ package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.Paint.Cap
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -114,9 +110,8 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 
         var posX = 0
         var posY = 0
-        val action = event.action
 
-        when (action) {
+        when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 val x = event.x
                 val y = event.y

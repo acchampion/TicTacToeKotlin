@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +42,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Activity showing user's location on Mapbox Map.
@@ -56,7 +56,6 @@ import retrofit2.Response;
  *
  * Created by adamcchampion on 2017/08/17.
  */
-@SuppressWarnings("LogNotTimber")
 public class MapsActivity extends AppCompatActivity implements LocationEngineListener,
         PermissionsListener, View.OnClickListener {
     private final int ENABLE_GPS_REQUEST_CODE = 1;
@@ -138,7 +137,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
             }
         }
         catch (NullPointerException npe) {
-            Log.e(TAG, "Could not set subtitle");
+            Timber.e(TAG, "Could not set subtitle");
         }
     }
 
@@ -191,7 +190,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
     }
 
     private void requestLocation() {
-        Log.d(TAG, "requestLocation()");
+        Timber.d(TAG, "requestLocation()");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!hasLocationPermission()) {
                 int PERMISSION_REQUEST_LOCATION = 1;
@@ -269,9 +268,9 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                 public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
                     List<CarmenFeature> results = response.body().getFeatures();
                     if (results.size() > 0) {
-                        // Log the first results position.
+                        // Timber the first results position.
                         Position firstResultPos = results.get(0).asPosition();
-                        Log.d(TAG, "onResponse: " + firstResultPos.toString());
+                        Timber.d(TAG, "onResponse: " + firstResultPos.toString());
 
 
                         if (mMapboxMap != null) {
@@ -285,13 +284,13 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                         }
                     } else {
                         // No result for your request were found.
-                        Log.d(TAG, "onResponse: No result found");
+                        Timber.d(TAG, "onResponse: No result found");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
-                    Log.e(TAG, "Error receiving geocoding response");
+                    Timber.e(TAG, "Error receiving geocoding response");
                     throwable.printStackTrace();
                 }
             });
@@ -300,7 +299,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
-        Log.d(TAG, "onExplanationNeeded()");
+        Timber.d(TAG, "onExplanationNeeded()");
     }
 
     @Override
@@ -309,9 +308,9 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
             enableLocationPlugin();
         } else {
             //FragmentManager fragmentManager = getSupportFragmentManager();
-            //LocationDeniedDialogFragment deniedDialogFragment = new LocationDeniedDialogFragment();
-            //deniedDialogFragment.show(fragmentManager, "location_denied");
-            Log.e(TAG, "User denied permission to get location");
+            //LocationDeniedDiaTimberFragment deniedDiaTimberFragment = new LocationDeniedDiaTimberFragment();
+            //deniedDiaTimberFragment.show(fragmentManager, "location_denied");
+            Timber.e(TAG, "User denied permission to get location");
             Toast.makeText(getApplicationContext(), R.string.location_permission_denied, Toast.LENGTH_LONG).show();
             finish();
         }
@@ -359,9 +358,9 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                             if (response != null) {
                                 List<CarmenFeature> results = response.body().getFeatures();
                                 if (results != null && results.size() > 0) {
-                                    // Log the first results position.
+                                    // Timber the first results position.
                                     Position firstResultPos = results.get(0).asPosition();
-                                    Log.d(TAG, "onResponse: " + firstResultPos.toString());
+                                    Timber.d(TAG, "onResponse: " + firstResultPos.toString());
 
 
                                     if (mMapboxMap != null) {
@@ -375,7 +374,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                                     }
                                 } else {
                                     // No result for your request were found.
-                                    Log.d(TAG, "onResponse: No result found");
+                                    Timber.d(TAG, "onResponse: No result found");
                                     Toast.makeText(MapsActivity.this, "No results found.", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -383,14 +382,14 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
                         @Override
                         public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
-                            Log.e(TAG, "Error receiving geocoding response");
+                            Timber.e(TAG, "Error receiving geocoding response");
                             Toast.makeText(MapsActivity.this, "Geocoding error, please try again.",
                                     Toast.LENGTH_SHORT).show();
                             throwable.printStackTrace();
                         }
                     });
                 } catch (Exception e) {
-                    Log.e(TAG, "Could not locate this address");
+                    Timber.e(TAG, "Could not locate this address");
                     e.printStackTrace();
                 }
                 break;

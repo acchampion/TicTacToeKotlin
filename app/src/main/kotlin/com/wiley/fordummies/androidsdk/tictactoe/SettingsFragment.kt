@@ -1,11 +1,8 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.os.Bundle
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.PreferenceFragmentCompat
-import android.util.Log
-import com.wiley.fordummies.androidsdk.tictactoe.R
 
 /**
  * Fragment for adjusting app settings.

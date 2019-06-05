@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +12,13 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ProgressBar
+import timber.log.Timber
 
 /**
  * Fragment that shows WebView for Tic-Tac-Toe on Wikipedia.
  *
  * Created by adamcchampion on 2017/08/14.
  */
-@SuppressWarnings("LogNotTimber")
 class HelpWebViewFragment : Fragment(), View.OnClickListener {
     private lateinit var mUrl: String
     private lateinit var mProgressBar: ProgressBar
@@ -31,7 +30,7 @@ class HelpWebViewFragment : Fragment(), View.OnClickListener {
         val v = inflater.inflate(R.layout.fragment_help_webview, container, false)
 
         val helpInWebView = v.findViewById<WebView>(R.id.helpwithwebview)
-        mProgressBar = v.findViewById<ProgressBar>(R.id.webviewprogress)
+        mProgressBar = v.findViewById(R.id.webviewprogress)
         mProgressBar.apply {
             max = 100
         }
@@ -41,12 +40,11 @@ class HelpWebViewFragment : Fragment(), View.OnClickListener {
         val extras = activity?.intent?.extras
         if (extras != null) {
             mUrl = extras.getString(ARG_URI)
-            Log.d(TAG, "Loading URL " + mUrl)
+            Timber.d(TAG, "Loading URL $mUrl")
         }
         WebView.setWebContentsDebuggingEnabled(true)
         helpInWebView.settings.javaScriptEnabled = true
         helpInWebView.webViewClient = object : WebViewClient() {
-            @Suppress("OverridingDeprecatedMember")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 return false
             }

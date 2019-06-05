@@ -15,12 +15,12 @@ import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v4.widget.SimpleCursorAdapter
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
+import timber.log.Timber
 
 /**
  * Fragment for displaying contacts.
@@ -30,7 +30,6 @@ import android.widget.Toast
  *
  * Created by adamcchampion on 2017/08/16.
  */
-@SuppressLint("LogNotTimber")
 class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private lateinit var mContactsListView: ListView
@@ -66,7 +65,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun requestContacts() {
-        Log.d(TAG, "requestContacts()")
+        Timber.d(TAG, "requestContacts()")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!hasReadContactPermission()) {
                 requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
@@ -89,14 +88,14 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 showContacts()
             } else {
-                Log.e(TAG, "Error: Permission denied to read contacts")
+                Timber.e(TAG, "Error: Permission denied to read contacts")
                 Toast.makeText(activity, resources.getString(R.string.read_contacts_permission_denied), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun showContacts() {
-        Log.d(TAG, "showContacts()")
+        Timber.d(TAG, "showContacts()")
 
         // Gets a CursorAdapter
         mCursorAdapter = SimpleCursorAdapter(
@@ -141,7 +140,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 //        // The column index for the LOOKUP_KEY column
 //        private val LOOKUP_KEY_INDEX = 1
 
-        private val PERMISSION_REQUEST_READ_CONTACTS = 1
+        private const val PERMISSION_REQUEST_READ_CONTACTS = 1
 
         /*
          * Defines an array that contains column names to move from the Cursor to the ListView.

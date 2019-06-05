@@ -1,5 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -8,22 +9,18 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-
+import timber.log.Timber
 import java.io.File
-
-import android.app.Activity.RESULT_OK
 
 /**
  * Audio playback Fragment.
  *
  * Created by adamcchampion on 2017/08/12.
  */
-@SuppressWarnings("LogNotTimber")
 class AudioFragment : Fragment(), View.OnClickListener {
     private var mStarted = false
     private val mAudioFilePath =
@@ -80,7 +77,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
             R.id.buttonAudioStart -> if (!mStarted) {
                 val musicIntent = Intent(activity?.applicationContext, MediaPlaybackService::class.java)
                 musicIntent.putExtra("URIString", mAudioFileUri.toString())
-                Log.d(TAG, "URI: ${mAudioFileUri.toString()}")
+                Timber.d(TAG, "URI: $mAudioFileUri")
                 activity?.startService(musicIntent)
                 mStarted = true
             }
@@ -97,7 +94,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
         if (resultCode == RESULT_OK && requestCode == AUDIO_CAPTURED) {
             if (data != null) {
                 mAudioFileUri = data.data
-                Log.v(TAG, "Audio File URI: ${mAudioFileUri.toString()}")
+                Timber.v(TAG, "Audio File URI: $mAudioFileUri")
             }
         }
     }
