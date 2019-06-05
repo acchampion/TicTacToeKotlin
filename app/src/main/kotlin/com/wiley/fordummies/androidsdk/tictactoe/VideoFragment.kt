@@ -1,5 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,10 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.VideoView
-
 import java.io.File
-
-import android.app.Activity.RESULT_OK
 
 /**
  * Created by adamcchampion on 2017/08/12.
@@ -49,13 +47,13 @@ class VideoFragment : Fragment(), View.OnClickListener {
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).path +
                 File.separator + "sample_video.mp4"
         val videoFile = File(path)
-        if (videoFile.exists()) {
-            mVideoFileUri = Uri.fromFile(videoFile)
+        mVideoFileUri = if (videoFile.exists()) {
+            Uri.fromFile(videoFile)
         } else {
             // Video file doesn't exist, so load sample video from resources.
             val videoResourceName = "android.resource://" + activity?.packageName +
                     File.separator + R.raw.sample_video
-            mVideoFileUri = Uri.parse(videoResourceName)
+            Uri.parse(videoResourceName)
         }
 
         // Guard against no audio recorder app (disable the "record" button).
