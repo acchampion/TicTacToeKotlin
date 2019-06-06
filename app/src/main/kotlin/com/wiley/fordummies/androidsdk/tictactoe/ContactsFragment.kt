@@ -8,18 +8,15 @@ import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.support.annotation.RequiresApi
-import android.support.v4.app.Fragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.CursorLoader
-import android.support.v4.content.Loader
-import android.support.v4.widget.SimpleCursorAdapter
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.loader.app.LoaderManager
 import timber.log.Timber
 
 /**
@@ -35,7 +32,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private lateinit var mContactsListView: ListView
 
     // An adapter that binds the result Cursor to the ListView
-    private lateinit var mCursorAdapter: SimpleCursorAdapter
+    private lateinit var mCursorAdapter: androidx.cursoradapter.widget.SimpleCursorAdapter
 
     private val TAG = javaClass.simpleName
 
@@ -51,7 +48,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).actionBar.apply {
+        (activity as AppCompatActivity).actionBar?.apply {
             subtitle = resources.getString(R.string.contacts)
         }
 
@@ -98,7 +95,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         Timber.d(TAG, "showContacts()")
 
         // Gets a CursorAdapter
-        mCursorAdapter = SimpleCursorAdapter(
+        mCursorAdapter = androidx.cursoradapter.widget.SimpleCursorAdapter(
                 activity,
                 R.layout.list_item_contact, null,
                 FROM_COLUMNS,
@@ -111,8 +108,8 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         loaderManager.initLoader(0, null, this)
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        return CursorLoader(
+    override fun onCreateLoader(id: Int, args: Bundle?): androidx.loader.content.Loader<Cursor> {
+        return androidx.loader.content.CursorLoader(
                 activity as Context,
                 ContactsContract.Contacts.CONTENT_URI,
                 PROJECTION,
@@ -122,12 +119,12 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         )
     }
 
-    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
+    override fun onLoadFinished(loader: androidx.loader.content.Loader<Cursor>, data: Cursor) {
         // Put the result Cursor in the adapter for the ListView
         mCursorAdapter.swapCursor(data)
     }
 
-    override fun onLoaderReset(loader: Loader<Cursor>) {
+    override fun onLoaderReset(loader: androidx.loader.content.Loader<Cursor>) {
         mCursorAdapter.swapCursor(null)
     }
 

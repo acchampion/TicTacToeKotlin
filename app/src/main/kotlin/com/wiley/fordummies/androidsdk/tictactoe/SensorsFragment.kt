@@ -6,15 +6,12 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import timber.log.Timber
 import java.util.*
 
@@ -24,7 +21,7 @@ import java.util.*
  * Created by adamcchampion on 2017/08/14.
  */
 class SensorsFragment : Fragment(), SensorEventListener {
-    private lateinit var mSensorRecyclerView: RecyclerView
+    private lateinit var mSensorRecyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var mAdapter: SensorAdapter
     private lateinit var mSensorManager: SensorManager
     private lateinit var mSensorList: List<Sensor>
@@ -38,13 +35,13 @@ class SensorsFragment : Fragment(), SensorEventListener {
         val v = inflater.inflate(R.layout.fragment_sensor_list, container, false)
 
         mSensorRecyclerView = v.findViewById(R.id.sensor_recycler_view)
-        mSensorRecyclerView.layoutManager = LinearLayoutManager(activity)
+        mSensorRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
 
         mSensorManager = activity?.getSystemService(SENSOR_SERVICE) as SensorManager
         mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL)
         mAdapter = SensorAdapter(mSensorList)
         mSensorRecyclerView.adapter = mAdapter
-        mSensorRecyclerView.itemAnimator = DefaultItemAnimator()
+        mSensorRecyclerView.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
 
         return v
     }
@@ -147,7 +144,7 @@ class SensorsFragment : Fragment(), SensorEventListener {
 
     }
 
-    private inner class SensorHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_sensor, parent, false)) {
+    private inner class SensorHolder(inflater: LayoutInflater, parent: ViewGroup) : androidx.recyclerview.widget.RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_sensor, parent, false)) {
         private lateinit var mSensor: Sensor
         private lateinit var mDescriptionStr: String
         private val mSensorInfoTextView: TextView = itemView.findViewById(R.id.sensor_data)
@@ -159,7 +156,7 @@ class SensorsFragment : Fragment(), SensorEventListener {
         }
     }
 
-    private inner class SensorAdapter(private val mSensorList: List<Sensor>) : RecyclerView.Adapter<SensorHolder>() {
+    private inner class SensorAdapter(private val mSensorList: List<Sensor>) : androidx.recyclerview.widget.RecyclerView.Adapter<SensorHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SensorHolder {
             val inflater = LayoutInflater.from(activity)

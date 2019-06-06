@@ -1,7 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 class SplashScreenActivity : SingleFragmentActivity() {
     override fun createFragment(): Fragment {

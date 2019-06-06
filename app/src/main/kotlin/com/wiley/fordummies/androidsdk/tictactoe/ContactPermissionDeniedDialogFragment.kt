@@ -3,7 +3,7 @@ package com.wiley.fordummies.androidsdk.tictactoe
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 
 /**
  * Created by adamcchampion on 2017/08/16.

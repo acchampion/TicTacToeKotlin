@@ -8,10 +8,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import timber.log.Timber
 import java.util.*
 
@@ -318,11 +318,10 @@ class GameSessionFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val instanceState: Bundle
-        if (outState == null) {
-            instanceState = Bundle()
+        val instanceState: Bundle = if (outState == null) {
+            Bundle()
         } else {
-            instanceState = outState
+            outState
         }
         // Save session score
         instanceState.putInt(SCOREPLAYERONEKEY, mScorePlayerOne)

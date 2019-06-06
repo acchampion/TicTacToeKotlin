@@ -5,12 +5,12 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 
 /**
  * Fragment for Tic-Tac-Toe help.
@@ -23,8 +23,6 @@ class HelpFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_help, container, false)
 
-        val btOK: Button = v.findViewById(R.id.button_help_ok)
-        btOK.setOnClickListener(this)
         val wikipedia: Button = v.findViewById(R.id.button_lookup_wikipedia)
         wikipedia.setOnClickListener(this)
         val wikipediaWebView: Button = v.findViewById(R.id.button_lookup_wikipedia_in_web_view)
@@ -43,7 +41,7 @@ class HelpFragment : Fragment(), View.OnClickListener {
     private fun hasNetworkConnection(): Boolean {
         val connectivityManager = activity?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = connectivityManager.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting
+        return activeNetwork != null && activeNetwork.isConnected
     }
 
     private fun launchBrowser(url: String) {
@@ -66,7 +64,6 @@ class HelpFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.button_help_ok -> activity?.finishFromChild(activity)
             R.id.button_lookup_wikipedia -> if (hasNetworkConnection()) {
                 launchBrowser("https://en.wikipedia.org/wiki/Tic-tac-toe")
             } else {

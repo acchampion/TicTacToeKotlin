@@ -1,8 +1,8 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceFragmentCompat
 
 /**
  * Fragment for adjusting app settings.

@@ -7,12 +7,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import timber.log.Timber
 import java.io.File
 
@@ -41,9 +41,6 @@ class AudioFragment : Fragment(), View.OnClickListener {
         buttonStop.setOnClickListener(this)
         val buttonRecord: Button = v.findViewById(R.id.buttonAudioRecord)
         buttonRecord.setOnClickListener(this)
-
-        val btnExit: Button = v.findViewById(R.id.buttonAudioExit)
-        btnExit.setOnClickListener(this)
 
         val audioFile = File(mAudioFilePath)
 
@@ -86,14 +83,13 @@ class AudioFragment : Fragment(), View.OnClickListener {
                 mStarted = false
             }
             R.id.buttonAudioRecord -> startActivityForResult(mRecordAudioIntent, AUDIO_CAPTURED)
-            R.id.buttonAudioExit -> activity?.finish()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && requestCode == AUDIO_CAPTURED) {
             if (data != null) {
-                mAudioFileUri = data.data
+                mAudioFileUri = data.data!!
                 Timber.v(TAG, "Audio File URI: $mAudioFileUri")
             }
         }

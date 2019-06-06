@@ -2,16 +2,15 @@ package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Button
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import timber.log.Timber
 
 /**
@@ -19,7 +18,7 @@ import timber.log.Timber
  *
  * Created by adamcchampion on 2017/08/14.
  */
-class HelpWebViewFragment : Fragment(), View.OnClickListener {
+class HelpWebViewFragment : Fragment() {
     private lateinit var mUrl: String
     private lateinit var mProgressBar: ProgressBar
     private val ARG_URI = "url"
@@ -35,8 +34,6 @@ class HelpWebViewFragment : Fragment(), View.OnClickListener {
             max = 100
         }
 
-        val buttonExit = v.findViewById<Button>(R.id.button_exit)
-        buttonExit.setOnClickListener(this)
         val extras = activity?.intent?.extras
         if (extras != null) {
             mUrl = extras.getString(ARG_URI)
@@ -69,12 +66,6 @@ class HelpWebViewFragment : Fragment(), View.OnClickListener {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.apply {
             subtitle = resources.getString(R.string.help_webview)
-        }
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.button_exit -> activity?.finishFromChild(activity)
         }
     }
 }

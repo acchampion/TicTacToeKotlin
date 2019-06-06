@@ -1,22 +1,20 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import java.io.File
-
-import android.app.Activity.RESULT_OK
-import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 
 /**
  * Fragment for showing and capturing images.
@@ -42,8 +40,6 @@ class ImagesFragment : Fragment(), View.OnClickListener {
         buttonShow.setOnClickListener(this)
         val buttonCapture: Button = v.findViewById(R.id.buttonImageCapture)
         buttonCapture.setOnClickListener(this)
-        val buttonExit: Button = v.findViewById(R.id.buttonImageExit)
-        buttonExit.setOnClickListener(this)
 
         // Guard against no camera app (disable the "record" button).
         val packageManager = activity?.packageManager
@@ -76,7 +72,6 @@ class ImagesFragment : Fragment(), View.OnClickListener {
                 }
             }
             R.id.buttonImageCapture -> startActivityForResult(mCaptureImageIntent, IMAGE_CAPTURED)
-            R.id.buttonImageExit -> activity?.finish()
         }
     }
 

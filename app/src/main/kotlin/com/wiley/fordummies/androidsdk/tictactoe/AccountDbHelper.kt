@@ -9,8 +9,6 @@ import timber.log.Timber
 /**
  * Account database helper class.
  *
- * TODO: Convert to Kotlin
- *
  * Created by adamcchampion on 2017/08/04.
  */
 class AccountDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {

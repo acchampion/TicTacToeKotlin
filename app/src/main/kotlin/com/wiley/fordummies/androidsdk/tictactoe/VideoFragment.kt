@@ -6,13 +6,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.VideoView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import java.io.File
 
 /**
@@ -40,9 +40,6 @@ class VideoFragment : Fragment(), View.OnClickListener {
         mButtonStop.setOnClickListener(this)
         mButtonRecord = v.findViewById(R.id.buttonVideoRecord)
         mButtonRecord.setOnClickListener(this)
-
-        val btnExit: Button = v.findViewById(R.id.buttonVideoExit)
-        btnExit.setOnClickListener(this)
 
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).path +
                 File.separator + "sample_video.mp4"
@@ -81,7 +78,6 @@ class VideoFragment : Fragment(), View.OnClickListener {
             }
             R.id.buttonVideoRecord -> startActivityForResult(mRecordVideoIntent, VIDEO_CAPTURED)
             R.id.buttonVideoStop -> mVideoView.stopPlayback()
-            R.id.buttonVideoExit -> activity?.finish()
         }
     }
 
