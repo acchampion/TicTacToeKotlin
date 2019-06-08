@@ -35,7 +35,6 @@ class GameSessionFragment : Fragment() {
     private lateinit var mSavedInstanceState: Bundle
     private val TAG = javaClass.simpleName
 
-    @Suppress("DEPRECATION")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Timber.d(TAG, "onCreateView()")
         val v: View
@@ -146,8 +145,8 @@ class GameSessionFragment : Fragment() {
         theGame.setPlayerNames(mFirstPlayerName, mSecondPlayerName)
     }
 
-    fun scheduleAndroidsTurn() {
-        Timber.d(TAG, "Thread ID in scheduleAndroidsTurn:" + Thread.currentThread().id)
+    private fun scheduleAndroidsTurn() {
+        Timber.d(TAG, "Thread ID in scheduleAndroidsTurn: %s", Thread.currentThread().id)
         mBoard.disableInput()
         if (!mTestMode) {
             val randomNumber = Random()
@@ -164,7 +163,7 @@ class GameSessionFragment : Fragment() {
     private fun androidTakesATurn() {
         val pickedX: Int
         val pickedY: Int
-        Timber.d(TAG, "Thread ID in androidTakesATurn:" + Thread.currentThread().id)
+        Timber.d(TAG, "Thread ID in androidTakesATurn: %s", Thread.currentThread().id)
 
         val gameGrid = mActiveGame.gameGrid
         val emptyBlocks = gameGrid.emptySquares
@@ -185,7 +184,7 @@ class GameSessionFragment : Fragment() {
     }
 
     fun humanTakesATurn(x: Int, y: Int) {/* human's turn */
-        Timber.d(TAG, "Thread ID in humanTakesATurn:" + Thread.currentThread().id)
+        Timber.d(TAG, "Thread ID in humanTakesATurn:%s", Thread.currentThread().id)
         val successfulPlay = mActiveGame.play(x, y)
         if (successfulPlay) {
             if (mGameView == null) {
@@ -229,7 +228,7 @@ class GameSessionFragment : Fragment() {
                 .setTitle(alertMessage)
                 .setMessage("Play another game?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton("Yes") { dialog, which -> run {
+                .setPositiveButton("Yes") { _, _ -> run {
                     val inflater = LayoutInflater.from(activity)
                     if (mContainer != null) {
                         Timber.d(TAG, "Calling setupBoard() again")
@@ -251,7 +250,7 @@ class GameSessionFragment : Fragment() {
                         Timber.d(TAG, "Could not restart game. mContainer or mSavedInstanceState were null")
                     }
                     playNewGame()} }
-                .setNegativeButton("No") { dialog, which -> activity?.finish() }
+                .setNegativeButton("No") { _, _ -> activity?.finish() }
                 .show()
 
     }
@@ -325,13 +324,10 @@ class GameSessionFragment : Fragment() {
         return false
     }
 
+    @Suppress("USELESS_ELVIS")
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val instanceState: Bundle = if (outState == null) {
-            Bundle()
-        } else {
-            outState
-        }
+        val instanceState: Bundle = outState ?: Bundle()
         // Save session score
         instanceState.putInt(SCOREPLAYERONEKEY, mScorePlayerOne)
         instanceState.putInt(SCOREPLAYERTWOKEY, mScorePlayerTwo)

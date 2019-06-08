@@ -1,7 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -129,20 +128,13 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     companion object {
-        @SuppressLint("InlinedApi")
         private val PROJECTION = arrayOf(ContactsContract.Contacts._ID, ContactsContract.Contacts.LOOKUP_KEY, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
-
-//        // The column index for the _ID column
-//        private val CONTACT_ID_INDEX = 0
-//        // The column index for the LOOKUP_KEY column
-//        private val LOOKUP_KEY_INDEX = 1
 
         private const val PERMISSION_REQUEST_READ_CONTACTS = 1
 
         /*
          * Defines an array that contains column names to move from the Cursor to the ListView.
         */
-        @SuppressLint("InlinedApi")
         private val FROM_COLUMNS = arrayOf(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
 
         /*

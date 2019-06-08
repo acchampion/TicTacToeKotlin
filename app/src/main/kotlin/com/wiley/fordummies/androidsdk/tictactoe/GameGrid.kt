@@ -1,9 +1,9 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.util.Log
+import timber.log.Timber
 import java.util.*
 
-@SuppressWarnings("LogNotTimber")
 class GameGrid {
     companion object {
         const val SIZE = 3
@@ -76,17 +76,19 @@ class GameGrid {
         get() {
             var foundIndex = -1
             var foundMismatch = false
-            Log.d(TAG, "Entering isRightToLeftDiagonalFilled")
+            Timber.d(TAG, "Entering isRightToLeftDiagonalFilled")
             var index = SIZE - 1
             while (index >= 0 && !foundMismatch) {
-                Log.d(TAG, ">" + mGrid[0][SIZE - 1].toString() + "<   >" + mGrid[index][index].toString() + "<")
+                val logStr = ">" + mGrid[0][SIZE - 1].toString() + "<   >" + mGrid[index][index].toString() + "<"
+                Log.d(TAG, logStr)
                 if (mGrid[0][SIZE - 1] !== mGrid[SIZE - 1 - index][index]) {
                     foundMismatch = true
                     foundIndex = index
                 }
                 index--
             }
-            Log.d(TAG, "Leaving isRightToLeftDiagonalFilled" + foundMismatch + "index>" + foundIndex + "<>" + mGrid[0][SIZE - 1].toString() + "<")
+            val finalLogStr = "Leaving isRightToLeftDiagonalFilled; " + foundMismatch + "; index: " + foundIndex + "; " + mGrid[0][SIZE - 1].toString()
+            Timber.d(TAG, finalLogStr)
             return !foundMismatch && mGrid[0][SIZE - 1] !== Symbol.SymbolBlankCreate()
         }
 

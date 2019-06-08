@@ -1,16 +1,14 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.Cap
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import timber.log.Timber
 
-@Suppress("DEPRECATION")
-@SuppressLint("TimberNotTimber")
 class Board(context: Context, attributes: AttributeSet) : View(context, attributes) {
     private val mGameSessionActivity: GameSessionActivity = context as GameSessionActivity    // game context (parent)
     private var mBlockWidth: Float = 0.toFloat()     // mBlockWidth of one block
@@ -34,15 +32,15 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 
         // Allocate Paint objects to save memory.
         mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mBackgroundPaint.color = resources.getColor(R.color.white)
+        mBackgroundPaint.color = ContextCompat.getColor(context, R.color.white)
         mDarkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mDarkPaint.color = resources.getColor(R.color.dark)
+        mDarkPaint.color = ContextCompat.getColor(context, R.color.dark)
         mDarkPaint.strokeWidth = mStrokeWidth
         mLightPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mLightPaint.color = resources.getColor(R.color.light)
+        mLightPaint.color = ContextCompat.getColor(context, R.color.light)
         mLightPaint.strokeWidth = mStrokeWidth
         mLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mLinePaint.color = resources.getColor(R.color.dark)
+        mLinePaint.color = ContextCompat.getColor(context, R.color.dark)
         mLinePaint.strokeWidth = mLineWidth
         mLinePaint.strokeCap = Cap.ROUND
         mDitherPaint = Paint()

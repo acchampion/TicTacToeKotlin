@@ -1,6 +1,5 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,6 @@ class HelpWebViewFragment : Fragment() {
     private val ARG_URI = "url"
     private val TAG = javaClass.simpleName
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_help_webview, container, false)
 
@@ -40,7 +38,6 @@ class HelpWebViewFragment : Fragment() {
             Timber.d(TAG, "Loading URL $mUrl")
         }
         WebView.setWebContentsDebuggingEnabled(true)
-        helpInWebView.settings.javaScriptEnabled = true
         helpInWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 return false
