@@ -15,9 +15,4 @@ class SplashScreenActivity : SingleFragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fragment)
     }
-
-    override fun onStart() {
-        super.onStart()
-
-    }
 }

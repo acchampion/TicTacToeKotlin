@@ -105,7 +105,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         mContactsListView.adapter = mCursorAdapter
 
         // Initializes the loader
-        loaderManager.initLoader(0, null, this)
+        LoaderManager.getInstance(this).initLoader(0, null, this)
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): androidx.loader.content.Loader<Cursor> {

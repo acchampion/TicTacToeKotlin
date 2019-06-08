@@ -17,7 +17,7 @@ object Settings {
 
     fun getName(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(OPT_NAME, OPT_NAME_DEF)
+                .getString(OPT_NAME, OPT_NAME_DEF)!!
     }
 
     fun doesHumanPlayFirst(context: Context): Boolean {

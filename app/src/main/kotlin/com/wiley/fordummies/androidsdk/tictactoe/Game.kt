@@ -18,7 +18,7 @@ class Game {
 
     var gameGrid: GameGrid = GameGrid()
 
-    var playCount = 0
+    private var playCount = 0
 
     init {
         // Constructor

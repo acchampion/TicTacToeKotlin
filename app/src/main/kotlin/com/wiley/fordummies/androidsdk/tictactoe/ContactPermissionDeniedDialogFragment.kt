@@ -16,7 +16,7 @@ class ContactPermissionDeniedDialogFragment : DialogFragment() {
                 .setMessage(resources.getString(R.string.read_contacts_permission_denied))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(resources.getString(R.string.ok_text)
-                    ) { dialog, which -> activity?.finish() }
+                    ) { _, _ -> activity?.finish() }
                 .create()
     }
 

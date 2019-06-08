@@ -1,8 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.util.Log
-
-import java.util.ArrayList
+import java.util.*
 
 @SuppressWarnings("LogNotTimber")
 class GameGrid {
@@ -26,13 +25,13 @@ class GameGrid {
             = Array(sizeOuter) { Array(sizeInner, innerInit) }
 
     fun setValueAtLocation(x: Int, y: Int, value: Symbol) {
-        if (x in 0..(SIZE - 1) && y in 0..(SIZE - 1))
+        if (x in 0 until SIZE && y in 0 until SIZE)
             mGrid[x][y] = value
     }
 
     fun getValueAtLocation(x: Int, y: Int): Symbol? {
         var returnValue: Symbol? = null
-        if (x in 0..(SIZE - 1) && y in 0..(SIZE - 1))
+        if (x in 0 until SIZE && y in 0 until SIZE)
             returnValue = mGrid[x][y]
         return returnValue
     }
@@ -95,8 +94,8 @@ class GameGrid {
     val emptySquares: ArrayList<Square>
         get() {
             val list = ArrayList<Square>()
-            for (i in 0..(SIZE - 1)) {
-                (0..(SIZE - 1))
+            for (i in 0 until SIZE) {
+                (0 until SIZE)
                         .asSequence()
                         .filter { mGrid[i][it] === Symbol.SymbolBlankCreate() }
                         .mapTo(list) { Square(i, it) }

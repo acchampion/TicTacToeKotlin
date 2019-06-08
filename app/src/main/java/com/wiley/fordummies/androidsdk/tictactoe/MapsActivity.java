@@ -1,9 +1,11 @@
 package com.wiley.fordummies.androidsdk.tictactoe;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +28,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.plugins.building.BuildingPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
-import com.mapbox.mapboxsdk.plugins.locationlayer.modes.CameraMode;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
@@ -113,7 +114,6 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
             mLocationLayerPlugin = new LocationLayerPlugin(mMapView, mMapboxMap, mLocationEngine);
             mLocationLayerPlugin.setLocationLayerEnabled(true);
-            mLocationLayerPlugin.setCameraMode(CameraMode.TRACKING_COMPASS);
 
             BuildingPlugin buildingPlugin = new BuildingPlugin(mMapView, mMapboxMap);
             buildingPlugin.setVisibility(true);
@@ -270,7 +270,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                     if (results.size() > 0) {
                         // Timber the first results position.
                         Position firstResultPos = results.get(0).asPosition();
-                        Timber.d(TAG, "onResponse: " + firstResultPos.toString());
+                        Timber.d(TAG, "onResponse: %s", firstResultPos.toString());
 
 
                         if (mMapboxMap != null) {
@@ -323,8 +323,8 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
             // Direct users to turn on GPS (and send them to Location Settings if it's off).
             // Source: https://stackoverflow.com/questions/843675/how-do-i-find-out-if-the-gps-of-an-android-device-is-enabled
-            int provider = android.provider.Settings.Secure.getInt(getContentResolver(), android.provider.Settings.Secure.LOCATION_MODE, -1);
-            if (provider != android.provider.Settings.Secure.LOCATION_MODE_HIGH_ACCURACY) {
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 Toast.makeText(getApplicationContext(), "Please turn on GPS in the Settings app", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(intent, ENABLE_GPS_REQUEST_CODE);
@@ -360,7 +360,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                                 if (results != null && results.size() > 0) {
                                     // Timber the first results position.
                                     Position firstResultPos = results.get(0).asPosition();
-                                    Timber.d(TAG, "onResponse: " + firstResultPos.toString());
+                                    Timber.d(TAG, "onResponse: %s", firstResultPos.toString());
 
 
                                     if (mMapboxMap != null) {

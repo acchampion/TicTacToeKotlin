@@ -5,12 +5,12 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.Cap
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import timber.log.Timber
 
 @Suppress("DEPRECATION")
-@SuppressLint("LogNotTimber")
+@SuppressLint("TimberNotTimber")
 class Board(context: Context, attributes: AttributeSet) : View(context, attributes) {
     private val mGameSessionActivity: GameSessionActivity = context as GameSessionActivity    // game context (parent)
     private var mBlockWidth: Float = 0.toFloat()     // mBlockWidth of one block
@@ -98,13 +98,13 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
     }
 
     override fun performClick(): Boolean {
-        Log.d(TAG, "performClick()")
+        Timber.d(TAG, "performClick()")
         return super.performClick()
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (!this.isInputEnabled) {
-            Log.d(TAG, "Board.onTouchEvent: Board not mIsEnabled")
+            Timber.d(TAG, "Board.onTouchEvent: Board not mIsEnabled")
             return false
         }
 
@@ -115,7 +115,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
             MotionEvent.ACTION_DOWN -> {
                 val x = event.x
                 val y = event.y
-                Log.d(TAG, "Coordinates: $x,$y")
+                Timber.d(TAG, "Coordinates: $x,$y")
                 if (x > mBlockWidth && x < mBlockWidth * 2) posX = 1
                 if (x > mBlockWidth * 2 && x < mBlockWidth * 3) posX = 2
 
@@ -130,27 +130,27 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
     }
 
     fun placeSymbol(x: Int, y: Int): Boolean {
-        Log.d(TAG, "Thread ID in Board.placeSymbol:" + Thread.currentThread().id)
+        Timber.d(TAG, "Thread ID in Board.placeSymbol: %s", Thread.currentThread().id)
         invalidateBlock(x, y)
         return true
     }
 
     fun invalidateBlock(x: Int, y: Int) {
         val selBlock = Rect((x * mBlockWidth).toInt(), (y * mBlockHeight).toInt(), ((x + 1) * mBlockWidth).toInt(), ((y + 1) * mBlockHeight).toInt())
-        invalidate(selBlock)
+        invalidate()
     }
 
     fun disableInput() {
         this.isInputEnabled = false
-        Log.d(TAG, "Board.disableInput(): Board not mIsEnabled")
+        Timber.d(TAG, "Board.disableInput(): Board not mIsEnabled")
     }
 
     fun enableInput() {
         this.isInputEnabled = true
-        Log.d(TAG, "Board.enableInput(): Board mIsEnabled")
+        Timber.d(TAG, "Board.enableInput(): Board mIsEnabled")
     }
 
-    fun getBitmapForSymbol(aSymbol: Symbol?): Bitmap? {
+    private fun getBitmapForSymbol(aSymbol: Symbol?): Bitmap? {
 
         if (!sDrawablesInitialized) {
             try {
@@ -160,7 +160,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
                 sSymBlank = BitmapFactory.decodeResource(res, R.drawable.blank)
                 sDrawablesInitialized = true
             } catch (ome: OutOfMemoryError) {
-                Log.d(TAG, "Ran out of memory decoding bitmaps")
+                Timber.d(TAG, "Ran out of memory decoding bitmaps")
                 ome.printStackTrace()
             }
 

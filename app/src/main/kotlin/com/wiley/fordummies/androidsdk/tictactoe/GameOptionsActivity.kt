@@ -7,8 +7,6 @@ import androidx.fragment.app.Fragment
  */
 
 class GameOptionsActivity : SingleFragmentActivity() {
-    protected val TAG = javaClass.simpleName
-
     override fun createFragment(): Fragment {
         return GameOptionsFragment()
     }

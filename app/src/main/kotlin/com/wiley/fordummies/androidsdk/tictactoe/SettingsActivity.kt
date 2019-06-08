@@ -13,16 +13,12 @@ import androidx.fragment.app.Fragment
  */
 
 class SettingsActivity : AppCompatActivity() {
-    private val OPT_NAME = "name"
-    private val OPT_NAME_DEF = "Player"
-    private val OPT_PLAY_FIRST = "human_starts"
-    private val OPT_PLAY_FIRST_DEF = true
 
-    protected fun createFragment(): Fragment {
+    private fun createFragment(): Fragment {
         return SettingsFragment()
     }
 
-    protected val layoutResId: Int
+    private val layoutResId: Int
         @LayoutRes
         get() = R.layout.activity_fragment
 

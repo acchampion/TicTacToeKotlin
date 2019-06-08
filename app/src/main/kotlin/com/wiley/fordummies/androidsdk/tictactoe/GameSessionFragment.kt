@@ -1,11 +1,10 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.app.AlertDialog
-import android.app.KeyguardManager
 import android.content.Context
-import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
@@ -58,10 +57,6 @@ class GameSessionFragment : Fragment() {
         }
         retainInstance = true
 
-        val keyguardManager = activity?.getSystemService(KEYGUARD_SERVICE) as KeyguardManager
-        val lock = keyguardManager.newKeyguardLock("GameSession")
-        lock?.disableKeyguard()
-
         setupBoard(v)
 
         setHasOptionsMenu(true)
@@ -84,12 +79,26 @@ class GameSessionFragment : Fragment() {
         mGameView.setGameStatus(mActiveGame.currentPlayerName + " to play.")
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState != null) {
+            mSavedInstanceState = savedInstanceState
+        }
+    }
 
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.apply {
             subtitle = resources.getString(R.string.game)
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            (activity as AppCompatActivity).setShowWhenLocked(true)
+        } else {
+            (activity as AppCompatActivity).window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+            (activity as AppCompatActivity).window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        }
+
 
         playNewGame()
     }

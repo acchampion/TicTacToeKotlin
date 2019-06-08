@@ -16,7 +16,7 @@ class AbandonGameDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activity)
                 .setTitle(resources.getString(R.string.exit))
                 .setMessage(resources.getString(R.string.abandon_game))
-                .setPositiveButton(resources.getString(R.string.yes)) { dialog, which -> activity?.finish() }
-                .setNegativeButton(resources.getString(R.string.no)) { dialog, which -> }.create()
+                .setPositiveButton(resources.getString(R.string.yes)) { _, _ -> activity?.finish() }
+                .setNegativeButton(resources.getString(R.string.no)) { _, _ -> }.create()
     }
 }

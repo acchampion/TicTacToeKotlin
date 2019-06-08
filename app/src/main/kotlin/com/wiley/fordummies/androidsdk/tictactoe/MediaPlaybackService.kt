@@ -8,7 +8,7 @@ import android.os.IBinder
 import timber.log.Timber
 
 class MediaPlaybackService : Service() {
-    internal lateinit var player: MediaPlayer
+    private lateinit var player: MediaPlayer
 
     private val TAG = javaClass.simpleName
 

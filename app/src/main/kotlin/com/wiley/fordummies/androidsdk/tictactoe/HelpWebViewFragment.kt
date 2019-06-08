@@ -36,7 +36,7 @@ class HelpWebViewFragment : Fragment() {
 
         val extras = activity?.intent?.extras
         if (extras != null) {
-            mUrl = extras.getString(ARG_URI)
+            mUrl = extras.getString(ARG_URI)!!
             Timber.d(TAG, "Loading URL $mUrl")
         }
         WebView.setWebContentsDebuggingEnabled(true)
