@@ -25,7 +25,6 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.plugins.building.BuildingPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
@@ -85,15 +84,12 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
         mMapView = findViewById(R.id.map_view);
         mMapView.onCreate(savedInstanceState);
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                mMapboxMap = mapboxMap;
-                mMapboxMap.getUiSettings().setCompassEnabled(true);
-                mMapboxMap.getUiSettings().setZoomControlsEnabled(true);
-                mMapboxMap.getUiSettings().setZoomGesturesEnabled(true);
-                enableLocationPlugin();
-            }
+        mMapView.getMapAsync(mapboxMap -> {
+            mMapboxMap = mapboxMap;
+            mMapboxMap.getUiSettings().setCompassEnabled(true);
+            mMapboxMap.getUiSettings().setZoomControlsEnabled(true);
+            mMapboxMap.getUiSettings().setZoomGesturesEnabled(true);
+            enableLocationPlugin();
         });
 
         mEditLocation = findViewById(R.id.location);
@@ -265,31 +261,34 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
             reverseGeocode.enqueueCall(new Callback<GeocodingResponse>() {
                 @Override
-                public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
-                    List<CarmenFeature> results = response.body().getFeatures();
-                    if (results.size() > 0) {
-                        // Timber the first results position.
-                        Position firstResultPos = results.get(0).asPosition();
-                        Timber.d(TAG, "onResponse: %s", firstResultPos.toString());
+                public void onResponse(@NonNull Call<GeocodingResponse> call, @NonNull Response<GeocodingResponse> response) {
+                    GeocodingResponse geocodingResponse = response.body();
+                    if (geocodingResponse != null) {
+                        List<CarmenFeature> results = geocodingResponse.getFeatures();
+                        if (results.size() > 0) {
+                            // Timber the first results position.
+                            Position firstResultPos = results.get(0).asPosition();
+                            Timber.d(TAG, "onResponse: %s", firstResultPos.toString());
 
 
-                        if (mMapboxMap != null) {
-                            LatLng latLng = new LatLng(firstResultPos.getLatitude(), firstResultPos.getLongitude());
+                            if (mMapboxMap != null) {
+                                LatLng latLng = new LatLng(firstResultPos.getLatitude(), firstResultPos.getLongitude());
 
-                            CameraPosition cameraPosition = new CameraPosition.Builder().
-                                    target(latLng)
-                                    .build();
-                            mMapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                            mEditLocation.setText(firstResultPos.toString());
+                                CameraPosition cameraPosition = new CameraPosition.Builder().
+                                        target(latLng)
+                                        .build();
+                                mMapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                mEditLocation.setText(firstResultPos.toString());
+                            }
+                        } else {
+                            // No result for your request were found.
+                            Timber.d(TAG, "onResponse: No result found");
                         }
-                    } else {
-                        // No result for your request were found.
-                        Timber.d(TAG, "onResponse: No result found");
                     }
                 }
 
                 @Override
-                public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
+                public void onFailure(@NonNull Call<GeocodingResponse> call, @NonNull Throwable throwable) {
                     Timber.e(TAG, "Error receiving geocoding response");
                     throwable.printStackTrace();
                 }
@@ -354,9 +353,10 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
                     mapboxGeocoding.enqueueCall(new Callback<GeocodingResponse>() {
                         @Override
-                        public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
-                            if (response != null) {
-                                List<CarmenFeature> results = response.body().getFeatures();
+                        public void onResponse(@NonNull Call<GeocodingResponse> call, @NonNull Response<GeocodingResponse> response) {
+                            GeocodingResponse geocodingResponse = response.body();
+                            if (geocodingResponse != null) {
+                                List<CarmenFeature> results = geocodingResponse.getFeatures();
                                 if (results != null && results.size() > 0) {
                                     // Timber the first results position.
                                     Position firstResultPos = results.get(0).asPosition();
@@ -381,7 +381,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                         }
 
                         @Override
-                        public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
+                        public void onFailure(@NonNull Call<GeocodingResponse> call, @NonNull Throwable throwable) {
                             Timber.e(TAG, "Error receiving geocoding response");
                             Toast.makeText(MapsActivity.this, "Geocoding error, please try again.",
                                     Toast.LENGTH_SHORT).show();
