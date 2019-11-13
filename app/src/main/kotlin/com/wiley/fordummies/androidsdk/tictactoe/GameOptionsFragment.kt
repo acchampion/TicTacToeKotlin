@@ -48,13 +48,13 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.menu, menu)
+        inflater.inflate(R.menu.menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.menu_settings -> {
                 startActivity(Intent(activity?.applicationContext, SettingsActivity::class.java))
                 return true
@@ -96,7 +96,9 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
     private fun showQuitAppDialog() {
         val manager = fragmentManager
         val fragment = QuitAppDialogFragment()
-        fragment.show(manager, "quit_app")
+        if (manager != null) {
+            fragment.show(manager, "quit_app")
+        }
     }
 
 }

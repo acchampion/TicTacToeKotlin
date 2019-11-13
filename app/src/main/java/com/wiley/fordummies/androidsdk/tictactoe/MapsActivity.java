@@ -178,7 +178,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
         if (whereAmIString != null)
@@ -334,6 +334,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Fetch location if user allowed it.
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ENABLE_GPS_REQUEST_CODE) {
             requestLocation();
         }

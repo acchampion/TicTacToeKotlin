@@ -55,7 +55,9 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             if (!hasReadContactPermission()) {
                 val fm = activity?.supportFragmentManager
                 val dialogFragment = ContactPermissionDeniedDialogFragment()
-                dialogFragment.show(fm, "contact_perm_denied")
+                if (fm != null) {
+                    dialogFragment.show(fm, "contact_perm_denied")
+                }
             }
         }
     }

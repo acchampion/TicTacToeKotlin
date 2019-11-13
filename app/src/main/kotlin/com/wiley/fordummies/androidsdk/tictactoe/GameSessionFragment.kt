@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.wiley.fordummies.androidsdk.tictactoe.ui.Board
 import timber.log.Timber
 import java.util.*
 
@@ -203,7 +204,9 @@ class GameSessionFragment : Fragment() {
     private fun quitGame() {
         val fm = activity?.supportFragmentManager
         val abandonGameDialogFragment = AbandonGameDialogFragment()
-        abandonGameDialogFragment.show(fm, "abandon_game")
+        if (fm != null) {
+            abandonGameDialogFragment.show(fm, "abandon_game")
+        }
     }
 
     private fun proceedToFinish() {

@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import android.widget.TextView
+import com.wiley.fordummies.androidsdk.tictactoe.ui.Board
 
 class GameView(board: Board, statusView: TextView, sessionScoresView: TextView) {
     private var mGameBoard: Board

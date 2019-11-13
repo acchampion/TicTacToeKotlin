@@ -81,7 +81,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
         } else {
             val manager = fragmentManager
             val fragment = LoginErrorDialogFragment()
-            fragment.show(manager, "login_error")
+            if (manager != null) {
+                fragment.show(manager, "login_error")
+            }
         }
     }
 

@@ -69,7 +69,9 @@ class AccountFragment : Fragment(), View.OnClickListener {
         } else if (password != confirm) {
             val manager = fragmentManager
             val fragment = AccountErrorDialogFragment()
-            fragment.show(manager, "account_error")
+            if (manager != null) {
+                fragment.show(manager, "account_error")
+            }
         } else {
             Timber.e(TAG, "An unknown account creation error occurred.")
         }
