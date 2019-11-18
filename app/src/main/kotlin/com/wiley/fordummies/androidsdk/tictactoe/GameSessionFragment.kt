@@ -22,10 +22,10 @@ import java.util.*
  */
 class GameSessionFragment : Fragment() {
 
+    var mActiveGame: Game = Game()
     private lateinit var mBoard: Board
     private lateinit var mTurnStatusView: TextView
     private lateinit var mScoreView: TextView
-    private var mActiveGame: Game = Game()
     private lateinit var mGameView: GameView
     private var mScorePlayerOne = 0
     private var mScorePlayerTwo = 0
@@ -146,7 +146,7 @@ class GameSessionFragment : Fragment() {
         theGame.setPlayerNames(mFirstPlayerName, mSecondPlayerName)
     }
 
-    private fun scheduleAndroidsTurn() {
+    fun scheduleAndroidsTurn() {
         Timber.d(TAG, "Thread ID in scheduleAndroidsTurn: %s", Thread.currentThread().id)
         mBoard.disableInput()
         if (!mTestMode) {
@@ -336,6 +336,16 @@ class GameSessionFragment : Fragment() {
         instanceState.putInt(SCOREPLAYERTWOKEY, mScorePlayerTwo)
         // Save turn
         instanceState.putString(GAMEKEY, mActiveGame.toString())
+    }
+
+    fun getPlayCount(): Int {
+        var playCount = 0
+
+        if (mActiveGame != null) {
+            playCount = mActiveGame.getPlayCount()
+        }
+
+        return playCount
     }
 
     companion object {

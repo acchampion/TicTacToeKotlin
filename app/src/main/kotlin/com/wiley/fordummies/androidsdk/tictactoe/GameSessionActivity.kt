@@ -15,6 +15,11 @@ class GameSessionActivity : SingleFragmentActivity() {
         return recoverFragment()
     }
 
+    fun getFragmentForTest(): GameSessionFragment {
+        recoverFragment()
+        return mGameSessionFragment
+    }
+
     fun humanTakesATurn(posX: Int, posY: Int) {
         recoverFragment()
         mGameSessionFragment.humanTakesATurn(posX, posY)

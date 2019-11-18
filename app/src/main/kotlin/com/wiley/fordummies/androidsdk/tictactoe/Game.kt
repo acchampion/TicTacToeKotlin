@@ -89,4 +89,8 @@ class Game {
 
     val isDrawn: Boolean
         get() = gameState == STATE.Draw
+
+    fun getPlayCount(): Int {
+        return playCount
+    }
 }
