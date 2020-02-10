@@ -1,6 +1,5 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
-import android.util.Log
 import timber.log.Timber
 import java.util.*
 
@@ -80,7 +79,7 @@ class GameGrid {
             var index = SIZE - 1
             while (index >= 0 && !foundMismatch) {
                 val logStr = ">" + mGrid[0][SIZE - 1].toString() + "<   >" + mGrid[index][index].toString() + "<"
-                Log.d(TAG, logStr)
+                Timber.d(logStr)
                 if (mGrid[0][SIZE - 1] !== mGrid[SIZE - 1 - index][index]) {
                     foundMismatch = true
                     foundIndex = index

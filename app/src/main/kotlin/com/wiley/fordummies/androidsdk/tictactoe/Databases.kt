@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase
  * Created by adamcchampion on 2017/08/31.
  */
 inline fun SQLiteDatabase.transaction(body: (SQLiteDatabase) -> Unit) {
-    beginTransaction();
+    beginTransaction()
     try {
         body(this)
         setTransactionSuccessful()
