@@ -29,7 +29,7 @@ class SensorsFragment : Fragment(), SensorEventListener {
     private var lastSensorValues = Hashtable<String, FloatArray>()
 
     private val TOLERANCE = 10.0.toFloat()
-    private val TAG = javaClass.simpleName
+    // private val TAG = SensorsFragment::class.java.simpleName
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,11 +60,11 @@ class SensorsFragment : Fragment(), SensorEventListener {
     }
 
     override fun onPause() {
-        Timber.d(TAG, "Entering onPause")
+        Timber.d("Entering onPause")
         super.onPause()
         // Stop updates when paused
         mSensorManager.unregisterListener(this)
-        Timber.d(TAG, "Leaving onPause")
+        Timber.d("Leaving onPause")
     }
 
 
@@ -114,11 +114,11 @@ class SensorsFragment : Fragment(), SensorEventListener {
                 distanceOfLastValue + "<\n" + "Distance  This= >" + distanceOfThisValue + "<\n" +
                 "Change = >" + change + "<\n" + "Percent = >" + percentageChange + "%\n" +
                 "Last value = " + lastValueString + "<\n" + sensorEventString
-        Timber.d(TAG, sensorTimberStr)
+        Timber.d(sensorTimberStr)
         if (lastValue == null || percentageChange > TOLERANCE) {
             val percentTimberStr = sensorName + "\n--- Event Changed --- \nChange = >" + change + "<\n" +
                     "Percent = >" + percentageChange + "%\n" + sensorEventString
-            Timber.d(TAG, percentTimberStr)
+            Timber.d(percentTimberStr)
         }
     }
 

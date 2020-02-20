@@ -34,7 +34,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     // An adapter that binds the result Cursor to the ListView
     private lateinit var mCursorAdapter: androidx.cursoradapter.widget.SimpleCursorAdapter
 
-    private val TAG = javaClass.simpleName
+    // private val TAG = ContactsFragment::class.java.simpleName
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_contact_list, container, false)
@@ -64,7 +64,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun requestContacts() {
-        Timber.d(TAG, "requestContacts()")
+        Timber.d("requestContacts()")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!hasReadContactPermission()) {
                 requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
@@ -87,14 +87,14 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 showContacts()
             } else {
-                Timber.e(TAG, "Error: Permission denied to read contacts")
+                Timber.e("Error: Permission denied to read contacts")
                 Toast.makeText(activity, resources.getString(R.string.read_contacts_permission_denied), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun showContacts() {
-        Timber.d(TAG, "showContacts()")
+        Timber.d("showContacts()")
 
         // Gets a CursorAdapter
         mCursorAdapter = androidx.cursoradapter.widget.SimpleCursorAdapter(

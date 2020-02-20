@@ -38,10 +38,10 @@ class GameSessionFragment : Fragment() {
     private val mTestMode = false
     private lateinit var mContainer: ViewGroup
     private lateinit var mSavedInstanceState: Bundle
-    private val TAG = javaClass.simpleName
+    private val TAG = GameSessionFragment::class.java.simpleName
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Timber.d(TAG, "onCreateView()")
+        Timber.d("onCreateView()")
         val v: View
         val rotation = activity?.windowManager?.defaultDisplay?.rotation
         v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
@@ -109,22 +109,22 @@ class GameSessionFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        Timber.d(TAG, "onStop()")
+        Timber.d("onStop()")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Timber.d(TAG, "onDestroyView()")
+        Timber.d("onDestroyView()")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.d(TAG, "onDestroy()")
+        Timber.d("onDestroy()")
     }
 
 /*
     fun startSession() {
-        Timber.d(TAG, "In startSession()")
+        Timber.d("In startSession()")
         mScorePlayerOne = 0
         mScorePlayerTwo = 0
     }
@@ -151,7 +151,7 @@ class GameSessionFragment : Fragment() {
     }
 
     fun scheduleAndroidsTurn() {
-        Timber.d(TAG, "Thread ID in scheduleAndroidsTurn: %s", Thread.currentThread().id)
+        Timber.d("Thread ID in scheduleAndroidsTurn: %s", Thread.currentThread().id)
         mBoard.disableInput()
         if (!mTestMode) {
             val randomNumber = Random()
@@ -168,7 +168,7 @@ class GameSessionFragment : Fragment() {
     private fun androidTakesATurn() {
         val pickedX: Int
         val pickedY: Int
-        Timber.d(TAG, "Thread ID in androidTakesATurn: %s", Thread.currentThread().id)
+        Timber.d("Thread ID in androidTakesATurn: %s", Thread.currentThread().id)
 
         val gameGrid = mActiveGame.gameGrid
         val emptyBlocks = gameGrid.emptySquares
@@ -189,7 +189,7 @@ class GameSessionFragment : Fragment() {
     }
 
     fun humanTakesATurn(x: Int, y: Int) {/* human's turn */
-        Timber.d(TAG, "Thread ID in humanTakesATurn:%s", Thread.currentThread().id)
+        Timber.d("Thread ID in humanTakesATurn:%s", Thread.currentThread().id)
         val successfulPlay = mActiveGame.play(x, y)
         if (successfulPlay) {
             if (mGameView == null) {
@@ -238,7 +238,7 @@ class GameSessionFragment : Fragment() {
                 .setPositiveButton("Yes") { _, _ -> run {
                     val inflater = LayoutInflater.from(activity)
                     if (mContainer != null) {
-                        Timber.d(TAG, "Calling setupBoard() again")
+                        Timber.d("Calling setupBoard() again")
 
                         mSavedInstanceState = Bundle()
                         onSaveInstanceState(mSavedInstanceState)
@@ -254,7 +254,7 @@ class GameSessionFragment : Fragment() {
                             }
                         }
                     } else {
-                        Timber.d(TAG, "Could not restart game. mContainer or mSavedInstanceState were null")
+                        Timber.d("Could not restart game. mContainer or mSavedInstanceState were null")
                     }
                     playNewGame()} }
                 .setNegativeButton("No") { _, _ -> activity?.finish() }

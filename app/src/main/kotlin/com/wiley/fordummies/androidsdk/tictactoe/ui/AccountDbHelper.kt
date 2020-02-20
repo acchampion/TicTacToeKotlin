@@ -13,7 +13,7 @@ import timber.log.Timber
  */
 class AccountDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    private val TAG = javaClass.simpleName
+    // private val TAG = AccountDbHelper::class.java.simpleName
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + AccountsTable.NAME + "(" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -23,7 +23,7 @@ class AccountDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        Timber.w(TAG, "Example: upgrading database; dropping and recreating tables.")
+        Timber.w("Example: upgrading database; dropping and recreating tables.")
         database.execSQL("DROP TABLE IF EXISTS " + AccountsTable.NAME)
         onCreate(database)
     }

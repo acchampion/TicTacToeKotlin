@@ -10,7 +10,7 @@ import timber.log.Timber
 class MediaPlaybackService : Service() {
     private lateinit var player: MediaPlayer
 
-    private val TAG = javaClass.simpleName
+    private val TAG = MediaPlaybackService::class.java.simpleName
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -27,7 +27,7 @@ class MediaPlaybackService : Service() {
         if (extras != null) {
             val audioFileURIString = extras.getString("URIString")
             val audioFileURI = Uri.parse(audioFileURIString)
-            Timber.d(TAG, "URI = $audioFileURI")
+            Timber.d("URI = $audioFileURI")
             try {
                 player.reset()
                 player.setDataSource(this.applicationContext, audioFileURI)

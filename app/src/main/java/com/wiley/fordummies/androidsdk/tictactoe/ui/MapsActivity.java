@@ -72,7 +72,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
     private String whereAmIString = null;
 
     private static final String WHERE_AM_I_STRING = "WhereAmIString";
-    private final String TAG = getClass().getSimpleName();
+    private static final String TAG = MapsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +135,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
             }
         }
         catch (NullPointerException npe) {
-            Timber.e(TAG, "Could not set subtitle");
+            Timber.e("Could not set subtitle");
         }
     }
 
@@ -188,7 +188,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
     }
 
     private void requestLocation() {
-        Timber.d(TAG, "requestLocation()");
+        Timber.d("requestLocation()");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!hasLocationPermission()) {
                 int PERMISSION_REQUEST_LOCATION = 1;
@@ -270,7 +270,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                         if (results.size() > 0) {
                             // Timber the first results position.
                             Position firstResultPos = results.get(0).asPosition();
-                            Timber.d(TAG, "onResponse: %s", firstResultPos.toString());
+                            Timber.d("onResponse: %s", firstResultPos.toString());
 
 
                             if (mMapboxMap != null) {
@@ -284,14 +284,14 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                             }
                         } else {
                             // No result for your request were found.
-                            Timber.d(TAG, "onResponse: No result found");
+                            Timber.d("onResponse: No result found");
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<GeocodingResponse> call, @NonNull Throwable throwable) {
-                    Timber.e(TAG, "Error receiving geocoding response");
+                    Timber.e("Error receiving geocoding response");
                     throwable.printStackTrace();
                 }
             });
@@ -300,7 +300,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
-        Timber.d(TAG, "onExplanationNeeded()");
+        Timber.d("onExplanationNeeded()");
     }
 
     @Override
@@ -311,7 +311,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
             //FragmentManager fragmentManager = getSupportFragmentManager();
             //LocationDeniedDiaTimberFragment deniedDiaTimberFragment = new LocationDeniedDiaTimberFragment();
             //deniedDiaTimberFragment.show(fragmentManager, "location_denied");
-            Timber.e(TAG, "User denied permission to get location");
+            Timber.e("User denied permission to get location");
             Toast.makeText(getApplicationContext(), R.string.location_permission_denied, Toast.LENGTH_LONG).show();
             finish();
         }
@@ -363,7 +363,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                                 if (results != null && results.size() > 0) {
                                     // Timber the first results position.
                                     Position firstResultPos = results.get(0).asPosition();
-                                    Timber.d(TAG, "onResponse: %s", firstResultPos.toString());
+                                    Timber.d("onResponse: %s", firstResultPos.toString());
 
 
                                     if (mMapboxMap != null) {
@@ -377,7 +377,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
                                     }
                                 } else {
                                     // No result for your request were found.
-                                    Timber.d(TAG, "onResponse: No result found");
+                                    Timber.d("onResponse: No result found");
                                     Toast.makeText(MapsActivity.this, "No results found.", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -385,14 +385,14 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineLis
 
                         @Override
                         public void onFailure(@NonNull Call<GeocodingResponse> call, @NonNull Throwable throwable) {
-                            Timber.e(TAG, "Error receiving geocoding response");
+                            Timber.e("Error receiving geocoding response");
                             Toast.makeText(MapsActivity.this, "Geocoding error, please try again.",
                                     Toast.LENGTH_SHORT).show();
                             throwable.printStackTrace();
                         }
                     });
                 } catch (Exception e) {
-                    Timber.e(TAG, "Could not locate this address");
+                    Timber.e("Could not locate this address");
                     e.printStackTrace();
                 }
                 break;

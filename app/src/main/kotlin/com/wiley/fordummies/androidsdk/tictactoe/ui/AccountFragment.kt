@@ -24,7 +24,7 @@ class AccountFragment : Fragment(), View.OnClickListener {
     private lateinit var mEtPassword: EditText
     private lateinit var mEtConfirm: EditText
 
-    private val TAG = javaClass.simpleName
+    // private val TAG = AccountFragment::class.java.simpleName
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_account, container, false)
@@ -76,7 +76,7 @@ class AccountFragment : Fragment(), View.OnClickListener {
                 fragment.show(manager, "account_error")
             }
         } else {
-            Timber.e(TAG, "An unknown account creation error occurred.")
+            Timber.e("An unknown account creation error occurred.")
         }
     }
 }

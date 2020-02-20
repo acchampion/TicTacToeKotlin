@@ -32,7 +32,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
     private val mRecordAudioIntent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
 
     private val AUDIO_CAPTURED = 1
-    private val TAG = javaClass.simpleName
+    private val TAG = AudioFragment::class.java.simpleName
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_audio, container, false)
@@ -76,7 +76,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
             R.id.buttonAudioStart -> if (!mStarted) {
                 val musicIntent = Intent(activity?.applicationContext, MediaPlaybackService::class.java)
                 musicIntent.putExtra("URIString", mAudioFileUri.toString())
-                Timber.d(TAG, "URI: $mAudioFileUri")
+                Timber.d("URI: $mAudioFileUri")
                 activity?.startService(musicIntent)
                 mStarted = true
             }
@@ -92,7 +92,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
         if (resultCode == RESULT_OK && requestCode == AUDIO_CAPTURED) {
             if (data != null) {
                 mAudioFileUri = data.data!!
-                Timber.v(TAG, "Audio File URI: $mAudioFileUri")
+                Timber.v("Audio File URI: $mAudioFileUri")
             }
         }
     }

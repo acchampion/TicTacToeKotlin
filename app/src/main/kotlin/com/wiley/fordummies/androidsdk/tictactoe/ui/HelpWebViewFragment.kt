@@ -22,7 +22,7 @@ class HelpWebViewFragment : Fragment() {
     private lateinit var mUrl: String
     private lateinit var mProgressBar: ProgressBar
     private val ARG_URI = "url"
-    private val TAG = javaClass.simpleName
+    // private val TAG = HelpWebViewFragment::class.java.simpleName
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_help_webview, container, false)
@@ -36,7 +36,7 @@ class HelpWebViewFragment : Fragment() {
         val extras = activity?.intent?.extras
         if (extras != null) {
             mUrl = extras.getString(ARG_URI)!!
-            Timber.d(TAG, "Loading URL $mUrl")
+            Timber.d("Loading URL $mUrl")
         }
         WebView.setWebContentsDebuggingEnabled(true)
         helpInWebView.webViewClient = object : WebViewClient() {
