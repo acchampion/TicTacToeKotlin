@@ -70,11 +70,9 @@ class AccountFragment : Fragment(), View.OnClickListener {
         } else if (username == "" || password == "" || confirm == "") {
             Toast.makeText(activity?.applicationContext, "Missing entry", Toast.LENGTH_SHORT).show()
         } else if (password != confirm) {
-            val manager = fragmentManager
+            val manager = parentFragmentManager
             val fragment = AccountErrorDialogFragment()
-            if (manager != null) {
-                fragment.show(manager, "account_error")
-            }
+			fragment.show(manager, "account_error")
         } else {
             Timber.e("An unknown account creation error occurred.")
         }

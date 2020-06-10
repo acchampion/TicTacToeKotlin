@@ -58,11 +58,9 @@ class HelpFragment : Fragment(), View.OnClickListener {
     }
 
     private fun noNetworkConnectionNotify() {
-        val manager = fragmentManager
+        val manager = parentFragmentManager
         val fragment = NoNetworkConnectionDialogFragment()
-        if (manager != null) {
-            fragment.show(manager, "no_net_conn")
-        }
+		fragment.show(manager, "no_net_conn")
     }
 
     override fun onClick(view: View) {

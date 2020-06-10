@@ -95,11 +95,9 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun showQuitAppDialog() {
-        val manager = fragmentManager
+        val manager = parentFragmentManager
         val fragment = QuitAppDialogFragment()
-        if (manager != null) {
-            fragment.show(manager, "quit_app")
-        }
+		fragment.show(manager, "quit_app")
     }
 
 }

@@ -218,7 +218,7 @@ class GameSessionFragment : Fragment() {
         val alertMessage: String
         if (mActiveGame.isWon) {
             winningPlayerName = mActiveGame.winningPlayerName
-            alertMessage = winningPlayerName + " Wins!"
+            alertMessage = "$winningPlayerName Wins!"
             mGameView.setGameStatus(alertMessage)
             accumulateScores(winningPlayerName)
 

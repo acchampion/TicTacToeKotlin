@@ -42,7 +42,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mContactsListView = activity!!.findViewById(R.id.contact_list_view)
+        mContactsListView = requireActivity().findViewById(R.id.contact_list_view)
         requestContacts()
     }
 
@@ -54,11 +54,9 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!hasReadContactPermission()) {
-                val fm = activity?.supportFragmentManager
+                val fm = requireActivity().supportFragmentManager
                 val dialogFragment = ContactPermissionDeniedDialogFragment()
-                if (fm != null) {
-                    dialogFragment.show(fm, "contact_perm_denied")
-                }
+				dialogFragment.show(fm, "contact_perm_denied")
             }
         }
     }

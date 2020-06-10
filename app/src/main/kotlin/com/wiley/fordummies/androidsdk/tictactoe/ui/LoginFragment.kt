@@ -2,7 +2,6 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.model.AccountSingleton
 
@@ -81,11 +81,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
             startActivity(Intent(activity, GameOptionsActivity::class.java))
             activity?.finish()
         } else {
-            val manager = fragmentManager
+            val manager = parentFragmentManager
             val fragment = LoginErrorDialogFragment()
-            if (manager != null) {
-                fragment.show(manager, "login_error")
-            }
+			fragment.show(manager, "login_error")
         }
     }
 
@@ -103,18 +101,18 @@ class LoginFragment : Fragment(), View.OnClickListener {
             R.id.cancel_button -> activity?.finish()
             R.id.new_user_button -> {
                 val rotation = activity?.windowManager?.defaultDisplay?.rotation
-                val fm = fragmentManager
+                val fm = parentFragmentManager
                 val fragment = AccountFragment()
                 if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-                    fm?.beginTransaction()
-                            ?.replace(R.id.fragment_container, fragment)
-                            ?.addToBackStack("account_fragment")
-                            ?.commit()
+					fm.beginTransaction()
+							.replace(R.id.fragment_container, fragment)
+							.addToBackStack("account_fragment")
+							.commit()
                 } else {
-                    fm?.beginTransaction()
-                            ?.add(R.id.account_fragment_container, fragment)
-                            ?.addToBackStack("account_fragment")
-                            ?.commit()
+					fm.beginTransaction()
+							.add(R.id.account_fragment_container, fragment)
+							.addToBackStack("account_fragment")
+							.commit()
                 }
             }
         }
