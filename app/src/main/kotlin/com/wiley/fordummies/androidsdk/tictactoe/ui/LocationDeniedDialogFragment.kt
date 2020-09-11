@@ -14,9 +14,9 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
 
 class LocationDeniedDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(activity)
+        return AlertDialog.Builder(requireActivity())
                 .setTitle(resources.getString(R.string.error))
                 .setMessage(resources.getString(R.string.location_permission_denied))
-                .setPositiveButton(resources.getString(R.string.ok_text)) { _, _ -> activity?.finish() }.create()
+                .setPositiveButton(resources.getString(R.string.ok_text)) { _, _ -> requireActivity().finish() }.create()
     }
 }

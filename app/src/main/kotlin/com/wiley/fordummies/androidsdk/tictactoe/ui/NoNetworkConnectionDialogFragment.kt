@@ -14,7 +14,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
 
 class NoNetworkConnectionDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(activity)
+        return AlertDialog.Builder(requireActivity())
                 .setTitle(resources.getString(R.string.warning))
                 .setMessage(resources.getString(R.string.no_net_text))
                 .setIcon(android.R.drawable.ic_dialog_alert)

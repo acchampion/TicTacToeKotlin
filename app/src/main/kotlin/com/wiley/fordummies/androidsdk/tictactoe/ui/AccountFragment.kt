@@ -42,7 +42,8 @@ class AccountFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.account)
         }
     }
@@ -62,13 +63,14 @@ class AccountFragment : Fragment(), View.OnClickListener {
         val username = mEtUsername.text.toString()
         val password = mEtPassword.text.toString()
         val confirm = mEtConfirm.text.toString()
+		val activity = requireActivity()
         if (password == confirm && username != "" && password != "" && confirm != "") {
-            val singleton = AccountSingleton.get(activity?.applicationContext)
+            val singleton = AccountSingleton.get(activity.applicationContext)
             val account = Account(username, password)
             singleton.addAccount(account)
-            Toast.makeText(activity?.applicationContext, "New record inserted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity.applicationContext, "New record inserted", Toast.LENGTH_SHORT).show()
         } else if (username == "" || password == "" || confirm == "") {
-            Toast.makeText(activity?.applicationContext, "Missing entry", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity.applicationContext, "Missing entry", Toast.LENGTH_SHORT).show()
         } else if (password != confirm) {
             val manager = parentFragmentManager
             val fragment = AccountErrorDialogFragment()

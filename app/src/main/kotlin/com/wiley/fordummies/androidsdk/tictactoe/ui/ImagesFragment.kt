@@ -43,8 +43,9 @@ class ImagesFragment : Fragment(), View.OnClickListener {
         buttonCapture.setOnClickListener(this)
 
         // Guard against no camera app (disable the "record" button).
-        val packageManager = activity?.packageManager
-        if (packageManager?.resolveActivity(mCaptureImageIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
+		val activity = requireActivity()
+        val packageManager = activity.packageManager
+        if (packageManager.resolveActivity(mCaptureImageIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
             buttonCapture.isEnabled = false
         }
 
@@ -53,7 +54,8 @@ class ImagesFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.images)
         }
     }

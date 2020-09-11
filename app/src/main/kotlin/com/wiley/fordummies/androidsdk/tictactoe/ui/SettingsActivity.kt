@@ -1,10 +1,10 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.R
 
 /**

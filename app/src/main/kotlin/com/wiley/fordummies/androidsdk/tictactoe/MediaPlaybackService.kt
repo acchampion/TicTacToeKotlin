@@ -10,9 +10,7 @@ import timber.log.Timber
 class MediaPlaybackService : Service() {
     private lateinit var player: MediaPlayer
 
-    private val TAG = MediaPlaybackService::class.java.simpleName
-
-    override fun onBind(intent: Intent): IBinder? {
+	override fun onBind(intent: Intent): IBinder? {
         return null
     }
 

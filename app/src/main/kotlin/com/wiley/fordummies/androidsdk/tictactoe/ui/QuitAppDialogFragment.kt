@@ -12,7 +12,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
 
 class QuitAppDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(activity)
+        return AlertDialog.Builder(requireActivity())
                 .setTitle(activity?.resources?.getString(R.string.exit))
                 .setMessage(activity?.resources?.getString(R.string.should_quit))
                 .setIcon(android.R.drawable.ic_dialog_alert)

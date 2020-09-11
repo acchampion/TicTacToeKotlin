@@ -14,7 +14,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
 
 class LoginErrorDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(activity)
+        return AlertDialog.Builder(requireActivity())
                 .setTitle(resources.getString(R.string.error))
                 .setMessage(resources.getString(R.string.login_error_text))
                 .setPositiveButton(resources.getString(R.string.ok_text)) { _, _ -> }.create()

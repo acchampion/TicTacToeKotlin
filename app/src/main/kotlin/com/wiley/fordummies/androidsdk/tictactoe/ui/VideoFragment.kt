@@ -42,6 +42,7 @@ class VideoFragment : Fragment(), View.OnClickListener {
         mButtonRecord = v.findViewById(R.id.buttonVideoRecord)
         mButtonRecord.setOnClickListener(this)
 
+		val activity = requireActivity()
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).path +
                 File.separator + "sample_video.mp4"
         val videoFile = File(path)
@@ -49,13 +50,13 @@ class VideoFragment : Fragment(), View.OnClickListener {
             Uri.fromFile(videoFile)
         } else {
             // Video file doesn't exist, so load sample video from resources.
-            val videoResourceName = "android.resource://" + activity?.packageName +
+            val videoResourceName = "android.resource://" + activity.packageName +
                     File.separator + R.raw.sample_video
             Uri.parse(videoResourceName)
         }
 
         // Guard against no audio recorder app (disable the "record" button).
-        val packageManager = activity?.packageManager
+        val packageManager = activity.packageManager
         if (packageManager?.resolveActivity(mRecordVideoIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
             mButtonRecord.isEnabled = false
         }
@@ -65,7 +66,8 @@ class VideoFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.video)
         }
     }

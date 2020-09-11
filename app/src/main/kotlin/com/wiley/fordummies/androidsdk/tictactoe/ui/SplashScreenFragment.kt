@@ -30,6 +30,7 @@ class SplashScreenFragment : Fragment(), View.OnTouchListener {
 
     override fun onStart() {
         super.onStart()
+		val activity = requireActivity()
         // Thread for displaying the SplashScreen
         val splashThread = Thread {
             try {
@@ -41,7 +42,7 @@ class SplashScreenFragment : Fragment(), View.OnTouchListener {
             } catch (e: InterruptedException) {
                 // do nothing
             } finally {
-                activity?.finish()
+                activity.finish()
                 startActivity(Intent("com.wiley.fordummies.androidsdk.tictactoe.Login"))
             }
         }

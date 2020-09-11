@@ -1,8 +1,10 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.ConnectivityManager.OnNetworkActiveListener
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +21,10 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
  * Created by adamcchampion on 2017/08/14.
  */
 
-class HelpFragment : Fragment(), View.OnClickListener {
+class HelpFragment : Fragment(), View.OnClickListener, OnNetworkActiveListener {
+
+	// private static final String TAG = HelpFragment.class.getSimpleName();
+	private var mIsNetActive = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_help, container, false)
@@ -34,15 +39,22 @@ class HelpFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             subtitle = resources.getString(R.string.help)
         }
+		val connectivityManager = requireActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+		connectivityManager.addDefaultNetworkActiveListener(this)
     }
 
+	override fun onPause() {
+		super.onPause()
+		val activity: Activity = requireActivity()
+		val connectivityManager = activity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+		connectivityManager.removeDefaultNetworkActiveListener(this)
+	}
+
     private fun hasNetworkConnection(): Boolean {
-        val connectivityManager = activity?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
+        return mIsNetActive
     }
 
     private fun launchBrowser(url: String) {
@@ -65,16 +77,20 @@ class HelpFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.button_lookup_wikipedia -> if (hasNetworkConnection()) {
-                launchBrowser("https://en.wikipedia.org/wiki/Tic-tac-toe")
-            } else {
-                noNetworkConnectionNotify()
-            }
-            R.id.button_lookup_wikipedia_in_web_view -> if (hasNetworkConnection()) {
-                launchWebView("https://en.wikipedia.org/wiki/Tic-tac-toe")
-            } else {
-                noNetworkConnectionNotify()
-            }
+			R.id.button_lookup_wikipedia -> if (hasNetworkConnection()) {
+				launchBrowser("https://en.wikipedia.org/wiki/Tic-tac-toe")
+			} else {
+				noNetworkConnectionNotify()
+			}
+			R.id.button_lookup_wikipedia_in_web_view -> if (hasNetworkConnection()) {
+				launchWebView("https://en.wikipedia.org/wiki/Tic-tac-toe")
+			} else {
+				noNetworkConnectionNotify()
+			}
         }
     }
+
+	override fun onNetworkActive() {
+		mIsNetActive = true
+	}
 }

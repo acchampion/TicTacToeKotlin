@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import timber.log.Timber
 import java.util.*
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * Fragment for viewing device sensors.
@@ -35,10 +37,11 @@ class SensorsFragment : Fragment(), SensorEventListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_sensor_list, container, false)
 
+		val activity = requireActivity()
         mSensorRecyclerView = v.findViewById(R.id.sensor_recycler_view)
         mSensorRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
 
-        mSensorManager = activity?.getSystemService(SENSOR_SERVICE) as SensorManager
+        mSensorManager = activity.getSystemService(SENSOR_SERVICE) as SensorManager
         mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL)
         mAdapter = SensorAdapter(mSensorList)
         mSensorRecyclerView.adapter = mAdapter
@@ -49,7 +52,8 @@ class SensorsFragment : Fragment(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.sensors)
         }
 
@@ -90,18 +94,18 @@ class SensorsFragment : Fragment(), SensorEventListener {
             val builder = StringBuilder()
             distanceOfLastValue = 0.0.toFloat()
             for (i in sensorEvent.values.indices) {
-                distanceOfLastValue += Math.pow(lastValue[i].toDouble(), 2.0).toFloat()
-                distanceOfThisValue += Math.pow(sensorEvent.values[i].toDouble(), 2.0).toFloat()
-                change += Math.pow((sensorEvent.values[i] - lastValue[i]).toDouble(), 2.0).toFloat()
+                distanceOfLastValue += lastValue[i].toDouble().pow(2.0).toFloat()
+                distanceOfThisValue += sensorEvent.values[i].toDouble().pow(2.0).toFloat()
+                change += (sensorEvent.values[i] - lastValue[i]).toDouble().pow(2.0).toFloat()
                 builder.append("   [")
                 builder.append(i)
                 builder.append("] = ")
                 builder.append(lastValue[i])
             }
             lastValueString = builder.toString()
-            change = Math.sqrt(change.toDouble()).toFloat()
-            distanceOfLastValue = Math.sqrt(distanceOfLastValue.toDouble()).toFloat()
-            distanceOfThisValue = Math.sqrt(distanceOfThisValue.toDouble()).toFloat()
+            change = sqrt(change.toDouble()).toFloat()
+            distanceOfLastValue = sqrt(distanceOfLastValue.toDouble()).toFloat()
+            distanceOfThisValue = sqrt(distanceOfThisValue.toDouble()).toFloat()
 
             percentageChange = when {
                 distanceOfLastValue.toDouble() != 0.0 -> change * 100.0.toFloat() / distanceOfLastValue

@@ -44,7 +44,8 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.options)
         }
     }
@@ -55,13 +56,14 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		val activity = requireActivity()
         when (item.itemId) {
             R.id.menu_settings -> {
-                startActivity(Intent(activity?.applicationContext, SettingsActivity::class.java))
+                startActivity(Intent(activity.applicationContext, SettingsActivity::class.java))
                 return true
             }
             R.id.menu_help -> {
-                startActivity(Intent(activity?.applicationContext, HelpActivity::class.java))
+                startActivity(Intent(activity.applicationContext, HelpActivity::class.java))
                 return true
             }
             R.id.menu_exit -> {
@@ -69,7 +71,7 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
                 return true
             }
             R.id.menu_contacts -> {
-                startActivity(Intent(activity?.applicationContext, ContactsActivity::class.java))
+                startActivity(Intent(activity.applicationContext, ContactsActivity::class.java))
                 return true
             }
         }
@@ -78,17 +80,18 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 
 
     override fun onClick(v: View) {
+		val activity = requireActivity()
         when (v.id) {
-            R.id.buttonNewGame -> startActivity(Intent(activity?.applicationContext, GameSessionActivity::class.java))
-            R.id.buttonAudio -> startActivity(Intent(activity?.applicationContext, AudioActivity::class.java))
-            R.id.buttonVideo -> startActivity(Intent(activity?.applicationContext, VideoActivity::class.java))
-            R.id.buttonImages -> startActivity(Intent(activity?.applicationContext, ImagesActivity::class.java))
-            R.id.buttonMaps -> startActivity(Intent(activity?.applicationContext, MapsActivity::class.java))
-            R.id.buttonSettings -> startActivity(Intent(activity?.applicationContext, SettingsActivity::class.java))
-            R.id.buttonHelp -> startActivity(Intent(activity?.applicationContext, HelpActivity::class.java))
-            R.id.buttonSensors -> startActivity(Intent(activity?.applicationContext, SensorsActivity::class.java))
+            R.id.buttonNewGame -> startActivity(Intent(activity.applicationContext, GameSessionActivity::class.java))
+            R.id.buttonAudio -> startActivity(Intent(activity.applicationContext, AudioActivity::class.java))
+            R.id.buttonVideo -> startActivity(Intent(activity.applicationContext, VideoActivity::class.java))
+            R.id.buttonImages -> startActivity(Intent(activity.applicationContext, ImagesActivity::class.java))
+            R.id.buttonMaps -> startActivity(Intent(activity.applicationContext, MapsActivity::class.java))
+            R.id.buttonSettings -> startActivity(Intent(activity.applicationContext, SettingsActivity::class.java))
+            R.id.buttonHelp -> startActivity(Intent(activity.applicationContext, HelpActivity::class.java))
+            R.id.buttonSensors -> startActivity(Intent(activity.applicationContext, SensorsActivity::class.java))
             R.id.buttonExit -> {
-                activity?.stopService(Intent(activity?.applicationContext, MediaPlaybackService::class.java))
+                activity.stopService(Intent(activity.applicationContext, MediaPlaybackService::class.java))
                 showQuitAppDialog()
             }
         }

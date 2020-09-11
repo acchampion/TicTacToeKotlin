@@ -29,7 +29,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v: View
-        val rotation = activity?.windowManager?.defaultDisplay?.rotation
+		val activity = requireActivity()
+        val rotation = activity.windowManager?.defaultDisplay?.rotation
         v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
             inflater.inflate(R.layout.fragment_login_land, container, false)
         } else {
@@ -51,8 +52,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mAccountSingleton = AccountSingleton.get(activity?.applicationContext)
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        mAccountSingleton = AccountSingleton.get(activity.applicationContext)
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.login)
         }
     }
@@ -77,9 +79,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
             editor.putString(OPT_NAME, username)
             editor.apply()
 
+			val activity = requireActivity()
+
             // Bring up the GameOptions screen
             startActivity(Intent(activity, GameOptionsActivity::class.java))
-            activity?.finish()
+            activity.finish()
         } else {
             val manager = parentFragmentManager
             val fragment = LoginErrorDialogFragment()
@@ -89,18 +93,20 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.account)
         }
     }
 
 
     override fun onClick(view: View) {
+		val activity = requireActivity()
         when (view.id) {
             R.id.login_button -> checkLogin()
-            R.id.cancel_button -> activity?.finish()
+            R.id.cancel_button -> activity.finish()
             R.id.new_user_button -> {
-                val rotation = activity?.windowManager?.defaultDisplay?.rotation
+                val rotation = activity.windowManager?.defaultDisplay?.rotation
                 val fm = parentFragmentManager
                 val fragment = AccountFragment()
                 if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {

@@ -103,7 +103,6 @@ class GameSessionFragment : Fragment() {
             (activity as AppCompatActivity).window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         }
 
-
         playNewGame()
     }
 

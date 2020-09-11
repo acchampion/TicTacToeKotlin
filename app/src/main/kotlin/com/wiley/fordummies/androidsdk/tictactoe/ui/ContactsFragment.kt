@@ -48,7 +48,8 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).actionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.actionBar?.apply {
             subtitle = resources.getString(R.string.contacts)
         }
 

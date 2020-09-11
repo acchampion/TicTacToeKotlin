@@ -45,19 +45,20 @@ class AudioFragment : Fragment(), View.OnClickListener {
         buttonRecord.setOnClickListener(this)
 
         val audioFile = File(mAudioFilePath)
+		val activity = requireActivity()
 
         mAudioFileUri = if (audioFile.exists()) {
             Uri.fromFile(File(mAudioFilePath))
         } else {
             // Audio file doesn't exist, so load sample audio from resources.
-            val audioResourceName = "android.resource://" + activity?.packageName +
+            val audioResourceName = "android.resource://" + activity.packageName +
                     File.separator + R.raw.sample_audio
             Uri.parse(audioResourceName)
         }
 
         // Guard against no audio recorder app (disable the "record" button).
-        val packageManager = activity?.packageManager
-        if (packageManager?.resolveActivity(mRecordAudioIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
+        val packageManager = activity.packageManager
+        if (packageManager.resolveActivity(mRecordAudioIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
             buttonRecord.isEnabled = false
         }
 
@@ -66,7 +67,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             subtitle = resources.getString(R.string.audio)
         }
     }

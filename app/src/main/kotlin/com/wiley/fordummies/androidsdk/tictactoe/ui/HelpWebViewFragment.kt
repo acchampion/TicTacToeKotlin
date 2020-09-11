@@ -33,7 +33,7 @@ class HelpWebViewFragment : Fragment() {
             max = 100
         }
 
-        val extras = activity?.intent?.extras
+        val extras = requireActivity().intent?.extras
         if (extras != null) {
             mUrl = extras.getString(ARG_URI)!!
             Timber.d("Loading URL $mUrl")
@@ -62,7 +62,8 @@ class HelpWebViewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.apply {
+		val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
             subtitle = resources.getString(R.string.help_webview)
         }
     }

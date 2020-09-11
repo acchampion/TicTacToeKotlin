@@ -12,12 +12,12 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
 
 class ContactPermissionDeniedDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(activity)
+        return AlertDialog.Builder(requireActivity())
                 .setTitle(resources.getString(R.string.error))
                 .setMessage(resources.getString(R.string.read_contacts_permission_denied))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(resources.getString(R.string.ok_text)
-                    ) { _, _ -> activity?.finish() }
+                    ) { _, _ -> requireActivity().finish() }
                 .create()
     }
 
