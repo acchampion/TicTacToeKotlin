@@ -1,10 +1,8 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.net.ConnectivityManager.OnNetworkActiveListener
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,12 +19,9 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
  * Created by adamcchampion on 2017/08/14.
  */
 
-class HelpFragment : Fragment(), View.OnClickListener, OnNetworkActiveListener {
+class HelpFragment : Fragment(), View.OnClickListener {
 
-	// private static final String TAG = HelpFragment.class.getSimpleName();
-	private var mIsNetActive = false
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_help, container, false)
 
         val wikipedia: Button = v.findViewById(R.id.button_lookup_wikipedia)
@@ -42,19 +37,12 @@ class HelpFragment : Fragment(), View.OnClickListener, OnNetworkActiveListener {
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             subtitle = resources.getString(R.string.help)
         }
-		val connectivityManager = requireActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		connectivityManager.addDefaultNetworkActiveListener(this)
     }
 
-	override fun onPause() {
-		super.onPause()
-		val activity: Activity = requireActivity()
-		val connectivityManager = activity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		connectivityManager.removeDefaultNetworkActiveListener(this)
-	}
 
     private fun hasNetworkConnection(): Boolean {
-        return mIsNetActive
+        val connMgr = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+		return connMgr.isDefaultNetworkActive()
     }
 
     private fun launchBrowser(url: String) {
@@ -89,8 +77,4 @@ class HelpFragment : Fragment(), View.OnClickListener, OnNetworkActiveListener {
 			}
         }
     }
-
-	override fun onNetworkActive() {
-		mIsNetActive = true
-	}
 }

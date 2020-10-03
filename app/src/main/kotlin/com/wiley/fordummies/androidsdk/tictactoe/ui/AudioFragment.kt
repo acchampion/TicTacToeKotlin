@@ -25,16 +25,13 @@ import java.io.File
  */
 class AudioFragment : Fragment(), View.OnClickListener {
     private var mStarted = false
-    private val mAudioFilePath =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).path +
-                    File.separator + "sample_audio.mp3"
+    private lateinit var mAudioFilePath: String
     private lateinit var mAudioFileUri: Uri
     private val mRecordAudioIntent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
 
     private val AUDIO_CAPTURED = 1
-    private val TAG = AudioFragment::class.java.simpleName
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_audio, container, false)
 
         val buttonStart: Button = v.findViewById(R.id.buttonAudioStart)
@@ -44,26 +41,30 @@ class AudioFragment : Fragment(), View.OnClickListener {
         val buttonRecord: Button = v.findViewById(R.id.buttonAudioRecord)
         buttonRecord.setOnClickListener(this)
 
-        val audioFile = File(mAudioFilePath)
-		val activity = requireActivity()
-
-        mAudioFileUri = if (audioFile.exists()) {
-            Uri.fromFile(File(mAudioFilePath))
-        } else {
-            // Audio file doesn't exist, so load sample audio from resources.
-            val audioResourceName = "android.resource://" + activity.packageName +
-                    File.separator + R.raw.sample_audio
-            Uri.parse(audioResourceName)
-        }
-
         // Guard against no audio recorder app (disable the "record" button).
-        val packageManager = activity.packageManager
+        val packageManager = requireActivity().packageManager
         if (packageManager.resolveActivity(mRecordAudioIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
             buttonRecord.isEnabled = false
         }
 
         return v
-    }
+	}
+
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		val musicDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+		mAudioFilePath = musicDir!!.path + File.separator + "sample_audio.mp3"
+		val audioFile = File(mAudioFilePath)
+
+		mAudioFileUri = if (audioFile.exists()) {
+			Uri.fromFile(File(mAudioFilePath))
+		} else {
+			// Audio file doesn't exist, so load sample audio from resources.
+			val audioResourceName = "android.resource://" + requireActivity().packageName +
+					File.separator + R.raw.sample_audio
+			Uri.parse(audioResourceName)
+		}
+	}
 
     override fun onResume() {
         super.onResume()

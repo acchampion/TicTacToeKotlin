@@ -24,10 +24,9 @@ import java.io.File
  */
 
 class ImagesFragment : Fragment(), View.OnClickListener {
-    private lateinit var imageView: ImageView
-    private val imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path +
-            File.separator + "other_image.png"
-    private lateinit var imageBitmap: Bitmap
+    private lateinit var mImageView: ImageView
+    private lateinit var mImageFilePath: String
+    private lateinit var mImageBitmap: Bitmap
 
     private val mCaptureImageIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
     private val IMAGE_CAPTURED = 1
@@ -35,7 +34,7 @@ class ImagesFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_images, container, false)
 
-        imageView = v.findViewById(R.id.imageView)
+        mImageView = v.findViewById(R.id.imageView)
 
         val buttonShow: Button = v.findViewById(R.id.buttonImageShow)
         buttonShow.setOnClickListener(this)
@@ -52,6 +51,12 @@ class ImagesFragment : Fragment(), View.OnClickListener {
         return v
     }
 
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		val musicPath = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+		mImageFilePath = musicPath!!.path + File.separator + "other_image.png"
+	}
+
     override fun onResume() {
         super.onResume()
 		val activity = requireActivity() as AppCompatActivity
@@ -63,15 +68,15 @@ class ImagesFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.buttonImageShow -> {
-                val imageFile = File(imageFilePath)
+                val imageFile = File(mImageFilePath)
                 if (imageFile.exists()) {
-                    imageBitmap = BitmapFactory.decodeFile(imageFilePath)
-                    imageView.setImageBitmap(imageBitmap)
+                    mImageBitmap = BitmapFactory.decodeFile(mImageFilePath)
+                    mImageView.setImageBitmap(mImageBitmap)
                 } else {
                     // File doesn't exist, so load a sample SVG image.
                     // Disable hardware acceleration for SVGs
-                    imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                    imageView.setImageResource(R.drawable.ic_scoreboard)
+                    mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    mImageView.setImageResource(R.drawable.ic_scoreboard)
                 }
             }
             R.id.buttonImageCapture -> startActivityForResult(mCaptureImageIntent, IMAGE_CAPTURED)
@@ -82,8 +87,8 @@ class ImagesFragment : Fragment(), View.OnClickListener {
         if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURED) {
             val extras = cameraIntent?.extras
             if (extras != null) {
-                imageBitmap = extras.get("data") as Bitmap
-                imageView.setImageBitmap(imageBitmap)
+                mImageBitmap = extras.get("data") as Bitmap
+                mImageView.setImageBitmap(mImageBitmap)
             }
         }
     }
