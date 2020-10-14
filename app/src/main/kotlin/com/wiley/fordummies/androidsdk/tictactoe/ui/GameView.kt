@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui
 
 import android.widget.TextView
+import java.util.*
 
 class GameView(board: Board, statusView: TextView, sessionScoresView: TextView) {
     private var mGameBoard: Board
@@ -29,9 +30,7 @@ class GameView(board: Board, statusView: TextView, sessionScoresView: TextView) 
     }
 
     fun placeSymbol(x: Int, y: Int) {
-        if (mGameBoard != null) {
-            mGameBoard.placeSymbol(x, y)
-            mGameBoard.invalidateBlock(x, y)
-        }
-    }
+		Objects.requireNonNull(mGameBoard).placeSymbol(x, y)
+		Objects.requireNonNull(mGameBoard).invalidateBlock(x, y)
+	}
 }

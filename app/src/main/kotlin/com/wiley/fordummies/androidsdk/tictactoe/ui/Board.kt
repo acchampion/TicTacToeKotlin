@@ -126,7 +126,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 
     fun invalidateBlock(x: Int, y: Int) {
         val selBlock = Rect((x * mBlockWidth).toInt(), (y * mBlockHeight).toInt(), ((x + 1) * mBlockWidth).toInt(), ((y + 1) * mBlockHeight).toInt())
-        invalidate(selBlock)
+        invalidate()
     }
 
     fun disableInput() {

@@ -342,13 +342,7 @@ class GameSessionFragment : Fragment() {
     }
 
     fun getPlayCount(): Int {
-        var playCount = 0
-
-        if (mActiveGame != null) {
-            playCount = mActiveGame.getPlayCount()
-        }
-
-        return playCount
+		return Objects.requireNonNull(mActiveGame).getPlayCount()
     }
 
     companion object {
