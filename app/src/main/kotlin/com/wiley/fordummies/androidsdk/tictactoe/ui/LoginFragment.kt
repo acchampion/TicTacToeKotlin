@@ -30,7 +30,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v: View
 		val activity = requireActivity()
-        val rotation = activity.windowManager?.defaultDisplay?.rotation
+        val rotation = activity.display?.rotation
         v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
             inflater.inflate(R.layout.fragment_login_land, container, false)
         } else {
@@ -106,7 +106,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             R.id.login_button -> checkLogin()
             R.id.cancel_button -> activity.finish()
             R.id.new_user_button -> {
-                val rotation = activity.windowManager?.defaultDisplay?.rotation
+                val rotation = activity.display?.rotation
                 val fm = parentFragmentManager
                 val fragment = AccountFragment()
                 if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {

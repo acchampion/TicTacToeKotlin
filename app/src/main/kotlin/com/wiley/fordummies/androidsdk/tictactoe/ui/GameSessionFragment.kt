@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -38,12 +39,11 @@ class GameSessionFragment : Fragment() {
     private val mTestMode = false
     private lateinit var mContainer: ViewGroup
     private lateinit var mSavedInstanceState: Bundle
-    private val TAG = GameSessionFragment::class.java.simpleName
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Timber.d("onCreateView()")
         val v: View
-        val rotation = activity?.windowManager?.defaultDisplay?.rotation
+        val rotation = requireActivity().display?.rotation
         v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
             inflater.inflate(R.layout.fragment_gamesession_land, container, false)
         } else {
@@ -154,7 +154,7 @@ class GameSessionFragment : Fragment() {
         mBoard.disableInput()
         if (!mTestMode) {
             val randomNumber = Random()
-            val handler = Handler()
+            val handler = Handler(Looper.getMainLooper())
             handler.postDelayed(
                     { androidTakesATurn() },
                     (ANDROID_TIMEOUT_BASE + randomNumber.nextInt(ANDROID_TIMEOUT_SEED)).toLong()
@@ -268,7 +268,7 @@ class GameSessionFragment : Fragment() {
             mScorePlayerTwo++
     }
 
-    fun sendScoresViaEmail() {
+    private fun sendScoresViaEmail() {
         val emailIntent = Intent(Intent.ACTION_SEND)
         emailIntent.putExtra(Intent.EXTRA_SUBJECT,
                 "Look at my AWESOME TicTacToe Score!")
@@ -280,18 +280,18 @@ class GameSessionFragment : Fragment() {
         startActivity(emailIntent)
     }
 
-    fun sendScoresViaSMS() {
-        val SMSIntent = Intent(Intent.ACTION_VIEW)
-        SMSIntent.putExtra("sms_body",
+    private fun sendScoresViaSMS() {
+        val smsIntent = Intent(Intent.ACTION_VIEW)
+        smsIntent.putExtra("sms_body",
                 "Look at my AWESOME TicTacToe Score!" +
                         mFirstPlayerName + " score is  " + mScorePlayerOne +
                         " and " +
                         mSecondPlayerName + " score is  " + mScorePlayerTwo)
-        SMSIntent.type = "vnd.android-dir/mms-sms"
-        startActivity(SMSIntent)
+        smsIntent.type = "vnd.android-dir/mms-sms"
+        startActivity(smsIntent)
     }
 
-    fun callTicTacToeHelp() {
+    private fun callTicTacToeHelp() {
         val phoneIntent = Intent(Intent.ACTION_DIAL)
         val phoneNumber = "842-822-4357" // TIC TAC HELP
         val uri = "tel:" + phoneNumber.trim { it <= ' ' }
