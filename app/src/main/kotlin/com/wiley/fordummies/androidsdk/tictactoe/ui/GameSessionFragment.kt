@@ -156,9 +156,9 @@ class GameSessionFragment : Fragment() {
             val randomNumber = Random()
             val handler = Handler(Looper.getMainLooper())
             handler.postDelayed(
-                    { androidTakesATurn() },
-                    (ANDROID_TIMEOUT_BASE + randomNumber.nextInt(ANDROID_TIMEOUT_SEED)).toLong()
-            )
+					{ androidTakesATurn() },
+					(ANDROID_TIMEOUT_BASE + randomNumber.nextInt(ANDROID_TIMEOUT_SEED)).toLong()
+			)
         } else {
             androidTakesATurn()
         }
@@ -269,24 +269,21 @@ class GameSessionFragment : Fragment() {
     }
 
     private fun sendScoresViaEmail() {
+		val emailText = "$mFirstPlayerName score is $mScorePlayerOne and " +
+				"$mSecondPlayerName score is $mScorePlayerTwo"
         val emailIntent = Intent(Intent.ACTION_SEND)
         emailIntent.putExtra(Intent.EXTRA_SUBJECT,
-                "Look at my AWESOME TicTacToe Score!")
+				"Look at my AWESOME TicTacToe Score!")
         emailIntent.type = "plain/text"
-        emailIntent.putExtra(Intent.EXTRA_TEXT,
-                mFirstPlayerName + " score is  " + mScorePlayerOne +
-                        " and " +
-                        mSecondPlayerName + " score is  " + mScorePlayerTwo)
+        emailIntent.putExtra(Intent.EXTRA_TEXT, emailText)
         startActivity(emailIntent)
     }
 
     private fun sendScoresViaSMS() {
+		val smsText = "Look at my AWESOME Tic-Tac-Toe score! $mFirstPlayerName score is " +
+				"$mScorePlayerOne and $mSecondPlayerName score is $mScorePlayerOne"
         val smsIntent = Intent(Intent.ACTION_VIEW)
-        smsIntent.putExtra("sms_body",
-                "Look at my AWESOME TicTacToe Score!" +
-                        mFirstPlayerName + " score is  " + mScorePlayerOne +
-                        " and " +
-                        mSecondPlayerName + " score is  " + mScorePlayerTwo)
+        smsIntent.putExtra("sms_body", smsText)
         smsIntent.type = "vnd.android-dir/mms-sms"
         startActivity(smsIntent)
     }
@@ -306,26 +303,26 @@ class GameSessionFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_help -> {
-                startActivity(Intent(activity?.applicationContext, HelpActivity::class.java))
-                return true
-            }
-            R.id.menu_exit -> {
-                quitGame()
-                return true
-            }
-            R.id.menu_email -> {
-                sendScoresViaEmail()
-                return true
-            }
-            R.id.menu_sms -> {
-                sendScoresViaSMS()
-                return true
-            }
-            R.id.menu_call -> {
-                callTicTacToeHelp()
-                return true
-            }
+			R.id.menu_help -> {
+				startActivity(Intent(activity?.applicationContext, HelpActivity::class.java))
+				return true
+			}
+			R.id.menu_exit -> {
+				quitGame()
+				return true
+			}
+			R.id.menu_email -> {
+				sendScoresViaEmail()
+				return true
+			}
+			R.id.menu_sms -> {
+				sendScoresViaSMS()
+				return true
+			}
+			R.id.menu_call -> {
+				callTicTacToeHelp()
+				return true
+			}
         }
         return false
     }
