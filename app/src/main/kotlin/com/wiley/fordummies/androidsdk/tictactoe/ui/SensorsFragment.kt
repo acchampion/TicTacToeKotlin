@@ -73,8 +73,8 @@ class SensorsFragment : Fragment(), SensorEventListener {
 
 
     fun getSensorDescription(sensor: Sensor): String {
-        return "Sensor: " + sensor.name + "; Ver :" + sensor.version + "; Range: " +
-                sensor.maximumRange + "; Power: " + sensor.power + "; Res: " + sensor.resolution
+        return "Sensor: ${sensor.name}; Ver: ${sensor.version}; Range: ${sensor.maximumRange}; " +
+				"Power: ${sensor.power}; Res: ${sensor.resolution}"
     }
 
     override fun onSensorChanged(sensorEvent: SensorEvent) {
@@ -114,16 +114,14 @@ class SensorsFragment : Fragment(), SensorEventListener {
             } // both distances are zero
 
         }
-        val sensorTimberStr = "--- EVENT Raw Values ---\n" + sensorName + "\nDistance  Last= >" +
-                distanceOfLastValue + "<\n" + "Distance  This= >" + distanceOfThisValue + "<\n" +
-                "Change = >" + change + "<\n" + "Percent = >" + percentageChange + "%\n" +
-                "Last value = " + lastValueString + "<\n" + sensorEventString
-        Timber.d(sensorTimberStr)
-        if (lastValue == null || percentageChange > TOLERANCE) {
-            val percentTimberStr = sensorName + "\n--- Event Changed --- \nChange = >" + change + "<\n" +
-                    "Percent = >" + percentageChange + "%\n" + sensorEventString
-            Timber.d(percentTimberStr)
-        }
+
+		val eventStr = "EVENT: Raw Values: $sensorName; Distance Last: $distanceOfLastValue; " +
+				"Distance This: $distanceOfThisValue; Change: $change; Percent: $percentageChange%; " +
+				"Last value: $lastValueString; $sensorEventString"
+		Timber.d(eventStr)
+		if (lastValue == null || percentageChange > TOLERANCE) {
+			Timber.d("EVENT CHANGE: Change: $change; Percent: $percentageChange%; $sensorEventString")
+		}
     }
 
     private fun sensorEventToString(event: SensorEvent): String {
@@ -146,7 +144,7 @@ class SensorsFragment : Fragment(), SensorEventListener {
     }
 
     override fun onAccuracyChanged(sensor: Sensor, i: Int) {
-
+		Timber.d("onAccuracyChanged(): Accuracy of $sensor changed to $i")
     }
 
     private inner class SensorHolder(inflater: LayoutInflater, parent: ViewGroup) : androidx.recyclerview.widget.RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_sensor, parent, false)) {

@@ -12,19 +12,17 @@ import timber.log.Timber
  * Created by adamcchampion on 2017/08/04.
  */
 class AccountDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-
-    // private val TAG = AccountDbHelper::class.java.simpleName
+	
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE " + AccountsTable.NAME + "(" +
+        sqLiteDatabase.execSQL("CREATE TABLE ${AccountsTable.NAME} (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                AccountsTable.Cols.NAME + " TEXT, " +
-                AccountsTable.Cols.PASSWORD + " TEXT" +
-                ")")
+                "${AccountsTable.Cols.NAME} TEXT, " +
+                "${AccountsTable.Cols.PASSWORD} TEXT )")
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         Timber.w("Example: upgrading database; dropping and recreating tables.")
-        database.execSQL("DROP TABLE IF EXISTS " + AccountsTable.NAME)
+        database.execSQL("DROP TABLE IF EXISTS ${AccountsTable.NAME}")
         onCreate(database)
     }
 

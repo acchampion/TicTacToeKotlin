@@ -42,7 +42,7 @@ class HelpFragment : Fragment(), View.OnClickListener {
 
     private fun hasNetworkConnection(): Boolean {
         val connMgr = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		return connMgr.isDefaultNetworkActive()
+		return connMgr.isDefaultNetworkActive
     }
 
     private fun launchBrowser(url: String) {

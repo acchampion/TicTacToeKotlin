@@ -31,6 +31,6 @@ class GameView(board: Board, statusView: TextView, sessionScoresView: TextView) 
 
     fun placeSymbol(x: Int, y: Int) {
 		Objects.requireNonNull(mGameBoard).placeSymbol(x, y)
-		Objects.requireNonNull(mGameBoard).invalidateBlock(x, y)
+		Objects.requireNonNull(mGameBoard).invalidate()
 	}
 }

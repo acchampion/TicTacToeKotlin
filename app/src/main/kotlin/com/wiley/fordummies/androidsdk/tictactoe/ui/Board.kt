@@ -1,7 +1,10 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -10,6 +13,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.GameGrid
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.Symbol
 import timber.log.Timber
+import kotlin.math.min
 
 
 class Board(context: Context, attributes: AttributeSet) : View(context, attributes) {
@@ -51,9 +55,9 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 		mBlockHeight = height / 3f
 
 		if (width < height) {
-			mBlockHeight = Math.min(mBlockWidth, mBlockHeight)
+			mBlockHeight = min(mBlockWidth, mBlockHeight)
 		} else {
-			mBlockWidth = Math.min(mBlockHeight, mBlockWidth)
+			mBlockWidth = min(mBlockHeight, mBlockWidth)
 		}
 
 		super.onSizeChanged(width, height, oldWidth, oldHeight)
@@ -66,9 +70,9 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 		var canvasHeight = height.toFloat()
 
 		if (canvasWidth < canvasHeight) {
-			canvasHeight = Math.min(canvasHeight, canvasWidth)
+			canvasHeight = min(canvasHeight, canvasWidth)
 		} else {
-			canvasWidth = Math.min(canvasHeight, canvasWidth)
+			canvasWidth = min(canvasHeight, canvasWidth)
 		}
 
 		// canvas.drawRect(0, 0, canvasWidth, canvasHeight, mBackgroundPaint);
@@ -121,12 +125,6 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 
 	fun placeSymbol(x: Int, y: Int) {
 		Timber.d(TAG, "Thread ID in Board.placeSymbol: %s", Thread.currentThread().id)
-		invalidateBlock(x, y)
-	}
-
-	fun invalidateBlock(x: Int, y: Int) {
-        val selBlock = Rect((x * mBlockWidth).toInt(), (y * mBlockHeight).toInt(),
-				((x + 1) * mBlockWidth).toInt(), ((y + 1) * mBlockHeight).toInt())
 		invalidate()
 	}
 
@@ -140,7 +138,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 		Timber.d(TAG, "Board.enableInput(): Board mIsEnabled")
 	}
 
-	fun getBitmapForSymbol(aSymbol: Symbol?): Bitmap? {
+	private fun getBitmapForSymbol(aSymbol: Symbol?): Bitmap? {
 		if (!sDrawablesInitialized) {
 			try {
 				val res = resources
@@ -153,7 +151,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 				val finalImgHeight = mBlockHeight.toInt() - INSET
 				val widthRatio = finalImgWidth.toFloat() / imgWidth.toFloat()
 				val heightRatio = finalImgHeight.toFloat() / imgHeight.toFloat()
-				val imgScaleRatio = Math.min(widthRatio, heightRatio)
+				val imgScaleRatio = min(widthRatio, heightRatio)
 
 				sSymX = Bitmap.createScaledBitmap(xSym, (imgWidth * imgScaleRatio).toInt(), (imgHeight * imgScaleRatio).toInt(), false)
 				sSymO = Bitmap.createScaledBitmap(oSym, (imgWidth * imgScaleRatio).toInt(), (imgHeight * imgScaleRatio).toInt(), false)
