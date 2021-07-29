@@ -64,5 +64,6 @@
         <service
             android:name=".MediaPlaybackService"
             android:enabled="true" />
+		<service android:name="com.mapbox.android.telemetry.MapboxTelemetryService"/>
     </application>
 </manifest>
