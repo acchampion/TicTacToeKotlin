@@ -15,83 +15,92 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import java.io.File
+import java.util.*
 
 /**
  * Created by adamcchampion on 2017/08/12.
  */
 
 class VideoFragment : Fragment(), View.OnClickListener {
-    private lateinit var mButtonStart: Button
-    private lateinit var mButtonStop: Button
-    private lateinit var mButtonRecord: Button
-    private lateinit var mVideoView: VideoView
-    private var mVideoFileUri: Uri? = null
-    private val mRecordVideoIntent = Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE)
+	private lateinit var mButtonStart: Button
+	private lateinit var mButtonStop: Button
+	private lateinit var mButtonRecord: Button
+	private lateinit var mVideoView: VideoView
+	private var mVideoFileUri: Uri? = null
+	private val mRecordVideoIntent = Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE)
 
-    private val VIDEO_CAPTURED = 1
+	private val VIDEO_CAPTURED = 1
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_video, container, false)
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
+		val v = inflater.inflate(R.layout.fragment_video, container, false)
 
-        mVideoView = v.findViewById(R.id.videoView)
+		mVideoView = v.findViewById(R.id.videoView)
 
-        mButtonStart = v.findViewById(R.id.buttonVideoStart)
-        mButtonStart.setOnClickListener(this)
-        mButtonStop = v.findViewById(R.id.buttonVideoStop)
-        mButtonStop.setOnClickListener(this)
-        mButtonRecord = v.findViewById(R.id.buttonVideoRecord)
-        mButtonRecord.setOnClickListener(this)
+		mButtonStart = v.findViewById(R.id.buttonVideoStart)
+		mButtonStart.setOnClickListener(this)
+		mButtonStop = v.findViewById(R.id.buttonVideoStop)
+		mButtonStop.setOnClickListener(this)
+		mButtonRecord = v.findViewById(R.id.buttonVideoRecord)
+		mButtonRecord.setOnClickListener(this)
 
 		// Guard against no audio recorder app (disable the "record" button).
-        val packageManager = requireActivity().packageManager
-        if (packageManager?.resolveActivity(mRecordVideoIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
-            mButtonRecord.isEnabled = false
-        }
+		val packageManager = requireActivity().packageManager
+		if (packageManager?.resolveActivity(
+				mRecordVideoIntent,
+				PackageManager.MATCH_DEFAULT_ONLY
+			) == null
+		) {
+			mButtonRecord.isEnabled = false
+		}
 
-        return v
-    }
+		return v
+	}
 
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
-		val activity = requireActivity()
-		val videoDir = activity.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-		val videoPath = videoDir!!.path + File.separator + "sample_video.mp4"
-		val videoFile = File(videoPath)
-		mVideoFileUri = if (videoFile.exists()) {
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		val ctx = requireContext()
+		val videoDir = ctx.applicationContext.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+		val videoFilePath = videoDir!!.path + File.separator + "sample_video.mp4"
+		val videoFile = File(videoFilePath)
+		mVideoFileUri = if (Objects.requireNonNull(videoFile).exists()) {
 			Uri.fromFile(videoFile)
 		} else {
 			// Video file doesn't exist, so load sample video from resources.
-			val videoResourceName = "android.resource://" + activity.packageName +
+			val videoResourceName = "android.resource://" + ctx.packageName +
 					File.separator + R.raw.sample_video
 			Uri.parse(videoResourceName)
 		}
 	}
 
-    override fun onResume() {
-        super.onResume()
+	override fun onResume() {
+		super.onResume()
 		val activity = requireActivity() as AppCompatActivity
-        activity.supportActionBar?.apply {
-            subtitle = resources.getString(R.string.video)
-        }
-    }
+		activity.supportActionBar?.apply {
+			subtitle = resources.getString(R.string.video)
+		}
+	}
 
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.buttonVideoStart -> {
-                // Load and start the movie
-                mVideoView.setVideoURI(mVideoFileUri)
-                mVideoView.start()
-            }
-            R.id.buttonVideoRecord -> startActivityForResult(mRecordVideoIntent, VIDEO_CAPTURED)
-            R.id.buttonVideoStop -> mVideoView.stopPlayback()
-        }
-    }
+	override fun onClick(view: View) {
+		when (view.id) {
+			R.id.buttonVideoStart -> {
+				// Load and start the movie
+				mVideoView.setVideoURI(mVideoFileUri)
+				mVideoView.start()
+			}
+			R.id.buttonVideoRecord -> startActivityForResult(mRecordVideoIntent, VIDEO_CAPTURED)
+			R.id.buttonVideoStop -> mVideoView.stopPlayback()
+		}
+	}
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK && requestCode == VIDEO_CAPTURED) {
-            if (data != null) {
-                mVideoFileUri = data.data
-            }
-        }
-    }
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		if (resultCode == RESULT_OK && requestCode == VIDEO_CAPTURED) {
+			if (data != null) {
+				mVideoFileUri = data.data
+			}
+		}
+	}
 }

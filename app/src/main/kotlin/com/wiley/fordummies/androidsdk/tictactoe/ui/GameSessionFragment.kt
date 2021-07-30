@@ -40,10 +40,12 @@ class GameSessionFragment : Fragment() {
     private lateinit var mContainer: ViewGroup
     private lateinit var mSavedInstanceState: Bundle
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+	override fun onCreateView(inflater: LayoutInflater,
+							  container: ViewGroup?,
+							  savedInstanceState: Bundle?): View? {
         Timber.d("onCreateView()")
         val v: View
-        val rotation = requireActivity().display?.rotation
+        val rotation = requireActivity().windowManager.defaultDisplay.rotation
         v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
             inflater.inflate(R.layout.fragment_gamesession_land, container, false)
         } else {
@@ -68,7 +70,15 @@ class GameSessionFragment : Fragment() {
         return v
     }
 
-    private fun setupBoard(v: View) {
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		if (savedInstanceState != null) {
+			mSavedInstanceState = savedInstanceState
+		}
+	}
+
+
+	private fun setupBoard(v: View) {
         mBoard = v.findViewById(R.id.board)
         val turnStatusView = v.findViewById<TextView>(R.id.gameInfo)
         val scoreView = v.findViewById<TextView>(R.id.scoreboard)

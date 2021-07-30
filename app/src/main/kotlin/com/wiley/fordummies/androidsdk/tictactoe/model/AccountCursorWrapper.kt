@@ -13,11 +13,11 @@ import com.wiley.fordummies.androidsdk.tictactoe.model.AccountDbSchema.AccountsT
 
 class AccountCursorWrapper(cursor: Cursor) : CursorWrapper(cursor) {
 
-    val account: Account
-        get() {
-            val name = getString(getColumnIndex(AccountsTable.Cols.NAME))
-            val password = getString(getColumnIndex(AccountsTable.Cols.PASSWORD))
+	val account: Account
+		get() {
+			val name = getString(getColumnIndex(AccountsTable.Cols.NAME))
+			val password = getString(getColumnIndex(AccountsTable.Cols.PASSWORD))
 
-            return Account(name, password)
-        }
+			return Account(name, password)
+		}
 }

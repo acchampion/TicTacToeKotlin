@@ -24,72 +24,85 @@ import java.io.File
  */
 
 class ImagesFragment : Fragment(), View.OnClickListener {
-    private lateinit var mImageView: ImageView
-    private lateinit var mImageFilePath: String
-    private lateinit var mImageBitmap: Bitmap
+	private lateinit var mImageView: ImageView
+	private lateinit var mImageFilePath: String
+	private lateinit var mImageBitmap: Bitmap
 
-    private val mCaptureImageIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
-    private val IMAGE_CAPTURED = 1
+	private val mCaptureImageIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
+	private val IMAGE_CAPTURED = 1
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_images, container, false)
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
+		val v = inflater.inflate(R.layout.fragment_images, container, false)
 
-        mImageView = v.findViewById(R.id.imageView)
+		mImageView = v.findViewById(R.id.imageView)
 
-        val buttonShow: Button = v.findViewById(R.id.buttonImageShow)
-        buttonShow.setOnClickListener(this)
-        val buttonCapture: Button = v.findViewById(R.id.buttonImageCapture)
-        buttonCapture.setOnClickListener(this)
+		val buttonShow: Button = v.findViewById(R.id.buttonImageShow)
+		buttonShow.setOnClickListener(this)
+		val buttonCapture: Button = v.findViewById(R.id.buttonImageCapture)
+		buttonCapture.setOnClickListener(this)
 
-        // Guard against no camera app (disable the "record" button).
+		// Guard against no camera app (disable the "record" button).
 		val activity = requireActivity()
-        val packageManager = activity.packageManager
-        if (packageManager.resolveActivity(mCaptureImageIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
-            buttonCapture.isEnabled = false
-        }
+		val packageManager = activity.packageManager
+		if (packageManager.resolveActivity(
+				mCaptureImageIntent,
+				PackageManager.MATCH_DEFAULT_ONLY
+			) == null
+		) {
+			buttonCapture.isEnabled = false
+		}
 
-        return v
-    }
-
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
-		val musicPath = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-		mImageFilePath = musicPath!!.path + File.separator + "other_image.png"
+		return v
 	}
 
-    override fun onResume() {
-        super.onResume()
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		val imageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+		mImageFilePath = imageDir!!.path + File.separator + "sample_image.jpg"
+	}
+
+
+	override fun onResume() {
+		super.onResume()
 		val activity = requireActivity() as AppCompatActivity
-        activity.supportActionBar?.apply {
-            subtitle = resources.getString(R.string.images)
-        }
-    }
+		activity.supportActionBar?.apply {
+			subtitle = resources.getString(R.string.images)
+		}
+	}
 
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.buttonImageShow -> {
-                val imageFile = File(mImageFilePath)
-                if (imageFile.exists()) {
-                    mImageBitmap = BitmapFactory.decodeFile(mImageFilePath)
-                    mImageView.setImageBitmap(mImageBitmap)
-                } else {
-                    // File doesn't exist, so load a sample SVG image.
-                    // Disable hardware acceleration for SVGs
-                    mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                    mImageView.setImageResource(R.drawable.ic_scoreboard)
-                }
-            }
-            R.id.buttonImageCapture -> startActivityForResult(mCaptureImageIntent, IMAGE_CAPTURED)
-        }
-    }
+	override fun onClick(view: View) {
+		when (view.id) {
+			R.id.buttonImageShow -> {
+				val imageFile = File(mImageFilePath)
+				if (imageFile.exists()) {
+					mImageBitmap = BitmapFactory.decodeFile(mImageFilePath)
+					mImageView.setImageBitmap(mImageBitmap)
+				} else {
+					// File doesn't exist, so load a sample SVG image.
+					// Disable hardware acceleration for SVGs
+					mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+					mImageView.setImageResource(R.drawable.ic_scoreboard)
+				}
+			}
+			R.id.buttonImageCapture -> startActivityForResult(mCaptureImageIntent, IMAGE_CAPTURED)
+		}
+	}
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, cameraIntent: Intent?) {
-        if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURED) {
-            val extras = cameraIntent?.extras
-            if (extras != null) {
-                mImageBitmap = extras.get("data") as Bitmap
-                mImageView.setImageBitmap(mImageBitmap)
-            }
-        }
-    }
+	override fun onActivityResult(
+		requestCode: Int,
+		resultCode: Int,
+		cameraIntent: Intent?
+	) {
+		if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURED) {
+			val extras = cameraIntent?.extras
+			if (extras != null) {
+				mImageBitmap = extras.get("data") as Bitmap
+				mImageView.setImageBitmap(mImageBitmap)
+			}
+		}
+	}
 }

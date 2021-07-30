@@ -16,45 +16,49 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
  */
 
 class SplashScreenFragment : Fragment(), View.OnTouchListener {
-    private var mIsActive = true
-    private val mSplashTime = 500
-    private val mTimeIncrement = 100
-    private val mSleepTime = 100
+	private var mIsActive = true
+	private val mSplashTime = 500
+	private val mTimeIncrement = 100
+	private val mSleepTime = 100
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_splash, container, false)
-        v.setOnTouchListener(this)
-        return v
-    }
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
+		val v = inflater.inflate(R.layout.fragment_splash, container, false)
+		v.setOnTouchListener(this)
+		return v
+	}
 
-    override fun onStart() {
-        super.onStart()
+	override fun onStart() {
+		super.onStart()
 		val activity = requireActivity()
-        // Thread for displaying the SplashScreen
-        val splashThread = Thread {
-            try {
-                var elapsedTime = 0
-                while (mIsActive && elapsedTime < mSplashTime) {
-                    Thread.sleep(mSleepTime.toLong())
-                    if (mIsActive) elapsedTime += mTimeIncrement
-                }
-            } catch (e: InterruptedException) {
-                // do nothing
-            } finally {
-                activity.finish()
-                startActivity(Intent("com.wiley.fordummies.androidsdk.tictactoe.Login"))
-            }
-        }
-        splashThread.start()
-    }
+		// Thread for displaying the SplashScreen
+		val splashThread = Thread {
+			try {
+				var elapsedTime = 0
+				while (mIsActive && elapsedTime < mSplashTime) {
+					Thread.sleep(mSleepTime.toLong())
+					if (mIsActive) elapsedTime += mTimeIncrement
+				}
+			} catch (e: InterruptedException) {
+				// do nothing
+			} finally {
+				activity.finish()
+				startActivity(Intent("com.wiley.fordummies.androidsdk.tictactoe.Login"))
+			}
+		}
+		splashThread.start()
+	}
 
-    override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-            mIsActive = false
-            view.performClick()
-            return true
-        }
-        return false
-    }
+	override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+		if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+			mIsActive = false
+			view.performClick()
+			return true
+		}
+		return false
+	}
 }
