@@ -1,9 +1,9 @@
-package com.wiley.fordummies.androidsdk.tictactoe.ui
+package com.wiley.fordummies.androidsdk.tictactoe.model.old
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.wiley.fordummies.androidsdk.tictactoe.model.AccountDbSchema.AccountsTable
+import com.wiley.fordummies.androidsdk.tictactoe.model.old.AccountDbSchema.AccountsTable
 import timber.log.Timber
 
 /**

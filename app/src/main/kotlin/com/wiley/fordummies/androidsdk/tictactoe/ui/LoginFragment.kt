@@ -11,10 +11,15 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.StringUtils
-import com.wiley.fordummies.androidsdk.tictactoe.model.AccountSingleton
+import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccount
+import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccountViewModel
+import timber.log.Timber
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -28,10 +33,15 @@ import java.security.NoSuchAlgorithmException
 class LoginFragment : Fragment(), View.OnClickListener {
 	private lateinit var mUsernameEditText: EditText
 	private lateinit var mPasswordEditText: EditText
-	private lateinit var mAccountSingleton: AccountSingleton
-	private lateinit var mDbHelper: AccountDbHelper
 
+	// private lateinit var mAccountSingleton: AccountSingleton
+	// private lateinit var mDbHelper: AccountDbHelper
+
+	private lateinit var mUserAccountViewModel: UserAccountViewModel
+
+	private val TAG = javaClass.simpleName
 	private val OPT_NAME = "name"
+
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -63,7 +73,19 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		val activity = requireActivity() as AppCompatActivity
-		mAccountSingleton = AccountSingleton.get(activity.applicationContext)
+		mUserAccountViewModel = ViewModelProvider((activity as ViewModelStoreOwner)).get(
+			UserAccountViewModel::class.java
+		)
+		// Here's a dummy observer object that indicates when the UserAccounts change in the database.
+		mUserAccountViewModel.allUserAccounts.observe((activity as LifecycleOwner),
+			{ userAccounts ->
+				Timber.d(
+					TAG,
+					"The list of UserAccounts just changed; it has %s elements",
+					userAccounts.size
+				)
+			})
+		// mAccountSingleton = AccountSingleton.get(activity.applicationContext)
 	}
 
 
@@ -76,15 +98,45 @@ class LoginFragment : Fragment(), View.OnClickListener {
 			val sha256HashBytes = digest.digest(password.toByteArray(StandardCharsets.UTF_8))
 			val sha256HashStr = StringUtils.bytesToHex(sha256HashBytes)
 			val activity: Activity = requireActivity()
-			val accountList = mAccountSingleton.accounts
-			var hasMatchingAccount = false
-			for ((name, password1) in accountList) {
-				if (name == username && password1 == sha256HashStr) {
-					hasMatchingAccount = true
-					break
+			// Old way to manage accounts
+//			val accountList = mAccountSingleton.accounts
+//			var hasMatchingAccount = false
+//			for ((name, password1) in accountList) {
+//				if (name == username && password1 == sha256HashStr) {
+//					hasMatchingAccount = true
+//					break
+//				}
+//			}
+
+			/*
+			 * This is the "old way" of querying the database directly for a matching Account.
+			 * For the "new way", we would observe changes in the database via the ViewModel,
+			 * then validate if the username/password combination is valid.
+			 */
+			/*if (mAccountSingleton == null) {
+				mAccountSingleton = AccountSingleton.get(activity.getApplicationContext());
+			}
+
+			if (mDbHelper == null) {
+				mDbHelper = new AccountDbHelper(activity.getApplicationContext());
+			}
+
+			List<Account> accountList = mAccountSingleton.getAccounts();
+			boolean hasMatchingAccount = false;
+			for (Account account : accountList) {
+				if (account.getName().equals(username) && account.getPassword().equals(sha256HashStr)) {
+					hasMatchingAccount = true;
+					break;
 				}
 			}
-			if (accountList.size > 0 && hasMatchingAccount) {
+			*/
+			// if (accountList.size() > 0 && hasMatchingAccount) {
+			val userAccount = UserAccount(username, sha256HashStr)
+			val userAccountListData = mUserAccountViewModel.allUserAccounts
+			val userAccountList = userAccountListData.value!!
+
+			// if (accountList.size > 0 && hasMatchingAccount) {
+			if (userAccountList.contains(userAccount)) {
 				// Save username as the name of the player
 				val settings =
 					PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)

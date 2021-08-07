@@ -1,9 +1,9 @@
-package com.wiley.fordummies.androidsdk.tictactoe.model
+package com.wiley.fordummies.androidsdk.tictactoe.model.old
 
 import android.database.Cursor
 import android.database.CursorWrapper
 
-import com.wiley.fordummies.androidsdk.tictactoe.model.AccountDbSchema.AccountsTable
+import com.wiley.fordummies.androidsdk.tictactoe.model.old.AccountDbSchema.AccountsTable
 
 /**
  * Class that wraps around a Cursor for an Account model object.
