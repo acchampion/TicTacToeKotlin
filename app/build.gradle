@@ -22,12 +22,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+	buildTypes {
+		debug {
+			buildConfigField 'String', "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
+		}
+		release {
+			buildConfigField 'String', "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
+			minifyEnabled false
+		}
+	}
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -43,18 +46,18 @@ dependencies {
 	// Kotlin extensions: core, collections
 	implementation "androidx.core:core-ktx:1.6.0"
 
-
 	implementation "androidx.appcompat:appcompat:$rootProject.appcompat_version"
+	implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
 
 	// Lifecycle
 	// Annotation processor
-	kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+	implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version"
 	implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_version"
 	implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycle_version"
 
 	implementation "androidx.activity:activity-ktx:$rootProject.activity_version"
 	implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerview_version"
-	implementation "androidx.preference:preference:$rootProject.preference_version"
+	implementation "androidx.preference:preference-ktx:$rootProject.preference_version"
 	implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 
 	implementation "androidx.room:room-runtime:$rootProject.room_version"
