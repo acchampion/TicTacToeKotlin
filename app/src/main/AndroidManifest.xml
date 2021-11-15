@@ -1,5 +1,6 @@
 <manifest package="com.wiley.fordummies.androidsdk.tictactoe"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+          xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
 
     <permission
         android:name="com.wiley.fordummies.androidsdk.tictactoe.LAUNCHACTIVITY"
@@ -25,14 +26,17 @@
         android:name=".TicTacToeApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.SplashScreenActivity">
+        android:theme="@style/AppTheme"
+		tools:node="replace">
+        <activity android:name=".ui.SplashScreenActivity"
+			android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LoginActivity">
+        <activity android:name=".ui.LoginActivity"
+			android:exported="false">
             <intent-filter>
                 <action android:name="com.wiley.fordummies.androidsdk.tictactoe.Login" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -63,7 +67,10 @@
 
         <service
             android:name=".MediaPlaybackService"
-            android:enabled="true" />
-		<service android:name="com.mapbox.android.telemetry.MapboxTelemetryService"/>
+            android:enabled="true"
+			android:exported="false"/>
+		<service android:name="com.mapbox.android.telemetry.MapboxTelemetryService"
+			android:enabled="true"
+			android:exported="false"/>
     </application>
 </manifest>

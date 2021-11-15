@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -142,7 +143,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 		}
 
 		DisplayMetrics displayMetrics = new DisplayMetrics();
-		getDisplay().getRealMetrics(displayMetrics);
+		getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
 		int editLocationWidth = displayMetrics.widthPixels - 350;
 		if (mEditLocation != null) {
 			mEditLocation.setWidth(Math.max(250, editLocationWidth));
@@ -192,14 +193,10 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 
 	private void requestLocation() {
 		Timber.d("requestLocation()");
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (lacksLocationPermission()) {
-				int PERMISSION_REQUEST_LOCATION = 1;
-				requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-						PERMISSION_REQUEST_LOCATION);
-			} else {
-				doRequestLocation();
-			}
+		if (lacksLocationPermission()) {
+			int PERMISSION_REQUEST_LOCATION = 1;
+			requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+					PERMISSION_REQUEST_LOCATION);
 		} else {
 			doRequestLocation();
 		}
@@ -218,9 +215,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 	}
 
 	private void doRequestLocation() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			mLocationEngine = initializeLocationEngine();
-		}
+		mLocationEngine = initializeLocationEngine();
 	}
 
 	@SuppressLint("MissingPermission")
@@ -264,6 +259,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (mPermissionsManager != null) {
 			mPermissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -273,7 +269,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 			if (manager != null) {
 				if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 					Toast.makeText(getApplicationContext(), "Please turn on GPS in the Settings app", Toast.LENGTH_LONG).show();
-					Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 					startActivityForResult(intent, ENABLE_GPS_REQUEST_CODE);
 				}
 			}
@@ -302,7 +298,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 						.setGeocodingType(GeocodingCriteria.TYPE_ADDRESS)
 						.build();
 
-				mapboxGeocoding.enqueueCall(new Callback<GeocodingResponse>() {
+				mapboxGeocoding.enqueueCall(new Callback<>() {
 					@Override
 					public void onResponse(@NonNull Call<GeocodingResponse> call, @NonNull Response<GeocodingResponse> response) {
 						//if (response != null) {
@@ -371,7 +367,7 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 						.setGeocodingType(GeocodingCriteria.TYPE_ADDRESS)
 						.build();
 
-				reverseGeocode.enqueueCall(new Callback<GeocodingResponse>() {
+				reverseGeocode.enqueueCall(new Callback<>() {
 					@Override
 					public void onResponse(@NonNull Call<GeocodingResponse> call, @NonNull Response<GeocodingResponse> response) {
 						GeocodingResponse responseBody = response.body();
