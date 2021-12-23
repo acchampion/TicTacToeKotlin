@@ -72,6 +72,7 @@ dependencies {
 	implementation "com.mapbox.mapboxsdk:mapbox-android-telemetry:$rootProject.mapbox_telemetry_version"
 	implementation "com.mapbox.mapboxsdk:mapbox-android-ui:$rootProject.mapbox_java_version"
 	implementation "com.jakewharton.timber:timber:$rootProject.timber_version"
+
 	testImplementation "junit:junit:$rootProject.junit_version"
 	androidTestImplementation "androidx.test:core:$rootProject.test_version"
 	androidTestImplementation "androidx.test:rules:$rootProject.test_version"
