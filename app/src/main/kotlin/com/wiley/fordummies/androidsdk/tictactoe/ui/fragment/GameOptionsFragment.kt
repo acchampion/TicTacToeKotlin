@@ -41,6 +41,8 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 		btnHelp.setOnClickListener(this)
 		val btnTestSensors: Button = v.findViewById(R.id.buttonSensors)
 		btnTestSensors.setOnClickListener(this)
+		val btnPhotoGallery: Button = v.findViewById(R.id.buttonPhotoGallery)
+		btnPhotoGallery.setOnClickListener(this)
 		val btnExit: Button = v.findViewById(R.id.buttonExit)
 		btnExit.setOnClickListener(this)
 
@@ -137,6 +139,13 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 					SensorsActivity::class.java
 				)
 			)
+			R.id.buttonPhotoGallery -> {
+				startActivity(
+					Intent(activity.applicationContext,
+						PhotoGalleryActivity::class.java
+					)
+				)
+			}
 			R.id.buttonExit -> {
 				activity.stopService(
 					Intent(
