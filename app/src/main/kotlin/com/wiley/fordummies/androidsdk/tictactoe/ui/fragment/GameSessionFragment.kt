@@ -11,7 +11,9 @@ import android.os.Looper
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.Game
 import com.wiley.fordummies.androidsdk.tictactoe.GameGrid
 import com.wiley.fordummies.androidsdk.tictactoe.R
@@ -59,13 +61,15 @@ class GameSessionFragment : Fragment() {
             mContainer = container
         }
 
-        if (savedInstanceState != null) {
-            mSavedInstanceState = savedInstanceState
-            mScorePlayerOne = savedInstanceState.getInt(SCOREPLAYERONEKEY)
-            mScorePlayerTwo = savedInstanceState.getInt(SCOREPLAYERTWOKEY)
-        }
+//        if (savedInstanceState != null) {
+//            mSavedInstanceState = savedInstanceState
+//            mScorePlayerOne = savedInstanceState.getInt(SCOREPLAYERONEKEY)
+//            mScorePlayerTwo = savedInstanceState.getInt(SCOREPLAYERTWOKEY)
+//        }
+
         retainInstance = true
 
+		loadGameFromPrefs()
         setupBoard(v)
 
         setHasOptionsMenu(true)
@@ -94,13 +98,6 @@ class GameSessionFragment : Fragment() {
         this.setPlayers(mActiveGame)
         mGameView.showScores(mActiveGame.playerOneName, mScorePlayerOne, mActiveGame.playerTwoName, mScorePlayerTwo)
         mGameView.setGameStatus(mActiveGame.currentPlayerName + " to play.")
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (savedInstanceState != null) {
-            mSavedInstanceState = savedInstanceState
-        }
     }
 
     override fun onResume() {
@@ -225,29 +222,53 @@ class GameSessionFragment : Fragment() {
         }
     }
 
-    private fun proceedToFinish() {
+	private fun loadGameFromPrefs() {
+		val appCtx = requireContext().applicationContext
+		val prefs = PreferenceManager.getDefaultSharedPreferences(appCtx)
+		mScorePlayerOne = prefs.getInt(SCOREPLAYERONEKEY, 0)
+		mScorePlayerTwo = prefs.getInt(SCOREPLAYERTWOKEY, 0)
+	}
+
+	private fun saveScoresToPrefs() {
+		val appCtx = requireContext().applicationContext
+		val prefs = PreferenceManager.getDefaultSharedPreferences(appCtx)
+		val gameStr = mActiveGame.toString()
+		prefs.edit {
+			putInt(SCOREPLAYERONEKEY, mScorePlayerOne)
+			putInt(SCOREPLAYERTWOKEY, mScorePlayerTwo)
+			putString(GAMEKEY, gameStr)
+		}
+	}
+
+
+	private fun proceedToFinish() {
         val winningPlayerName: String
         val alertMessage: String
-        if (mActiveGame.isWon) {
-            winningPlayerName = mActiveGame.winningPlayerName
-            alertMessage = "$winningPlayerName Wins!"
-            mGameView.setGameStatus(alertMessage)
-            accumulateScores(winningPlayerName)
+		when {
+			mActiveGame.isWon -> {
+				winningPlayerName = mActiveGame.winningPlayerName
+				alertMessage = "$winningPlayerName Wins!"
+				mGameView.setGameStatus(alertMessage)
+				accumulateScores(winningPlayerName)
+				saveScoresToPrefs()
 
-            mGameView.showScores(mFirstPlayerName, mScorePlayerOne, mSecondPlayerName, mScorePlayerTwo)
-
-        } else if (mActiveGame.isDrawn) {
-            alertMessage = "DRAW!"
-            mGameView.setGameStatus(alertMessage)
-        } else {
-            // Control flow should never reach this block, but if it does, show a default text string.
-            alertMessage = "Info"
-        }
+				mGameView.showScores(mFirstPlayerName, mScorePlayerOne, mSecondPlayerName, mScorePlayerTwo)
+			}
+			mActiveGame.isDrawn -> {
+				alertMessage = "DRAW!"
+				mGameView.setGameStatus(alertMessage)
+			}
+			else -> {
+				// Control flow should never reach this block, but if it does, show a default text string.
+				alertMessage = "Info"
+			}
+		}
         AlertDialog.Builder(activity)
                 .setTitle(alertMessage)
                 .setMessage("Play another game?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton("Yes") { _, _ -> run {
+					saveScoresToPrefs()
                     val inflater = LayoutInflater.from(activity)
                     if (mContainer != null) {
                         Timber.d("Calling setupBoard() again")
@@ -269,7 +290,12 @@ class GameSessionFragment : Fragment() {
                         Timber.d("Could not restart game. mContainer or mSavedInstanceState were null")
                     }
                     playNewGame()} }
-                .setNegativeButton("No") { _, _ -> activity?.finish() }
+                .setNegativeButton("No") { _, _ -> run {
+					mScorePlayerOne = 0
+					mScorePlayerTwo = 0
+					saveScoresToPrefs()
+					activity?.finish()
+				} }
                 .show()
 
     }
@@ -343,12 +369,12 @@ class GameSessionFragment : Fragment() {
     @Suppress("USELESS_ELVIS")
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val instanceState: Bundle = outState ?: Bundle()
+        /*val instanceState: Bundle = outState ?: Bundle()
         // Save session score
         instanceState.putInt(SCOREPLAYERONEKEY, mScorePlayerOne)
         instanceState.putInt(SCOREPLAYERTWOKEY, mScorePlayerTwo)
         // Save turn
-        instanceState.putString(GAMEKEY, mActiveGame.toString())
+        instanceState.putString(GAMEKEY, mActiveGame.toString())*/
     }
 
     fun getPlayCount(): Int {
