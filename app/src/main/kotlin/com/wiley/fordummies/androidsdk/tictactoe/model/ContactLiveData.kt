@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.AsyncTask
 import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -16,6 +17,9 @@ import java.util.*
  */
 class ContactLiveData(private val mContext: Context) :
 	LiveData<List<Contact>>() {
+
+	private val TAG = javaClass.simpleName
+
 	@SuppressLint("StaticFieldLeak, Deprecated")
 	private fun loadContacts() {
 
@@ -41,13 +45,16 @@ class ContactLiveData(private val mContext: Context) :
 						val count = cursor.count
 						var position = cursor.position
 						while (position < count) {
-							if (cursor.columnCount > 1) {
-								val contactName =
-									cursor.getString(cursor.getColumnIndex("display_name"))
+							val nameIndex =
+								cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+							if (nameIndex >= 0) {
+								val contactName = cursor.getString(nameIndex)
 								val contact = Contact(contactName)
 								contactList.add(contact)
 								cursor.moveToNext()
 								position = cursor.position
+							} else {
+								Timber.tag(TAG).e("Invalid column index")
 							}
 						}
 					}
@@ -72,9 +79,9 @@ class ContactLiveData(private val mContext: Context) :
 	 * Defines an array that contains column names to move from
 	 * the Cursor to the ListView.
 	 */
-		private val FROM_COLUMNS = arrayOf(
+		/*private val FROM_COLUMNS = arrayOf(
 			ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
-		)
+		)*/
 	}
 
 	init {
