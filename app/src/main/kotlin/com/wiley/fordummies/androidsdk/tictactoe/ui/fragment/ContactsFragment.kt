@@ -3,14 +3,12 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -42,29 +40,28 @@ class ContactsFragment : Fragment() {
 		} else {
 			// The user denied permission to read contacts, so show them a message.
 			Timber.e("Error: Permission denied to read contacts")
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				if (lacksReadContactPermission()) {
-					val activity = requireActivity() as AppCompatActivity
-					val fm = activity.supportFragmentManager
-					val dialogFragment = ContactPermissionDeniedDialogFragment()
-					dialogFragment.show(fm, "contact_perm_denied")
-				}
+			if (lacksReadContactPermission()) {
+				val activity = requireActivity() as AppCompatActivity
+				val fm = activity.supportFragmentManager
+				val dialogFragment = ContactPermissionDeniedDialogFragment()
+				dialogFragment.show(fm, "contact_perm_denied")
 			}
 		}
 	}
 
 	private val TAG = javaClass.simpleName
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		val activity: Activity = requireActivity()
 		mContactViewModel = ContactViewModel(activity.application)
 		mContactViewModel.allContacts.observe(
-			(activity as LifecycleOwner),
-			{ contactList ->
-				Timber.d(TAG, "List of contacts changed; %d elements", contactList.size)
-				val contactAdapter = ContactAdapter(contactList)
-				mContactRecyclerView.swapAdapter(contactAdapter, true)
-			})
+			(activity as LifecycleOwner)
+		) { contactList ->
+			Timber.d(TAG, "List of contacts changed; %d elements", contactList.size)
+			val contactAdapter = ContactAdapter(contactList)
+			mContactRecyclerView.swapAdapter(contactAdapter, true)
+		}
 	}
 
 	override fun onCreateView(
@@ -96,18 +93,13 @@ class ContactsFragment : Fragment() {
 
 	private fun requestContacts() {
 		Timber.d("requestContacts()")
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (lacksReadContactPermission()) {
-				mActivityResult.launch(Manifest.permission.READ_CONTACTS)
-			} else {
-				showContacts()
-			}
+		if (lacksReadContactPermission()) {
+			mActivityResult.launch(Manifest.permission.READ_CONTACTS)
 		} else {
 			showContacts()
 		}
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.M)
 	private fun lacksReadContactPermission(): Boolean {
 		val activity: Activity = requireActivity()
 		return activity.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED

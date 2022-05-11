@@ -60,26 +60,20 @@ class ContactsFragmentOld : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 			subtitle = resources.getString(R.string.contacts)
 		}
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (!hasReadContactPermission()) {
-				val fm = requireActivity().supportFragmentManager
-				val dialogFragment = ContactPermissionDeniedDialogFragment()
-				dialogFragment.show(fm, "contact_perm_denied")
-			}
+		if (!hasReadContactPermission()) {
+			val fm = requireActivity().supportFragmentManager
+			val dialogFragment = ContactPermissionDeniedDialogFragment()
+			dialogFragment.show(fm, "contact_perm_denied")
 		}
 	}
 
 	private fun requestContacts() {
 		Timber.d("requestContacts()")
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (!hasReadContactPermission()) {
-				requestPermissions(
-					arrayOf(Manifest.permission.READ_CONTACTS),
-					PERMISSION_REQUEST_READ_CONTACTS
-				)
-			} else {
-				showContacts()
-			}
+		if (!hasReadContactPermission()) {
+			requestPermissions(
+				arrayOf(Manifest.permission.READ_CONTACTS),
+				PERMISSION_REQUEST_READ_CONTACTS
+			)
 		} else {
 			showContacts()
 		}

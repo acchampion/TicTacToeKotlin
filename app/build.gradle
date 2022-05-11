@@ -45,6 +45,7 @@ android {
 	lint {
 		abortOnError false
 	}
+	namespace 'com.wiley.fordummies.androidsdk.tictactoe'
 }
 
 dependencies {
