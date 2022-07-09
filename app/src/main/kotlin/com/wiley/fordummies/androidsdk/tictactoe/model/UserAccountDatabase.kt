@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccountDatabase
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
@@ -22,7 +22,7 @@ abstract class UserAccountDatabase : RoomDatabase() {
         @Volatile
         private var sInstance: UserAccountDatabase? = null
         private const val sNumberOfThreads = 2
-        val databaseWriteExecutor = Executors.newFixedThreadPool(sNumberOfThreads)
+        val databaseWriteExecutor: ExecutorService = Executors.newFixedThreadPool(sNumberOfThreads)
         fun getDatabase(context: Context): UserAccountDatabase {
             if (sInstance == null) {
                 synchronized(UserAccountDatabase::class.java) {

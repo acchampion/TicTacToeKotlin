@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -24,6 +25,7 @@ import timber.log.Timber
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Fragment for login screen.
@@ -39,6 +41,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	// private lateinit var mDbHelper: AccountDbHelper
 
 	private lateinit var mUserAccountViewModel: UserAccountViewModel
+	private var mUserAccountList = CopyOnWriteArrayList<UserAccount>()
 
 	private val TAG = javaClass.simpleName
 	private val OPT_NAME = "name"
@@ -78,15 +81,25 @@ class LoginFragment : Fragment(), View.OnClickListener {
 			UserAccountViewModel::class.java
 		)
 		// Here's a dummy observer object that indicates when the UserAccounts change in the database.
-		mUserAccountViewModel.allUserAccounts.observe((activity as LifecycleOwner),
-			{ userAccounts ->
-				Timber.d(
-					TAG,
-					"The list of UserAccounts just changed; it has %s elements",
-					userAccounts.size
-				)
-			})
-		// mAccountSingleton = AccountSingleton.get(activity.applicationContext)
+		mUserAccountViewModel.allUserAccounts.observe((activity as LifecycleOwner)
+		) { userAccounts ->
+			Timber.tag(TAG)
+				.d("The list of UserAccounts just changed; it has %s elements", userAccounts.size)
+			mUserAccountList.clear()
+			mUserAccountList.addAll(userAccounts)
+		}
+	}
+
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+		Timber.tag(TAG).d("onDestroyView()")
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		val activity = requireActivity()
+		mUserAccountViewModel.allUserAccounts.removeObservers(activity as LifecycleOwner)
 	}
 
 
@@ -99,45 +112,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
 			val sha256HashBytes = digest.digest(password.toByteArray(StandardCharsets.UTF_8))
 			val sha256HashStr = StringUtils.bytesToHex(sha256HashBytes)
 			val activity: Activity = requireActivity()
-			// Old way to manage accounts
-//			val accountList = mAccountSingleton.accounts
-//			var hasMatchingAccount = false
-//			for ((name, password1) in accountList) {
-//				if (name == username && password1 == sha256HashStr) {
-//					hasMatchingAccount = true
-//					break
-//				}
-//			}
 
-			/*
-			 * This is the "old way" of querying the database directly for a matching Account.
-			 * For the "new way", we would observe changes in the database via the ViewModel,
-			 * then validate if the username/password combination is valid.
-			 */
-			/*if (mAccountSingleton == null) {
-				mAccountSingleton = AccountSingleton.get(activity.getApplicationContext());
-			}
-
-			if (mDbHelper == null) {
-				mDbHelper = new AccountDbHelper(activity.getApplicationContext());
-			}
-
-			List<Account> accountList = mAccountSingleton.getAccounts();
-			boolean hasMatchingAccount = false;
-			for (Account account : accountList) {
-				if (account.getName().equals(username) && account.getPassword().equals(sha256HashStr)) {
-					hasMatchingAccount = true;
-					break;
-				}
-			}
-			*/
-			// if (accountList.size() > 0 && hasMatchingAccount) {
 			val userAccount = UserAccount(username, sha256HashStr)
-			val userAccountListData = mUserAccountViewModel.allUserAccounts
-			val userAccountList = userAccountListData.value!!
 
 			// if (accountList.size > 0 && hasMatchingAccount) {
-			if (userAccountList.contains(userAccount)) {
+			if (mUserAccountList.contains(userAccount)) {
 				// Save username as the name of the player
 				val settings =
 					PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
@@ -149,9 +128,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 				startActivity(Intent(activity, GameOptionsActivity::class.java))
 				activity.finish()
 			} else {
-				val manager = parentFragmentManager
-				val fragment = LoginErrorDialogFragment()
-				fragment.show(manager, "login_error")
+				showLoginErrorFragment()
 			}
 		} catch (e: NoSuchAlgorithmException) {
 			e.printStackTrace()
@@ -167,6 +144,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
 		}
 	}
 
+	private fun showLoginErrorFragment() {
+		val manager: FragmentManager = parentFragmentManager
+		val fragment = LoginErrorDialogFragment()
+		fragment.show(manager, "login_error")
+	}
 
 	override fun onClick(view: View) {
 		val activity = requireActivity()

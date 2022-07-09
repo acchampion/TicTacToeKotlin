@@ -34,15 +34,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
 		tools:node="replace">
-        <activity android:name=".ui.activity.SplashScreenActivity"
-			android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+		<uses-library
+			android:name="android.test.runner"
+			android:required="false" />
+
+		<provider
+			android:name="androidx.core.content.FileProvider"
+			android:authorities="${applicationId}.provider"
+			android:exported="false"
+			android:grantUriPermissions="true">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/provider_paths" />
+		</provider>
+
+		<!-- If you want to disable android.startup completely. -->
+		<provider
+			android:name="androidx.startup.InitializationProvider"
+			android:authorities="${applicationId}.androidx-startup"
+			tools:node="remove" />
+
         <activity android:name=".ui.activity.LoginActivity"
-			android:exported="false">
+			android:exported="true"
+			android:theme="@style/Theme.Splash">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
             <intent-filter>
                 <action android:name="com.wiley.fordummies.androidsdk.tictactoe.Login" />
                 <category android:name="android.intent.category.DEFAULT" />

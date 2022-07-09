@@ -17,40 +17,38 @@ class UserAccountRepository internal constructor(application: Application) {
     // Observed LiveData notify the observer upon data change.
     val allUserAccounts: LiveData<List<UserAccount>>
     private val TAG = javaClass.simpleName
-    fun findUserAccountByName(userAccount: UserAccount): LiveData<UserAccount> {
 
-//		try {
-//			Future<LiveData<UserAccount>> future =
-//					(Future<LiveData<UserAccount>>) UserAccountDatabase.databaseWriteExecutor.submit(() -> {
-//						mUserAccountDao.findByName(userAccount.getName(), userAccount.getPassword());
-//					});
-//			while (!future.isDone()) {
-//				Timber.d(TAG, "Waiting for query to complete");
-//				Thread.sleep(100);
-//			}
-//			theUserAccount = future.get(2, TimeUnit.SECONDS);
-//		} catch (ExecutionException e) {
-//			Timber.e(TAG, "Could not find UserAccount by name");
-//			e.printStackTrace();
-//		} catch (InterruptedException e) {
-//			Timber.e(TAG, "Database query was interrupted");
-//			e.printStackTrace();
-//		} catch (TimeoutException e) {
-//			Timber.e(TAG, "Query task timed out");
-//			e.printStackTrace();
-//		}
-        return mUserAccountDao.findByName(userAccount.name, userAccount.password)
+    fun findUserAccountByName(account: UserAccount): LiveData<UserAccount> {
+        return mUserAccountDao.findByName(account.name, account.password)
     }
 
     // You MUST call this on a non-UI thread or the app will throw an exception.
     // I'm passing a Runnable object to the database.
-    fun insert(userAccount: UserAccount) {
+    fun insert(account: UserAccount) {
         UserAccountDatabase.databaseWriteExecutor.execute(Runnable {
             mUserAccountDao.insert(
-                userAccount
+                account
             )
         })
     }
+
+	// Similarly, I'm calling update() on a non-UI thread.
+	fun update(account: UserAccount) {
+		UserAccountDatabase.databaseWriteExecutor.execute {
+			mUserAccountDao.update(
+				account
+			)
+		}
+	}
+
+	// Similarly, I'm calling delete() on a non-UI thread.
+	fun delete(account: UserAccount) {
+		UserAccountDatabase.databaseWriteExecutor.execute {
+			mUserAccountDao.delete(
+				account
+			)
+		}
+	}
 
     init {
         val db: UserAccountDatabase = UserAccountDatabase.getDatabase(application)

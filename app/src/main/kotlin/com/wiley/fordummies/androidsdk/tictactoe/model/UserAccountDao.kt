@@ -12,11 +12,11 @@ interface UserAccountDao {
     fun findByName(name: String, password: String): LiveData<UserAccount>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(userAccount: UserAccount)
+    fun insert(account: UserAccount)
 
     @Update
-    fun updateUserAccount(userAccount: UserAccount)
+    fun update(account: UserAccount)
 
     @Delete
-    fun delete(userAccount: UserAccount)
+    fun delete(account: UserAccount)
 }

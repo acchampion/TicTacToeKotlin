@@ -29,9 +29,9 @@ class HelpFragment : Fragment(), View.OnClickListener {
 	): View? {
 		val v = inflater.inflate(R.layout.fragment_help, container, false)
 
-		val wikipedia: Button = v.findViewById(R.id.button_lookup_wikipedia)
+		val wikipedia: Button = v.findViewById(R.id.button_wikipedia)
 		wikipedia.setOnClickListener(this)
-		val wikipediaWebView: Button = v.findViewById(R.id.button_lookup_wikipedia_in_web_view)
+		val wikipediaWebView: Button = v.findViewById(R.id.button_wikipedia_webview)
 		wikipediaWebView.setOnClickListener(this)
 
 		return v
@@ -48,7 +48,8 @@ class HelpFragment : Fragment(), View.OnClickListener {
 	private fun hasNetworkConnection(): Boolean {
 		val connMgr =
 			requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		return connMgr.isDefaultNetworkActive
+		val networkInfo = connMgr.activeNetworkInfo
+		return connMgr.isDefaultNetworkActive && networkInfo != null && networkInfo.isConnected
 	}
 
 	private fun launchBrowser(url: String) {
@@ -64,7 +65,7 @@ class HelpFragment : Fragment(), View.OnClickListener {
 		startActivity(launchWebViewIntent)
 	}
 
-	private fun noNetworkConnectionNotify() {
+	private fun notifyNetworkConnection() {
 		val manager = parentFragmentManager
 		val fragment = NoNetworkConnectionDialogFragment()
 		fragment.show(manager, "no_net_conn")
@@ -72,15 +73,15 @@ class HelpFragment : Fragment(), View.OnClickListener {
 
 	override fun onClick(view: View) {
 		when (view.id) {
-			R.id.button_lookup_wikipedia -> if (hasNetworkConnection()) {
+			R.id.button_wikipedia -> if (hasNetworkConnection()) {
 				launchBrowser("https://en.wikipedia.org/wiki/Tic-tac-toe")
 			} else {
-				noNetworkConnectionNotify()
+				notifyNetworkConnection()
 			}
-			R.id.button_lookup_wikipedia_in_web_view -> if (hasNetworkConnection()) {
+			R.id.button_wikipedia_webview -> if (hasNetworkConnection()) {
 				launchWebView("https://en.wikipedia.org/wiki/Tic-tac-toe")
 			} else {
-				noNetworkConnectionNotify()
+				notifyNetworkConnection()
 			}
 		}
 	}

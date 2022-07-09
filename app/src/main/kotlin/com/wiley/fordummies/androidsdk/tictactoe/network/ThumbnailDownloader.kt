@@ -1,16 +1,18 @@
 package com.wiley.fordummies.androidsdk.tictactoe.network
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.os.Message
-import androidx.lifecycle.Lifecycle
+import androidx.annotation.NonNull
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.LifecycleOwner
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.set
 
 private const val TAG = "ThumbnailDownloader"
 private const val MESSAGE_DOWNLOAD = 0
@@ -22,9 +24,9 @@ class ThumbnailDownloader<in T> (
     HandlerThread(TAG) {
 
 	val fragmentLifecycleObserver: LifecycleObserver =
-		object : LifecycleObserver {
-			@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-			fun setup() {
+		object : DefaultLifecycleObserver {
+			override fun onCreate(@NonNull owner: LifecycleOwner) {
+				super.onCreate(owner)
 				Timber.tag(TAG).i("Starting background thread")
 				if (!isAlive) {
 					start()
@@ -32,16 +34,16 @@ class ThumbnailDownloader<in T> (
 				looper
 			}
 
-			@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-			fun tearDown() {
+			override fun onDestroy(owner: LifecycleOwner) {
+				super.onDestroy(owner)
 				Timber.tag(TAG).i("Destroying background thread")
 				quit()
 			}
 		}
 
-	val viewLifecycleObserver = object : LifecycleObserver {
-		@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-		private fun clearQueue() {
+	val viewLifecycleObserver = object : DefaultLifecycleObserver {
+		override fun onDestroy(owner: LifecycleOwner) {
+			super.onDestroy(owner)
 			Timber.tag(TAG).i("Clearing all requests from queue")
 			mRequestHandler.removeMessages(MESSAGE_DOWNLOAD)
 			mRequestMap.clear()
@@ -59,10 +61,9 @@ class ThumbnailDownloader<in T> (
     }
 
 	@Suppress("UNCHECKED_CAST")
-	@SuppressLint("HandlerLeak")
     override fun onLooperPrepared() {
         super.onLooperPrepared()
-        mRequestHandler = object : Handler() {
+        mRequestHandler = object : Handler(Looper.getMainLooper()) {
 			override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 if (msg.what == MESSAGE_DOWNLOAD) {

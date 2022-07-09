@@ -44,6 +44,7 @@ class HelpWebViewFragment : Fragment() {
 		}
 		WebView.setWebContentsDebuggingEnabled(true)
 		helpInWebView.webViewClient = object : WebViewClient() {
+
 			override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
 				return false
 			}
@@ -71,4 +72,5 @@ class HelpWebViewFragment : Fragment() {
 			subtitle = resources.getString(R.string.help_webview)
 		}
 	}
+
 }

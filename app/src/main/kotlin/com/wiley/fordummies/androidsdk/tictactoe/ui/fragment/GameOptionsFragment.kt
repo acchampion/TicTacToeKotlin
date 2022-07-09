@@ -1,5 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -10,6 +12,8 @@ import com.wiley.fordummies.androidsdk.tictactoe.MediaPlaybackService
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.ui.MapsActivity
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.*
+import timber.log.Timber
+
 
 /**
  * Fragment that handles main user navigation in the app.
@@ -18,11 +22,15 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.*
  */
 
 class GameOptionsFragment : Fragment(), View.OnClickListener {
+
+	private val TAG = javaClass.simpleName
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
+		Timber.tag(TAG).d("onCreateView")
 		val v = inflater.inflate(R.layout.fragment_game_options, container, false)
 
 		val btnNewGame: Button = v.findViewById(R.id.buttonNewGame)
@@ -57,6 +65,13 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 		activity.supportActionBar?.apply {
 			subtitle = resources.getString(R.string.options)
 		}
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+		val activity: Activity = requireActivity()
+		val appContext: Context = activity.applicationContext
+		activity.stopService(Intent(appContext, MediaPlaybackService::class.java))
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

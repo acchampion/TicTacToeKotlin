@@ -16,8 +16,8 @@ class UserAccountViewModel(application: Application) : AndroidViewModel(applicat
 	fun containsUserAccount(userAccount: UserAccount): Boolean {
 		var accountInList = false
 		val userAccountLiveData = mRepository.findUserAccountByName(userAccount)
-		val theUserAccount = userAccountLiveData.value
-		if (theUserAccount?.name == userAccount.name && theUserAccount.password == userAccount.password) {
+		val theUserAccount = userAccountLiveData.value ?: return accountInList
+		if (theUserAccount.name == userAccount.name && theUserAccount.password == userAccount.password) {
 			accountInList = true
 		}
 		return accountInList
@@ -29,6 +29,7 @@ class UserAccountViewModel(application: Application) : AndroidViewModel(applicat
 
 	fun insert(userAccount: UserAccount) {
 		mRepository.insert(userAccount)
+		allUserAccounts = mRepository.allUserAccounts
 	}
 
 }

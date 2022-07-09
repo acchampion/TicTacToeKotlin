@@ -274,19 +274,16 @@ class GameSessionFragment : Fragment() {
                         Timber.d("Calling setupBoard() again")
 
                         mSavedInstanceState = Bundle()
-                        onSaveInstanceState(mSavedInstanceState)
                         activity?.recreate()
                         onCreateView(inflater, mContainer, mSavedInstanceState)
 
-                        if (mBoard != null) {
-                            val blankSymbol = Symbol.SymbolBlankCreate()
-                            for (x in 0 until GameGrid.SIZE) {
-                                for (y in 0 until GameGrid.SIZE) {
-                                    mActiveGame.gameGrid.setValueAtLocation(x, y, blankSymbol)
-                                }
-                            }
-                        }
-                    } else {
+						val blankSymbol = Symbol.SymbolBlankCreate()
+						for (x in 0 until GameGrid.SIZE) {
+							for (y in 0 until GameGrid.SIZE) {
+								mActiveGame.gameGrid.setValueAtLocation(x, y, blankSymbol)
+							}
+						}
+					} else {
                         Timber.d("Could not restart game. mContainer or mSavedInstanceState were null")
                     }
                     playNewGame()} }

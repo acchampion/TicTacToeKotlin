@@ -1,5 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
+import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -18,6 +19,9 @@ import androidx.lifecycle.MutableLiveData
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import timber.log.Timber
 import java.io.File
+import java.io.FileDescriptor
+import java.io.IOException
+
 
 /**
  * Fragment for showing and capturing images.
@@ -34,16 +38,26 @@ class ImagesFragment : Fragment(), View.OnClickListener {
     private var mCapturePhotoLaunch = registerForActivityResult(
         TakePicturePreview()
     ) { result ->
-        mBitmapLiveData.value = result
-        mImageView.setImageBitmap(mBitmapLiveData.value)
-    }
+		Runnable {
+			mBitmapLiveData.postValue(result)
+			val bitmap = mBitmapLiveData.value
+			mImageView.setImageBitmap(bitmap)
+		}
+	}
 
     private var mPickImageResult = registerForActivityResult(
         GetContent()
     ) { result ->
-        val uriString = result.toString()
-        val imageUri = Uri.parse(uriString)
-        mImageView.setImageURI(imageUri)
+		val uriString = result.toString()
+		val imageUri = Uri.parse(uriString)
+		val runnable = Runnable {
+			val bitmap: Bitmap? = uriToBitmap(imageUri)
+			if (bitmap != null) {
+				mBitmapLiveData.postValue(bitmap!!)
+				mImageView.setImageURI(imageUri)
+			}
+		}
+		runnable.run()
     }
 
     override fun onCreateView(
@@ -103,4 +117,18 @@ class ImagesFragment : Fragment(), View.OnClickListener {
         }
     }
 
+	private fun uriToBitmap(selectedFileUri: Uri): Bitmap? {
+		var image: Bitmap? = null
+		try {
+			val activity: Activity = requireActivity()
+			val parcelFileDescriptor =
+				activity.contentResolver.openFileDescriptor(selectedFileUri, "r")
+			val fileDescriptor: FileDescriptor = parcelFileDescriptor!!.fileDescriptor
+			image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+			parcelFileDescriptor.close()
+		} catch (e: IOException) {
+			e.printStackTrace()
+		}
+		return image
+	}
 }

@@ -6,7 +6,6 @@ import android.os.AsyncTask
 import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
 import timber.log.Timber
-import java.util.*
 
 /**
  * LiveData class that encapsulates the results of fetching contacts' names.
@@ -74,14 +73,6 @@ class ContactLiveData(private val mContext: Context) :
 			ContactsContract.Contacts.LOOKUP_KEY,
 			ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
 		)
-
-		/*
-	 * Defines an array that contains column names to move from
-	 * the Cursor to the ListView.
-	 */
-		/*private val FROM_COLUMNS = arrayOf(
-			ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
-		)*/
 	}
 
 	init {
