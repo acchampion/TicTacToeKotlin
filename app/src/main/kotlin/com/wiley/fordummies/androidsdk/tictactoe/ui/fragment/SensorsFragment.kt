@@ -37,7 +37,7 @@ class SensorsFragment : Fragment(), SensorEventListener {
         val activity: Activity = requireActivity()
         val sensorRecyclerView = v.findViewById<RecyclerView>(R.id.sensor_recyclerview_table)
         sensorRecyclerView.layoutManager = LinearLayoutManager(activity)
-        mSensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+		mSensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 		mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL)
 		val adapter = SensorAdapter(mSensorList)
 		sensorRecyclerView.adapter = adapter

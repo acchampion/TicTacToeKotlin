@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
@@ -45,7 +46,7 @@ class HelpWebViewFragment : Fragment() {
 		WebView.setWebContentsDebuggingEnabled(true)
 		helpInWebView.webViewClient = object : WebViewClient() {
 
-			override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+			override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
 				return false
 			}
 		}

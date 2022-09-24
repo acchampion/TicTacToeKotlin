@@ -1,6 +1,5 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.fragment.app.viewModels
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.StringUtils
 import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccount
@@ -30,16 +28,7 @@ class AccountFragment : Fragment(), View.OnClickListener {
 	private lateinit var mEtUsername: EditText
 	private lateinit var mEtPassword: EditText
 	private lateinit var mEtConfirm: EditText
-	private lateinit var mUserAccountViewModel: UserAccountViewModel
-	// private val TAG = AccountFragment::class.java.simpleName
-
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		val activity: Activity = requireActivity()
-		mUserAccountViewModel = ViewModelProvider((activity as ViewModelStoreOwner)).get(
-			UserAccountViewModel::class.java
-		)
-	}
+	private val mUserAccountViewModel: UserAccountViewModel by viewModels()
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -91,15 +80,6 @@ class AccountFragment : Fragment(), View.OnClickListener {
 				val sha256HashBytes = digest.digest(password.toByteArray(StandardCharsets.UTF_8))
 				val sha256HashStr = StringUtils.bytesToHex(sha256HashBytes)
 
-				// Old way: add account directly
-				// Account account = new Account(username, sha256HashStr);
-				// singleton.addAccount(account);
-//				Toast.makeText(
-//					activity.applicationContext,
-//					"New record inserted",
-//					Toast.LENGTH_SHORT
-//				).show()
-
 				// New way: create new UserAccount, then add it to ViewModel
 				val userAccount = UserAccount(username, sha256HashStr)
 				mUserAccountViewModel.insert(userAccount)
@@ -108,7 +88,6 @@ class AccountFragment : Fragment(), View.OnClickListener {
 					"New UserAccount added",
 					Toast.LENGTH_SHORT
 				).show()
-
 
 			} catch (e: NoSuchAlgorithmException) {
 				Toast.makeText(activity, "Error: No SHA-256 algorithm found", Toast.LENGTH_SHORT)

@@ -61,13 +61,7 @@ class GameSessionFragment : Fragment() {
             mContainer = container
         }
 
-//        if (savedInstanceState != null) {
-//            mSavedInstanceState = savedInstanceState
-//            mScorePlayerOne = savedInstanceState.getInt(SCOREPLAYERONEKEY)
-//            mScorePlayerTwo = savedInstanceState.getInt(SCOREPLAYERTWOKEY)
-//        }
-
-        retainInstance = true
+		retainInstance = true
 
 		loadGameFromPrefs()
         setupBoard(v)

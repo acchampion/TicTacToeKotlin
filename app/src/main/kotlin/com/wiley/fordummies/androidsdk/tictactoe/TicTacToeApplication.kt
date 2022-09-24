@@ -14,9 +14,9 @@ const val NOTIFICATION_CHANNEL_ID = "flickr_poll"
 class TicTacToeApplication: Application() {
 
     override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(DebugTree())
+		super.onCreate()
+		if (BuildConfig.DEBUG) {
+			Timber.plant(DebugTree())
         }
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -11,13 +11,16 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.model.Contact
 import com.wiley.fordummies.androidsdk.tictactoe.model.viewmodel.ContactViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -27,9 +30,9 @@ import timber.log.Timber
  */
 class ContactsFragment : Fragment() {
 	private lateinit var mContactRecyclerView: RecyclerView
-	private lateinit var mContactAdapter: ContactAdapter
-	private lateinit var mContactList: List<Contact>
-	private lateinit var mContactViewModel: ContactViewModel
+	private val mContactViewModel: ContactViewModel by viewModels()
+
+	private var contactJob: Job? = null
 
 	private val mActivityResult = registerForActivityResult(
 		RequestPermission()
@@ -49,19 +52,10 @@ class ContactsFragment : Fragment() {
 		}
 	}
 
-	private val TAG = javaClass.simpleName
+	private val classTag = javaClass.simpleName
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		val activity: Activity = requireActivity()
-		mContactViewModel = ContactViewModel(activity.application)
-		mContactViewModel.allContacts.observe(
-			(activity as LifecycleOwner)
-		) { contactList ->
-			Timber.d(TAG, "List of contacts changed; %d elements", contactList.size)
-			val contactAdapter = ContactAdapter(contactList)
-			mContactRecyclerView.swapAdapter(contactAdapter, true)
-		}
 	}
 
 	override fun onCreateView(
@@ -82,6 +76,11 @@ class ContactsFragment : Fragment() {
 		} catch (npe: NullPointerException) {
 			Timber.e("Could not set subtitle")
 		}
+	}
+
+	override fun onStop() {
+		super.onStop()
+		contactJob?.cancel()
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,11 +106,19 @@ class ContactsFragment : Fragment() {
 
 	private fun showContacts() {
 		Timber.d("showContacts()")
-		val allContactsData = mContactViewModel.allContacts
-		mContactList = allContactsData.value!!
-		mContactAdapter = ContactAdapter(mContactList)
-		mContactRecyclerView.adapter = mContactAdapter
-		mContactRecyclerView.itemAnimator = DefaultItemAnimator()
+		contactJob = viewLifecycleOwner.lifecycleScope.launch {
+			val contactList = mContactViewModel.loadContacts(requireActivity().contentResolver)
+			mContactViewModel.getContactsLiveData(requireActivity().applicationContext.contentResolver).observe(
+				(activity as LifecycleOwner)
+			) { newContactList: List<Contact?>? ->
+				Timber.tag(classTag).d("List of contacts changed; %d elements", newContactList?.size)
+				if (newContactList != null && !newContactList.contains(null)) {
+					val theList: List<Contact> = ArrayList(newContactList.size)
+					val contactAdapter = ContactAdapter(newContactList as List<Contact>)
+					mContactRecyclerView.swapAdapter(contactAdapter, true)
+				}
+			}
+		}
 	}
 
 	private class ContactHolder constructor(inflater: LayoutInflater, parent: ViewGroup?) :

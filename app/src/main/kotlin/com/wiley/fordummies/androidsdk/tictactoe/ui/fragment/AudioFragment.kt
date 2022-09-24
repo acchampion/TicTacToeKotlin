@@ -29,7 +29,7 @@ import java.io.File
  */
 class AudioFragment : Fragment(), View.OnClickListener {
     private var mStarted = false
-    private var mAudioFileUri: Uri? = null
+    private lateinit var mAudioFileUri: Uri
     private val mRecordAudioIntent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
     private lateinit var mButtonStart: Button
     private lateinit var mButtonStop: Button
@@ -40,7 +40,9 @@ class AudioFragment : Fragment(), View.OnClickListener {
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                mAudioFileUri = intent.data
+				if (intent.data != null) {
+					mAudioFileUri = intent.data!!
+				}
                 Timber.v("Audio File URI: %s", mAudioFileUri)
             }
         }

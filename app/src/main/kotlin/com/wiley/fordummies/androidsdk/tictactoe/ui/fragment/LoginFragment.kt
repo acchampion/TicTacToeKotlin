@@ -37,13 +37,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	private lateinit var mUsernameEditText: EditText
 	private lateinit var mPasswordEditText: EditText
 
-	// private lateinit var mAccountSingleton: AccountSingleton
-	// private lateinit var mDbHelper: AccountDbHelper
-
 	private lateinit var mUserAccountViewModel: UserAccountViewModel
 	private var mUserAccountList = CopyOnWriteArrayList<UserAccount>()
 
-	private val TAG = javaClass.simpleName
+	private val classTag = javaClass.simpleName
 	private val OPT_NAME = "name"
 
 
@@ -83,7 +80,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 		// Here's a dummy observer object that indicates when the UserAccounts change in the database.
 		mUserAccountViewModel.allUserAccounts.observe((activity as LifecycleOwner)
 		) { userAccounts ->
-			Timber.tag(TAG)
+			Timber.tag(classTag)
 				.d("The list of UserAccounts just changed; it has %s elements", userAccounts.size)
 			mUserAccountList.clear()
 			mUserAccountList.addAll(userAccounts)
@@ -93,7 +90,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
 	override fun onDestroyView() {
 		super.onDestroyView()
-		Timber.tag(TAG).d("onDestroyView()")
+		Timber.tag(classTag).d("onDestroyView()")
 	}
 
 	override fun onDestroy() {

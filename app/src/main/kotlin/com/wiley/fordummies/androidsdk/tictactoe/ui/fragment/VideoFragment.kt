@@ -25,7 +25,7 @@ import java.util.*
  */
 class VideoFragment : Fragment(), View.OnClickListener {
     private lateinit var mVideoView: VideoView
-    private var mVideoFileUri: Uri? = null
+    private lateinit var mVideoFileUri: Uri
     private lateinit var mButtonStart: Button
     private lateinit var mButtonStop: Button
     private val mRecordVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
@@ -36,7 +36,14 @@ class VideoFragment : Fragment(), View.OnClickListener {
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                mVideoFileUri = intent.data
+				if (intent.data != null) {
+					mVideoFileUri = intent.data!!
+				} else {
+					// Video file doesn't exist, so load sample video from resources.
+					val videoResourceName = "android.resource://" + requireContext().packageName +
+							File.separator + R.raw.sample_video
+					mVideoFileUri = Uri.parse(videoResourceName)
+				}
                 mVideoView.setVideoURI(mVideoFileUri)
                 Timber.v("Audio File URI: %s", mVideoFileUri)
             }

@@ -23,14 +23,14 @@ import timber.log.Timber
 
 class GameOptionsFragment : Fragment(), View.OnClickListener {
 
-	private val TAG = javaClass.simpleName
+	private val classTag = javaClass.simpleName
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		Timber.tag(TAG).d("onCreateView")
+		Timber.tag(classTag).d("onCreateView")
 		val v = inflater.inflate(R.layout.fragment_game_options, container, false)
 
 		val btnNewGame: Button = v.findViewById(R.id.buttonNewGame)
