@@ -37,14 +37,14 @@ class ContactViewModel(application: Application) : AndroidViewModel(application)
 		mAllContactsData = ContactLiveData(application)
 	}
 
-	suspend fun getContactsLiveData(resolver: ContentResolver): ContactLiveData {
+	fun getContactsLiveData(resolver: ContentResolver): ContactLiveData {
 		mContactList = loadContacts(resolver)
 		mAllContactsData.value = mContactList
 		assert(mAllContactsData.value != null)
 		return mAllContactsData
 	}
 
-	suspend fun loadContacts(mResolver: ContentResolver): MutableList<Contact> {
+	fun loadContacts(mResolver: ContentResolver): MutableList<Contact> {
 		val cursor: Cursor? = mResolver.query(
 			ContactsContract.Contacts.CONTENT_URI,
 			PROJECTION,

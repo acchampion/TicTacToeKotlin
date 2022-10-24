@@ -53,7 +53,7 @@ class ImagesFragment : Fragment(), View.OnClickListener {
 		val runnable = Runnable {
 			val bitmap: Bitmap? = uriToBitmap(imageUri)
 			if (bitmap != null) {
-				mBitmapLiveData.postValue(bitmap!!)
+				mBitmapLiveData.postValue(bitmap)
 				mImageView.setImageURI(imageUri)
 			}
 		}

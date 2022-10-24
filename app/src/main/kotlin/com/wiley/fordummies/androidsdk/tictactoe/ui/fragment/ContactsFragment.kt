@@ -113,8 +113,8 @@ class ContactsFragment : Fragment() {
 			) { newContactList: List<Contact?>? ->
 				Timber.tag(classTag).d("List of contacts changed; %d elements", newContactList?.size)
 				if (newContactList != null && !newContactList.contains(null)) {
-					val theList: List<Contact> = ArrayList(newContactList.size)
-					val contactAdapter = ContactAdapter(newContactList as List<Contact>)
+					val theList = newContactList.filterIsInstance<Contact>()
+					val contactAdapter = ContactAdapter(theList)
 					mContactRecyclerView.swapAdapter(contactAdapter, true)
 				}
 			}
