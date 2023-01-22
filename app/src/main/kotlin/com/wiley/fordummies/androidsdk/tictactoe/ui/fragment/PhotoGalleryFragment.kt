@@ -28,7 +28,7 @@ class PhotoGalleryFragment : VisibleFragment() {
 	private lateinit var mPhotoRecyclerView: RecyclerView
 
 	private val classTag = javaClass.simpleName
-	private val POLL_WORK = "POLL_WORK"
+	private val pollWork = "POLL_WORK"
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -124,7 +124,7 @@ class PhotoGalleryFragment : VisibleFragment() {
 			R.id.menu_item_toggle_polling -> {
 				val isPolling = QueryPreferences.isPolling(requireContext())
 				if (isPolling) {
-					WorkManager.getInstance(requireContext()).cancelUniqueWork(POLL_WORK)
+					WorkManager.getInstance(requireContext()).cancelUniqueWork(pollWork)
 					QueryPreferences.setPolling(requireContext(), false)
 				} else {
 					val constraints = Constraints.Builder()
@@ -138,7 +138,7 @@ class PhotoGalleryFragment : VisibleFragment() {
 						.setConstraints(constraints)
 						.build()
 					WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
-						POLL_WORK,
+						pollWork,
 						ExistingPeriodicWorkPolicy.KEEP,
 						periodicRequest
 					)

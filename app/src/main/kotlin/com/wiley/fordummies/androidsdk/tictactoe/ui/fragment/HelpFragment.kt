@@ -49,6 +49,7 @@ class HelpFragment : Fragment(), View.OnClickListener {
 		val connMgr =
 			requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 		val networkInfo = connMgr.activeNetworkInfo
+		val network = connMgr.activeNetwork
 		return connMgr.isDefaultNetworkActive && networkInfo != null && networkInfo.isConnected
 	}
 

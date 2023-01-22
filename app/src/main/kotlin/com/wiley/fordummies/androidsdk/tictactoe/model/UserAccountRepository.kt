@@ -16,7 +16,7 @@ class UserAccountRepository internal constructor(application: Application) {
     // Room executes all queries on a separate thread.
     // Observed LiveData notify the observer upon data change.
     val allUserAccounts: LiveData<List<UserAccount>>
-    private val TAG = javaClass.simpleName
+    private val classTag = javaClass.simpleName
 
     fun findUserAccountByName(account: UserAccount): LiveData<UserAccount> {
         return mUserAccountDao.findByName(account.name, account.password)
@@ -25,12 +25,12 @@ class UserAccountRepository internal constructor(application: Application) {
     // You MUST call this on a non-UI thread or the app will throw an exception.
     // I'm passing a Runnable object to the database.
     fun insert(account: UserAccount) {
-        UserAccountDatabase.databaseWriteExecutor.execute(Runnable {
-            mUserAccountDao.insert(
-                account
-            )
-        })
-    }
+        UserAccountDatabase.databaseWriteExecutor.execute {
+			mUserAccountDao.insert(
+				account
+			)
+		}
+	}
 
 	// Similarly, I'm calling update() on a non-UI thread.
 	fun update(account: UserAccount) {

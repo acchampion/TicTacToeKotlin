@@ -12,9 +12,8 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.StringUtils
@@ -37,7 +36,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	private lateinit var mUsernameEditText: EditText
 	private lateinit var mPasswordEditText: EditText
 
-	private lateinit var mUserAccountViewModel: UserAccountViewModel
+	private val mUserAccountViewModel: UserAccountViewModel by viewModels()
 	private var mUserAccountList = CopyOnWriteArrayList<UserAccount>()
 
 	private val classTag = javaClass.simpleName
@@ -74,9 +73,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		val activity = requireActivity() as AppCompatActivity
-		mUserAccountViewModel = ViewModelProvider((activity as ViewModelStoreOwner)).get(
-			UserAccountViewModel::class.java
-		)
+
 		// Here's a dummy observer object that indicates when the UserAccounts change in the database.
 		mUserAccountViewModel.allUserAccounts.observe((activity as LifecycleOwner)
 		) { userAccounts ->

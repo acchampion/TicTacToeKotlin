@@ -36,13 +36,13 @@ class VideoFragment : Fragment(), View.OnClickListener {
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-				if (intent.data != null) {
-					mVideoFileUri = intent.data!!
+				mVideoFileUri = if (intent.data != null) {
+					intent.data!!
 				} else {
 					// Video file doesn't exist, so load sample video from resources.
 					val videoResourceName = "android.resource://" + requireContext().packageName +
 							File.separator + R.raw.sample_video
-					mVideoFileUri = Uri.parse(videoResourceName)
+					Uri.parse(videoResourceName)
 				}
                 mVideoView.setVideoURI(mVideoFileUri)
                 Timber.v("Audio File URI: %s", mVideoFileUri)

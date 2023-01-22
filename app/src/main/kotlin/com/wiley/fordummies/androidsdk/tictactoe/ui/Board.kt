@@ -29,7 +29,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 	private val mGridPaint: Paint
 	private val mDitherPaint: Paint
 
-	private val TAG = javaClass.simpleName
+	private val classTag = javaClass.simpleName
 
 	init {
 
@@ -100,7 +100,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 
 	override fun onTouchEvent(event: MotionEvent): Boolean {
 		if (!this.mIsEnabled) {
-			Timber.d(TAG, "Board.onTouchEvent(): Board not mIsEnabled")
+			Timber.d(classTag, "Board.onTouchEvent(): Board not mIsEnabled")
 			return false
 		}
 
@@ -111,7 +111,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 		if (action == MotionEvent.ACTION_DOWN) {
 			val x = event.x
 			val y = event.y
-			Timber.d(TAG, "Coordinates: $x, $y")
+			Timber.d(classTag, "Coordinates: $x, $y")
 			if (x > mBlockWidth && x < mBlockWidth * 2) posX = 1
 			if (x > mBlockWidth * 2 && x < mBlockWidth * 3) posX = 2
 
@@ -125,18 +125,18 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 	}
 
 	fun placeSymbol(x: Int, y: Int) {
-		Timber.d(TAG, "Thread ID in Board.placeSymbol: %s", Thread.currentThread().id)
+		Timber.d(classTag, "Thread ID in Board.placeSymbol: %s", Thread.currentThread().id)
 		invalidate()
 	}
 
 	fun disableInput() {
 		this.mIsEnabled = false
-		Timber.d(TAG, "Board.disableInput(): Board not mIsEnabled")
+		Timber.d(classTag, "Board.disableInput(): Board not mIsEnabled")
 	}
 
 	fun enableInput() {
 		this.mIsEnabled = true
-		Timber.d(TAG, "Board.enableInput(): Board mIsEnabled")
+		Timber.d(classTag, "Board.enableInput(): Board mIsEnabled")
 	}
 
 	private fun getBitmapForSymbol(aSymbol: Symbol?): Bitmap? {
@@ -164,7 +164,7 @@ class Board(context: Context, attributes: AttributeSet) : View(context, attribut
 				oSym.recycle()
 				xSym.recycle()
 			} catch (ome: OutOfMemoryError) {
-				Timber.d(TAG, "Ran out of memory decoding bitmaps")
+				Timber.d(classTag, "Ran out of memory decoding bitmaps")
 				ome.printStackTrace()
 			}
 		}

@@ -22,7 +22,7 @@ import timber.log.Timber
 class HelpWebViewFragment : Fragment() {
 	private lateinit var mUrl: String
 	private lateinit var mProgressBar: ProgressBar
-	private val ARG_URI = "url"
+	private val argUrl = "url"
 	// private val TAG = HelpWebViewFragment::class.java.simpleName
 
 	override fun onCreateView(
@@ -40,7 +40,7 @@ class HelpWebViewFragment : Fragment() {
 
 		val extras = requireActivity().intent?.extras
 		if (extras != null) {
-			mUrl = extras.getString(ARG_URI)!!
+			mUrl = extras.getString(argUrl)!!
 			Timber.d("Loading URL $mUrl")
 		}
 		WebView.setWebContentsDebuggingEnabled(true)

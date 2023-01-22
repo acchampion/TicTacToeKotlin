@@ -1,7 +1,14 @@
 package com.wiley.fordummies.androidsdk.tictactoe;
 
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.test.annotation.UiThreadTest;
+import androidx.test.rule.ActivityTestRule;
 
 import com.wiley.fordummies.androidsdk.tictactoe.ui.Board;
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.GameSessionActivity;
@@ -9,24 +16,17 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.GameSessionFragment
 
 import org.junit.Test;
 
-import androidx.test.annotation.UiThreadTest;
-import androidx.test.rule.ActivityTestRule;
-
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 /**
  * Test that Tic-Tac-Toe's Board UI works.
  * <p>
- * Source: https://stackoverflow.com/questions/30908969/android-writing-test-cases-for-fragments
+ * Source: <a href="https://stackoverflow.com/questions/30908969/android-writing-test-cases-for-fragments">...</a>
  * <p>
  * Created by adamcchampion on 2017/08/20.
  */
 
 public class GameSessionActivityTest extends ActivityTestRule<GameSessionActivity> {
-    private GameSessionActivity mGameSessionActivity;
-    private GameSessionFragment mGameSessionFragment;
+    private final GameSessionActivity mGameSessionActivity;
+    private final GameSessionFragment mGameSessionFragment;
     private Board mBoard;
 
     private final float[] x = {(float) 56.0, (float) 143.0, (float) 227.0};

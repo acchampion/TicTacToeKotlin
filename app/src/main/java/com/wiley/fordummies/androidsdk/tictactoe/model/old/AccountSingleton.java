@@ -25,7 +25,7 @@ import java.util.List;
 public class AccountSingleton {
     private static AccountSingleton sAccount;
 
-    private SQLiteDatabase mDatabase;
+    private final SQLiteDatabase mDatabase;
 
     private static final String INSERT_STMT = "INSERT INTO " + AccountsTable.NAME + " (name, password) VALUES (?, ?)" ;
 
@@ -50,11 +50,11 @@ public class AccountSingleton {
     }
 
     /**
-     * Add a new user Account to the database. This DB logic uses code from Jake Wharton:
-     * http://jakewharton.com/kotlin-is-here/ (slide 61). It's much easier in Kotlin!
-     *
-     * @param account User Account object
-     */
+	 * Add a new user Account to the database. This DB logic uses code from Jake Wharton:
+	 * <a href="http://jakewharton.com/kotlin-is-here/">...</a> (slide 61). It's much easier in Kotlin!
+	 *
+	 * @param account User Account object
+	 */
     public void addAccount(Account account) {
         ContentValues contentValues = getContentValues(account);
 
@@ -71,9 +71,9 @@ public class AccountSingleton {
     }
 
     /**
-     * Delete all user accounts from the database. This DB logic uses code from Jake Wharton:
-     * http://jakewharton.com/kotlin-is-here/ (slide 61). It's much easier in Kotlin!
-     */
+	 * Delete all user accounts from the database. This DB logic uses code from Jake Wharton:
+	 * <a href="http://jakewharton.com/kotlin-is-here/">...</a> (slide 61). It's much easier in Kotlin!
+	 */
     @SuppressWarnings({"UnusedDeclaration"})
     public void deleteAllAccounts() {
         mDatabase.beginTransaction();

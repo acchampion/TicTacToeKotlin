@@ -33,7 +33,7 @@ import java.io.IOException
 class ImagesFragment : Fragment(), View.OnClickListener {
     private lateinit var mImageView: ImageView
     private lateinit var mImageFilePath: String
-    private val mBitmapLiveData = MutableLiveData<Bitmap>()
+    private val mBitmapLiveData = MutableLiveData<Bitmap?>()
 
     private var mCapturePhotoLaunch = registerForActivityResult(
         TakePicturePreview()

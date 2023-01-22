@@ -17,25 +17,21 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
-import java.util.*
 
 class FlickrFetchr {
-	private val mPhotoInterceptor: PhotoInterceptor
-	private val mClient: OkHttpClient
+	private val mPhotoInterceptor: PhotoInterceptor = PhotoInterceptor()
+	private val mClient: OkHttpClient = OkHttpClient.Builder()
+		.addInterceptor(mPhotoInterceptor)
+		.build()
 	private val mFlickrApi: FlickrApi
-	private val mRetrofit: Retrofit
-	private val TAG = javaClass.simpleName
+	private val mRetrofit: Retrofit = Retrofit.Builder()
+		.baseUrl("https://api.flickr.com/")
+		.addConverterFactory(GsonConverterFactory.create())
+		.client(mClient)
+		.build()
+	private val classTag = javaClass.simpleName
 
 	init {
-		mPhotoInterceptor = PhotoInterceptor()
-		mClient = OkHttpClient.Builder()
-			.addInterceptor(mPhotoInterceptor)
-			.build()
-		mRetrofit = Retrofit.Builder()
-			.baseUrl("https://api.flickr.com/")
-			.addConverterFactory(GsonConverterFactory.create())
-			.client(mClient)
-			.build()
 		mFlickrApi = mRetrofit.create(FlickrApi::class.java)
 	}
 
@@ -51,7 +47,7 @@ class FlickrFetchr {
 				call: Call<FlickrResponse?>,
 				response: Response<FlickrResponse?>
 			) {
-				Timber.tag(TAG).d("Response received")
+				Timber.tag(classTag).d("Response received")
 				val flickrResponse = response.body()
 				if (flickrResponse != null) {
 					val photoResponse = flickrResponse.photos
@@ -65,7 +61,7 @@ class FlickrFetchr {
 			}
 
 			override fun onFailure(call: Call<FlickrResponse?>, t: Throwable) {
-				Timber.tag(TAG).e(t, "Failed to fetch photos")
+				Timber.tag(classTag).e(t, "Failed to fetch photos")
 			}
 		})
 		return responseLiveData
@@ -75,7 +71,7 @@ class FlickrFetchr {
 	fun fetchPhoto(url: String?): Bitmap? {
 		val response: Response<ResponseBody> = mFlickrApi.fetchUrlBytes(url).execute()
 		val bitmap = response.body()?.byteStream()?.use(BitmapFactory::decodeStream)
-		Timber.tag(TAG).i("Decoded bitmap $bitmap from Response $response")
+		Timber.tag(classTag).i("Decoded bitmap $bitmap from Response $response")
 		return bitmap
 	}
 
@@ -100,7 +96,7 @@ class FlickrFetchr {
 				call: Call<FlickrResponse?>,
 				response: Response<FlickrResponse?>
 			) {
-				Timber.tag(TAG).d("Response received")
+				Timber.tag(classTag).d("Response received")
 				val flickrResponse = response.body()
 				if (flickrResponse != null) {
 					val photoResponse = flickrResponse.photos
@@ -114,7 +110,7 @@ class FlickrFetchr {
 			}
 
 			override fun onFailure(call: Call<FlickrResponse?>, t: Throwable) {
-				Timber.tag(TAG).e(t, "Failed to fetch photos")
+				Timber.tag(classTag).e(t, "Failed to fetch photos")
 			}
 		})
 		return responseLiveData

@@ -1,7 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
 import timber.log.Timber
-import java.util.*
 
 class GameGrid {
     companion object {
@@ -9,7 +8,7 @@ class GameGrid {
     }
     private val mGrid: Array<Array<Symbol?>>
 
-    private val TAG = javaClass.simpleName
+    private val classTag = javaClass.simpleName
 
     init {
         // Constructor. Initializes the mGrid to blanks
@@ -75,7 +74,7 @@ class GameGrid {
         get() {
             var foundIndex = -1
             var foundMismatch = false
-            Timber.d(TAG, "Entering isRightToLeftDiagonalFilled")
+            Timber.d(classTag, "Entering isRightToLeftDiagonalFilled")
             var index = SIZE - 1
             while (index >= 0 && !foundMismatch) {
                 val logStr = ">" + mGrid[0][SIZE - 1].toString() + "<   >" + mGrid[index][index].toString() + "<"
@@ -87,7 +86,7 @@ class GameGrid {
                 index--
             }
             val finalLogStr = "Leaving isRightToLeftDiagonalFilled; " + foundMismatch + "; index: " + foundIndex + "; " + mGrid[0][SIZE - 1].toString()
-            Timber.d(TAG, finalLogStr)
+            Timber.d(classTag, finalLogStr)
             return !foundMismatch && mGrid[0][SIZE - 1] !== Symbol.SymbolBlankCreate()
         }
 

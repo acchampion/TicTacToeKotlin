@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.7.21'
     repositories {
         google()
 		mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:7.4.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -46,8 +46,8 @@ task clean(type: Delete) {
 
 ext {
 	// AndroidX Jetpack components
-	activity_version = "1.6.0"
-	appcompat_version = '1.5.1'
+	activity_version = "1.6.1"
+	appcompat_version = '1.6.0'
 	browser_version = "1.4.0"
 	core_version = "1.9.0"
 	coroutines_version = '1.6.1'
@@ -56,10 +56,10 @@ ext {
 	lifecycle_version = "2.5.1"
 	recyclerview_version = "1.2.1"
 	preference_version = "1.2.0"
-	room_version = '2.4.3'
+	room_version = '2.5.0'
 	splash_version = "1.0.0"
 	work_version = "2.7.1"
-	test_version = "1.4.0"
+	test_version = "1.5.0"
 
 	// Timber and LeakCanary versions
 	timber_version = '5.0.1'
@@ -77,7 +77,7 @@ ext {
 	glide_version = "4.13.2"
 
 	// Testing components (Espresso and JUnit)
-	espresso_version = "3.4.0"
+	espresso_version = "3.5.1"
 	junit_version = "4.13.2"
 }
 

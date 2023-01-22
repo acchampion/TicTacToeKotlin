@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -202,13 +200,11 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 		}
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.M)
 	private boolean lacksLocationPermission() {
 		return checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 				!= PackageManager.PERMISSION_GRANTED;
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.M)
 	private boolean hasLocationPermission() {
 		return checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 				== PackageManager.PERMISSION_GRANTED;
@@ -219,7 +215,6 @@ public class MapsActivity extends AppCompatActivity implements LocationEngineCal
 	}
 
 	@SuppressLint("MissingPermission")
-	@RequiresApi(api = Build.VERSION_CODES.M)
 	private LocationEngine initializeLocationEngine() {
 		LocationEngine locationEngine = LocationEngineProvider.getBestLocationEngine(this);
 		LocationEngineRequest.Builder locRequestBuilder = new LocationEngineRequest.Builder(60000);

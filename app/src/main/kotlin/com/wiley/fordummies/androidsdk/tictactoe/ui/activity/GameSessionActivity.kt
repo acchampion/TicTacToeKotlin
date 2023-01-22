@@ -1,8 +1,8 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.activity
 
 import androidx.fragment.app.Fragment
-import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.GameSessionFragment
 import com.wiley.fordummies.androidsdk.tictactoe.ui.SingleFragmentActivity
+import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.GameSessionFragment
 
 /**
  * Activity for playing Tic-Tac-Toe game.
@@ -13,7 +13,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.SingleFragmentActivity
 class GameSessionActivity : SingleFragmentActivity() {
     private var mGameSessionFragment: GameSessionFragment = recoverFragment()
 
-    override fun createFragment(): Fragment? {
+    override fun createFragment(): Fragment {
         return recoverFragment()
     }
 
