@@ -12,6 +12,9 @@
 		android:label="New Photo Notification"
 		android:protectionLevel="signature" />
 
+	<uses-feature android:name="android.hardware.telephony"
+		android:required="false"/>
+
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="com.wiley.fordummies.androidsdk.tictactoe.LAUNCHACTIVITY" />
 	<uses-permission android:name="com.wiley.fordummies.androidsdk.tictactoe.PRIVATE" />
@@ -87,12 +90,17 @@
                   android:parentActivityName=".ui.activity.GameOptionsActivity"/>
         <activity android:name=".ui.activity.ContactsActivity"
                   android:parentActivityName=".ui.activity.GameOptionsActivity"/>
-        <activity android:name=".ui.MapsActivity"
-                  android:parentActivityName=".ui.activity.GameOptionsActivity"/>
         <activity android:name=".ui.activity.GameSessionActivity"
                   android:parentActivityName=".ui.activity.GameOptionsActivity"/>
+		<activity android:name=".ui.activity.MapsLocationActivity"
+			android:parentActivityName=".ui.activity.GameOptionsActivity"/>
+		<activity android:name=".ui.activity.MapsSearchActivity"
+			android:parentActivityName=".ui.activity.GameOptionsActivity"/>
+		<activity
+			android:name="com.wiley.fordummies.androidsdk.tictactoe.ui.activity.MapsSearchActivity"
+			android:parentActivityName=".ui.activity.GameOptionsActivity"/>
 
-        <service
+		<service
             android:name=".MediaPlaybackService"
             android:enabled="true"
 			android:exported="false"/>

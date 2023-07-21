@@ -5,7 +5,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
+import androidx.startup.AppInitializer
 import androidx.work.Configuration
+import com.mapbox.maps.loader.MapboxMapsInitializer
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -29,6 +31,9 @@ class TicTacToeApplication: Application() {
 			)
 			notificationManager.createNotificationChannel(channel)
 		}
+
+		AppInitializer.getInstance(this)
+			.initializeComponent(MapboxMapsInitializer::class.java)
     }
 
 	fun getWorkManagerConfiguration(): Configuration {

@@ -64,8 +64,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
 		loginButton.setOnClickListener(this)
 		val cancelButton: Button = v.findViewById(R.id.cancel_button)
 		cancelButton.setOnClickListener(this)
-		val newUserButton: Button = v.findViewById(R.id.new_user_button)
-		newUserButton.setOnClickListener(this)
+
+		if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+			val newUserButton: Button = v.findViewById(R.id.new_user_button)
+			newUserButton.setOnClickListener(this)
+		}
 
 		return v
 	}

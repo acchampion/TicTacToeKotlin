@@ -13,7 +13,7 @@ class PhotoInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest: Request = chain.request()
-        val newUrl: HttpUrl = originalRequest.url().newBuilder()
+        val newUrl: HttpUrl = originalRequest.url.newBuilder()
             .addQueryParameter("api_key", apiKey)
             .addQueryParameter("format", "json")
             .addQueryParameter("nojsoncallback", "1")
