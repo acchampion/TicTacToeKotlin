@@ -1,7 +1,9 @@
 package com.wiley.fordummies.androidsdk.tictactoe;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
+@Keep
 public class Symbol {
     private enum MARK {X, O, Blank}
 

@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.MediaPlaybackService
@@ -33,7 +34,7 @@ import timber.log.Timber
  *
  * Created by adamcchampion on 2017/08/05.
  */
-
+@Keep
 class GameOptionsFragment : Fragment(), View.OnClickListener {
 
 	private val classTag = javaClass.simpleName

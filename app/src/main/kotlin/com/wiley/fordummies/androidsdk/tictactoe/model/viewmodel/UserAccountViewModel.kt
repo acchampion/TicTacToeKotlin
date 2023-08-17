@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model.viewmodel
 
 import android.app.Application
+import androidx.annotation.Keep
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccount
@@ -9,6 +10,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccountRepository
 /**
  * ViewModel for the user account storage.
  */
+@Keep
 class UserAccountViewModel(application: Application) : AndroidViewModel(application) {
 	private val mRepository: UserAccountRepository = UserAccountRepository(application)
 	var allUserAccounts: LiveData<List<UserAccount>> = mRepository.allUserAccounts

@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +31,7 @@ import java.io.IOException
  *
  * Created by adamcchampion on 2017/08/12.
  */
+@Keep
 class ImagesFragment : Fragment(), View.OnClickListener {
     private lateinit var mImageView: ImageView
     private lateinit var mImageFilePath: String

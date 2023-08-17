@@ -2,11 +2,10 @@ package com.wiley.fordummies.androidsdk.tictactoe.network
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.annotation.Keep
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.wiley.fordummies.androidsdk.tictactoe.api.FlickrApi
-import com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse
 import com.wiley.fordummies.androidsdk.tictactoe.api.PhotoInterceptor
 import com.wiley.fordummies.androidsdk.tictactoe.model.GalleryItem
 import okhttp3.OkHttpClient
@@ -15,37 +14,38 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 
+@Keep
 class FlickrFetchr {
 	private val mPhotoInterceptor: PhotoInterceptor = PhotoInterceptor()
 	private val mClient: OkHttpClient = OkHttpClient.Builder()
 		.addInterceptor(mPhotoInterceptor)
 		.build()
-	private val mFlickrApi: FlickrApi
+	private val mFlickrApi: com.wiley.fordummies.androidsdk.tictactoe.api.FlickrApi
 	private val mRetrofit: Retrofit = Retrofit.Builder()
 		.baseUrl("https://api.flickr.com/")
-		.addConverterFactory(GsonConverterFactory.create())
+		.addConverterFactory(MoshiConverterFactory.create())
 		.client(mClient)
 		.build()
 	private val classTag = javaClass.simpleName
 
 	init {
-		mFlickrApi = mRetrofit.create(FlickrApi::class.java)
+		mFlickrApi = mRetrofit.create(com.wiley.fordummies.androidsdk.tictactoe.api.FlickrApi::class.java)
 	}
 
-	fun fetchPhotosRequest(): Call<FlickrResponse> {
+	fun fetchPhotosRequest(): Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse> {
 		return mFlickrApi.fetchPhotos()
 	}
 
 	fun fetchPhotosOld(): LiveData<List<GalleryItem>> {
 		val responseLiveData = MutableLiveData<List<GalleryItem>>()
 		val flickrRequest = mFlickrApi.fetchPhotos()
-		flickrRequest.enqueue(object : Callback<FlickrResponse?> {
+		flickrRequest.enqueue(object : Callback<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?> {
 			override fun onResponse(
-				call: Call<FlickrResponse?>,
-				response: Response<FlickrResponse?>
+				call: Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?>,
+				response: Response<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?>
 			) {
 				Timber.tag(classTag).d("Response received")
 				val flickrResponse = response.body()
@@ -60,7 +60,7 @@ class FlickrFetchr {
 				}
 			}
 
-			override fun onFailure(call: Call<FlickrResponse?>, t: Throwable) {
+			override fun onFailure(call: Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?>, t: Throwable) {
 				Timber.tag(classTag).e(t, "Failed to fetch photos")
 			}
 		})
@@ -80,7 +80,7 @@ class FlickrFetchr {
 		return fetchPhotoMetadata(fetchPhotosRequest())
 	}
 
-	fun searchPhotosRequest(query: String?): Call<FlickrResponse> {
+	fun searchPhotosRequest(query: String?): Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse> {
 		return mFlickrApi.searchPhotos(query!!)
 	}
 
@@ -89,12 +89,12 @@ class FlickrFetchr {
 		return fetchPhotoMetadata(searchPhotosRequest(query))
 	}
 
-	private fun fetchPhotoMetadata(flickrRequest: Call<FlickrResponse>): LiveData<List<GalleryItem>> {
+	private fun fetchPhotoMetadata(flickrRequest: Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse>): LiveData<List<GalleryItem>> {
 		val responseLiveData = MutableLiveData<List<GalleryItem>>()
-		flickrRequest.enqueue(object : Callback<FlickrResponse?> {
+		flickrRequest.enqueue(object : Callback<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?> {
 			override fun onResponse(
-				call: Call<FlickrResponse?>,
-				response: Response<FlickrResponse?>
+				call: Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?>,
+				response: Response<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?>
 			) {
 				Timber.tag(classTag).d("Response received")
 				val flickrResponse = response.body()
@@ -109,7 +109,7 @@ class FlickrFetchr {
 				}
 			}
 
-			override fun onFailure(call: Call<FlickrResponse?>, t: Throwable) {
+			override fun onFailure(call: Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?>, t: Throwable) {
 				Timber.tag(classTag).e(t, "Failed to fetch photos")
 			}
 		})

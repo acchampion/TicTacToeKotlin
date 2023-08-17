@@ -1,8 +1,10 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui
 
 import android.widget.TextView
-import java.util.*
+import androidx.annotation.Keep
+import java.util.Objects
 
+@Keep
 class GameView(board: Board, statusView: TextView, sessionScoresView: TextView) {
     private var mGameBoard: Board
     private var mStatusView: TextView

@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
 import android.os.Bundle
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import com.wiley.fordummies.androidsdk.tictactoe.R
@@ -10,7 +11,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
  *
  * Created by adamcchampion on 2017/08/13.
  */
-
+@Keep
 class SettingsFragment : PreferenceFragmentCompat() {
 
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

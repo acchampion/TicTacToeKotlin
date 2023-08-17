@@ -3,6 +3,7 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import androidx.annotation.Keep
 import androidx.fragment.app.DialogFragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
 
@@ -11,7 +12,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.R
  *
  * Created by adamcchampion on 2017/08/17.
  */
-
+@Keep
 class LocationDeniedDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireActivity())

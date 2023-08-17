@@ -1,5 +1,8 @@
 package com.wiley.fordummies.androidsdk.tictactoe;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class StringUtils {
 
 	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();

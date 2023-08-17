@@ -1,6 +1,8 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui;
 
 import android.os.Bundle;
+
+import androidx.annotation.Keep;
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,6 +17,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.R;
  *
  * Source: Phillips, Stewart, and Marsicano, Big Nerd Ranch Guide to Android Development, 3rd ed.
  */
+@Keep
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();

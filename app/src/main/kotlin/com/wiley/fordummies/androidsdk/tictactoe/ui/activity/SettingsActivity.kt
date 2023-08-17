@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.activity
 
 import android.os.Bundle
+import androidx.annotation.Keep
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,7 +14,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.SettingsFragment
  *
  * Created by adamcchampion on 2017/08/13.
  */
-
+@Keep
 class SettingsActivity : AppCompatActivity() {
 
     private fun createFragment(): Fragment {

@@ -13,16 +13,18 @@ import android.widget.Button
 import android.widget.VideoView
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import timber.log.Timber
 import java.io.File
-import java.util.*
+import java.util.Objects
 
 /**
  * Created by adamcchampion on 2017/08/12.
  */
+@Keep
 class VideoFragment : Fragment(), View.OnClickListener {
     private lateinit var mVideoView: VideoView
     private lateinit var mVideoFileUri: Uri

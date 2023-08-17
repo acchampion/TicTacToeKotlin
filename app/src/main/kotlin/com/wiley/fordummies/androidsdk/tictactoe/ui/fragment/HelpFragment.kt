@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
@@ -19,7 +20,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.HelpWebViewActivity
  *
  * Created by adamcchampion on 2017/08/14.
  */
-
+@Keep
 class HelpFragment : Fragment(), View.OnClickListener {
 
 	override fun onCreateView(

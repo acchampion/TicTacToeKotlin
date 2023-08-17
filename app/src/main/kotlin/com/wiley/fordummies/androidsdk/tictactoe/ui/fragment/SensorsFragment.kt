@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -18,10 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import timber.log.Timber
-import java.util.*
+import java.util.Hashtable
+import java.util.Locale
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+@Keep
 class SensorsFragment : Fragment(), SensorEventListener {
 	private lateinit var mSensorManager: SensorManager
 	private lateinit var mSensorList: List<Sensor>

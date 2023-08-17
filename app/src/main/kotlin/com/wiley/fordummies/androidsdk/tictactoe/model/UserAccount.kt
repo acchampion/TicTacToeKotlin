@@ -1,12 +1,14 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Fts4
 import androidx.room.PrimaryKey
-import java.util.*
+import java.util.Objects
 
 @Fts4
+@Keep
 @Entity(tableName = "useraccount")
 class UserAccount(
     @field:ColumnInfo(name = "name") var name: String,

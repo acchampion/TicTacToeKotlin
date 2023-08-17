@@ -76,7 +76,7 @@
         android:layout_height="match_parent">
 		<androidx.fragment.app.FragmentContainerView
 			android:id="@+id/titles"
-			android:name="com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.AccountFragment"
+			android:name="ui.fragment.AccountFragment"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_margin="8dp"

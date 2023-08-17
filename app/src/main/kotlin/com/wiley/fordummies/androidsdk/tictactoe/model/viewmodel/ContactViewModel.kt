@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.ContactsContract
+import androidx.annotation.Keep
 import androidx.lifecycle.AndroidViewModel
 import com.wiley.fordummies.androidsdk.tictactoe.model.Contact
 import com.wiley.fordummies.androidsdk.tictactoe.model.ContactLiveData
@@ -18,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  *
  * Created by acc on 2021/08/03.
  */
+@Keep
 class ContactViewModel(application: Application) : AndroidViewModel(application) {
 	private var mRepository: ContactRepository
 	private var mAllContactsData: ContactLiveData

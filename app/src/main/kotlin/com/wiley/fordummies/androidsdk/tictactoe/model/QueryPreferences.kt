@@ -1,9 +1,11 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model
 
 import android.content.Context
+import androidx.annotation.Keep
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 
+@Keep
 object QueryPreferences {
 	private const val PREF_SEARCH_QUERY = "searchQuery"
 	private const val PREF_LAST_RESULT_ID = "lastResultId"

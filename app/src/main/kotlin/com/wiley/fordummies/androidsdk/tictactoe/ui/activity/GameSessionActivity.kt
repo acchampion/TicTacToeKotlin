@@ -1,5 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.activity
 
+import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.ui.SingleFragmentActivity
 import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.GameSessionFragment
@@ -9,7 +10,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.GameSessionFragment
  *
  * Created by adamcchampion on 2017/08/19.
  */
-
+@Keep
 class GameSessionActivity : SingleFragmentActivity() {
     private var mGameSessionFragment: GameSessionFragment = recoverFragment()
 

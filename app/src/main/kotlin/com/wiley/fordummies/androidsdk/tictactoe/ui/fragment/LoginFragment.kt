@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -31,7 +32,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  *
  * Created by adamcchampion on 2017/08/03.
  */
-
+@Keep
 class LoginFragment : Fragment(), View.OnClickListener {
 	private lateinit var mUsernameEditText: EditText
 	private lateinit var mPasswordEditText: EditText

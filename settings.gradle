@@ -1,4 +1,10 @@
-include ':app'
+pluginManagement {
+	repositories {
+		google()
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
 
 dependencyResolutionManagement {
 	repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -6,7 +12,7 @@ dependencyResolutionManagement {
 		google()
 		mavenCentral()
 		maven {
-			url 'https://api.mapbox.com/downloads/v2/releases/maven'
+			url = "https://api.mapbox.com/downloads/v2/releases/maven"
 			authentication {
 				basic(BasicAuthentication)
 			}
@@ -18,5 +24,22 @@ dependencyResolutionManagement {
 				password = MAPBOX_DOWNLOADS_TOKEN
 			}
 		}
+	}
+}
+
+rootProject.name = "TicTacToeKotlin"
+include(":app")
+
+// Enable Gradle's build cache so that subsequent builds are faster.
+// Cached information is removed after one week. If you need to delete the cached data,
+// go to your home directory, the ".gradle" subdirectory, and delete the directory
+// "caches". (Example: 'rm -rf ~/.gradle/caches' on Macs and Linux systems)
+// Source: CircleCI,
+//   https://circleci.com/blog/turbocharging-your-android-gradle-builds-using-build-cache/
+buildCache {
+	local {
+		enabled = true
+		directory = new File(rootDir, 'build-cache')
+		removeUnusedEntriesAfterDays = 7
 	}
 }

@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import com.mapbox.android.core.permissions.PermissionsListener
@@ -35,7 +36,9 @@ import timber.log.Timber
  *
  * I modified this example based on <a href="https://docs.mapbox.com/android/maps/examples/location-tracking/">a
  *   Mapbox example app/a>.
- */class MapsLocationFragment : Fragment(), PermissionsListener {
+ */
+@Keep
+class MapsLocationFragment : Fragment(), PermissionsListener {
 	private val permissionsManager = PermissionsManager(this)
 
 	private lateinit var mapView: MapView

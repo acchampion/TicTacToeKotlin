@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.MediaPlaybackService
@@ -27,6 +28,7 @@ import java.io.File
  *
  * Created by adamcchampion on 2017/08/12.
  */
+@Keep
 class AudioFragment : Fragment(), View.OnClickListener {
     private var mStarted = false
     private lateinit var mAudioFileUri: Uri

@@ -1,9 +1,11 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model
 
+import androidx.annotation.Keep
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
+@Keep
 interface UserAccountDao {
     @get:Query("SELECT rowid, name, password FROM useraccount")
     val allUserAccounts: LiveData<List<UserAccount>>

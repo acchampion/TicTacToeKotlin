@@ -1,7 +1,9 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
+import androidx.annotation.Keep
 import timber.log.Timber
 
+@Keep
 class GameGrid {
     companion object {
         const val SIZE = 3

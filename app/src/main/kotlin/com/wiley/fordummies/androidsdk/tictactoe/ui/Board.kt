@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.annotation.Keep
 import androidx.core.content.ContextCompat
 import com.wiley.fordummies.androidsdk.tictactoe.GameGrid
 import com.wiley.fordummies.androidsdk.tictactoe.R
@@ -17,7 +18,8 @@ import timber.log.Timber
 import kotlin.math.min
 
 
-class Board(context: Context, attributes: AttributeSet) : View(context, attributes) {
+@Keep
+public class Board(context: Context, attributes: AttributeSet) : View(context, attributes) {
 
 	// game context (parent)
 	private val mGameSessionActivity: GameSessionActivity = context as GameSessionActivity

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +29,7 @@ import timber.log.Timber
  *
  * Created by acc on 2021/08/09.
  */
+@Keep
 class ContactsFragment : Fragment() {
 	private lateinit var mContactRecyclerView: RecyclerView
 	private val mContactViewModel: ContactViewModel by viewModels()

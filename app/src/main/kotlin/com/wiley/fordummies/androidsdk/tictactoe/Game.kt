@@ -1,5 +1,8 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
+import androidx.annotation.Keep
+
+@Keep
 class Game {
 
     private enum class STATE { Inactive, Active, Won, Draw }
@@ -53,13 +56,13 @@ class Game {
             if (gameState == STATE.Active) { // if the game is still active
                 // Swap symbols and players
                 currentSymbol = if (currentSymbol === Symbol.SymbolXCreate())
-                    Symbol.SymbolOCreate()
+					Symbol.SymbolOCreate()
                 else
-                    Symbol.SymbolXCreate()
+					Symbol.SymbolXCreate()
                 currentPlayer = if (currentPlayer === PLAYER.Player1)
-                    PLAYER.Player2
+					PLAYER.Player2
                 else
-                    PLAYER.Player1
+					PLAYER.Player1
             }
         }
         return successfulPlay

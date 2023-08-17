@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnticipateInterpolator
+import androidx.annotation.Keep
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.splashscreen.SplashScreenViewProvider
 import androidx.fragment.app.Fragment
@@ -19,7 +20,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.LoginFragment
  *
  * Created by adamcchampion on 2017/08/03.
  */
-
+@Keep
 class LoginActivity : SingleFragmentActivity() {
     override fun createFragment(): Fragment {
         return LoginFragment()
@@ -31,24 +32,27 @@ class LoginActivity : SingleFragmentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 			installSplashScreen().setOnExitAnimationListener { splashScreenView: SplashScreenViewProvider ->
-				val slideUp = ObjectAnimator.ofFloat(
-					splashScreenView, View.TRANSLATION_Y.toString(),
-					0f,
-					splashScreenView.iconView.height
-						.toFloat()
-				)
-				slideUp.interpolator = AnticipateInterpolator()
-				slideUp.duration = 200L
+				val iconView = splashScreenView.iconView
+				if (iconView != null) {
+					val slideUp = ObjectAnimator.ofFloat(
+						splashScreenView, View.TRANSLATION_Y.toString(),
+						0f,
+						splashScreenView.iconView.height
+							.toFloat()
+					)
+					slideUp.interpolator = AnticipateInterpolator()
+					slideUp.duration = 200L
 
-				// Call SplashScreenView.remove at the end of your custom animation.
-				slideUp.addListener(object : AnimatorListenerAdapter() {
-					override fun onAnimationEnd(animation: Animator) {
-						splashScreenView.remove()
-					}
-				})
+					// Call SplashScreenView.remove at the end of your custom animation.
+					slideUp.addListener(object : AnimatorListenerAdapter() {
+						override fun onAnimationEnd(animation: Animator) {
+							splashScreenView.remove()
+						}
+					})
 
-				// Run your animation.
-				slideUp.start()
+					// Run your animation.
+					slideUp.start()
+				}
 			}
 		}
 		super.onCreate(savedInstanceState)

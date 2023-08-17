@@ -3,8 +3,14 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.browser.customtabs.CustomTabsIntent
@@ -12,7 +18,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.VisibleFragment
@@ -23,6 +33,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.network.PollWorker
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
+@Keep
 class PhotoGalleryFragment : VisibleFragment() {
 	private val mPhotoGalleryViewModel: PhotoGalleryViewModel by viewModels()
 	private lateinit var mPhotoRecyclerView: RecyclerView

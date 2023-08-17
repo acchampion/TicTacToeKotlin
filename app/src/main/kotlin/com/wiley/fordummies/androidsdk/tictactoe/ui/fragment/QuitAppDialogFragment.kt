@@ -3,6 +3,7 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import androidx.annotation.Keep
 import androidx.fragment.app.DialogFragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import kotlin.system.exitProcess
@@ -10,7 +11,7 @@ import kotlin.system.exitProcess
 /**
  * Created by adamcchampion on 2017/08/12.
  */
-
+@Keep
 class QuitAppDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireActivity())

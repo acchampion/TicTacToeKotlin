@@ -4,16 +4,17 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.wiley.fordummies.androidsdk.tictactoe.NOTIFICATION_CHANNEL_ID
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.model.GalleryItem
 import com.wiley.fordummies.androidsdk.tictactoe.model.QueryPreferences
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.PhotoGalleryActivity.Companion.newIntent
 import timber.log.Timber
 
+@Keep
 class PollWorker(private val mContext: Context, workerParams: WorkerParameters) : Worker(
 	mContext, workerParams
 ) {
@@ -54,7 +55,7 @@ class PollWorker(private val mContext: Context, workerParams: WorkerParameters) 
 			)
 			val resources = mContext.resources
 			val notification: Notification =
-				NotificationCompat.Builder(mContext, NOTIFICATION_CHANNEL_ID)
+				NotificationCompat.Builder(mContext, NOTIFICATION)
 					.setTicker(resources.getString(R.string.new_pictures_title))
 					.setSmallIcon(android.R.drawable.ic_menu_report_image)
 					.setContentTitle(resources.getString(R.string.new_pictures_title))

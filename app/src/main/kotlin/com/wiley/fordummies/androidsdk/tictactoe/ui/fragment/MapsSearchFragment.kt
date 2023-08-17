@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -41,6 +42,14 @@ import com.mapbox.search.ui.view.SearchResultsView
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import timber.log.Timber
 
+/**
+ * Created by acc in late July 2023.
+ *
+ * I modified this example based on <a href="https://docs.mapbox.com/android/search/examples/autofill-ui/">Mapbox's
+ *   example app with address autofill and search</a>
+ */
+
+@Keep
 class MapsSearchFragment : Fragment(), PermissionsListener,
 	LocationEngineCallback<LocationEngineResult> {
 

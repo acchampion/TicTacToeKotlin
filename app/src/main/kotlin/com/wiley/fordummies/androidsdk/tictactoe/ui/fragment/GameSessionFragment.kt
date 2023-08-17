@@ -376,17 +376,6 @@ class GameSessionFragment : Fragment() {
 		return false
 	}
 
-	@Suppress("USELESS_ELVIS")
-	override fun onSaveInstanceState(outState: Bundle) {
-		super.onSaveInstanceState(outState)
-		/*val instanceState: Bundle = outState ?: Bundle()
-		// Save session score
-		instanceState.putInt(SCOREPLAYERONEKEY, mScorePlayerOne)
-		instanceState.putInt(SCOREPLAYERTWOKEY, mScorePlayerTwo)
-		// Save turn
-		instanceState.putString(GAMEKEY, mActiveGame.toString())*/
-	}
-
 	fun getPlayCount(): Int {
 		return Objects.requireNonNull(mActiveGame).getPlayCount()
 	}

@@ -5,8 +5,10 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.IBinder
+import androidx.annotation.Keep
 import timber.log.Timber
 
+@Keep
 class MediaPlaybackService : Service() {
 	private lateinit var player: MediaPlayer
 

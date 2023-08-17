@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model
 
 import android.app.Application
+import androidx.annotation.Keep
 import androidx.lifecycle.LiveData
 
 /**
@@ -10,6 +11,7 @@ import androidx.lifecycle.LiveData
  *
  * Created by acc on 2021/08/04.
  */
+@Keep
 class UserAccountRepository internal constructor(application: Application) {
     private var mUserAccountDao: UserAccountDao
 

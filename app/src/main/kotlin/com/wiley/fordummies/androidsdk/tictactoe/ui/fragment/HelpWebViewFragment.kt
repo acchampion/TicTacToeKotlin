@@ -9,6 +9,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
@@ -19,6 +20,7 @@ import timber.log.Timber
  *
  * Created by adamcchampion on 2017/08/14.
  */
+@Keep
 class HelpWebViewFragment : Fragment() {
 	private lateinit var mUrl: String
 	private lateinit var mProgressBar: ProgressBar

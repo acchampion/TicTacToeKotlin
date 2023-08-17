@@ -1,115 +1,123 @@
-apply plugin: 'com.android.application'
-apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'kotlin-kapt'
+plugins {
+	id 'com.android.application' version '8.1.0'
+	id 'kotlin-android'
+	id 'com.google.devtools.ksp' version '1.9.0-1.0.13'
+}
 
 android {
-	compileSdkVersion 33
-	buildToolsVersion '33.0.1'
 	defaultConfig {
-		applicationId "com.wiley.fordummies.androidsdk.tictactoe"
-		minSdkVersion 24
-		targetSdkVersion 33
-		versionCode 1
-		versionName "1.0"
-		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+		compileSdk = 33
+		buildToolsVersion = "34.0.0"
+		applicationId("com.wiley.fordummies.androidsdk.tictactoe")
+		minSdkVersion(24)
+		targetSdkVersion(33)
+		versionCode = 1
+		versionName = "1.0"
+		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables.useSupportLibrary = true
 	}
 	compileOptions {
+		// Flag to enable support for the new language APIs
+		coreLibraryDesugaringEnabled true
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
 	}
-	kotlinOptions {
-		jvmTarget = JavaVersion.VERSION_17
-	}
 	buildTypes {
 		debug {
-			buildConfigField 'String', "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
-			buildConfigField 'String', "FlickrAccessToken", FLICKR_ACCESS_TOKEN
+			buildConfigField "String", "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
+			buildConfigField "String", "FlickrAccessToken", FLICKR_ACCESS_TOKEN
+			minifyEnabled = false
+			shrinkResources = false
 		}
 		release {
-			buildConfigField 'String', "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
-			buildConfigField 'String', "FlickrAccessToken", FLICKR_ACCESS_TOKEN
-			minifyEnabled false
+			buildConfigField "String", "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
+			buildConfigField "String", "FlickrAccessToken", FLICKR_ACCESS_TOKEN
+			minifyEnabled = true
+			shrinkResources = true
 		}
 	}
-	buildFeatures {
-		viewBinding true
-	}
 	sourceSets {
-		main.java.srcDirs += 'src/main/kotlin'
+		main {
+			java.srcDirs = ["src/main/java", "src/main/kotlin"]
+			kotlin.srcDirs = ["src/main/kotlin"]
+		}
 	}
-	lint {
-		abortOnError false
-	}
-	namespace 'com.wiley.fordummies.androidsdk.tictactoe'
+	namespace("com.wiley.fordummies.androidsdk.tictactoe")
 }
 
 dependencies {
-	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation(fileTree(dir: "libs", include: ["*.jar"]))
 
 	constraints {
-		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
+		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0") {
 			because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
 		}
-		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0") {
 			because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
 		}
 	}
 
+	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+
+	// Kotlin Symbol Processing libraries
+	implementation("com.google.devtools.ksp:symbol-processing-api:$rootProject.ksp_version")
+
+
 	// Kotlin extensions: core, collections
-	implementation "androidx.core:core-ktx:$rootProject.core_version"
+	implementation("androidx.core:core-ktx:$rootProject.core_version")
 
-	implementation "androidx.appcompat:appcompat:$rootProject.appcompat_version"
-	implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraint_version"
+	implementation("androidx.appcompat:appcompat:$rootProject.appcompat_version")
+	implementation("androidx.constraintlayout:constraintlayout:$rootProject.constraint_version")
 
-	implementation "androidx.browser:browser:$rootProject.browser_version"
+	implementation("androidx.browser:browser:$rootProject.browser_version")
 
-	implementation "androidx.core:core-splashscreen:$rootProject.splash_version"
+	implementation("androidx.core:core-splashscreen:$rootProject.splash_version")
 
-	implementation "androidx.work:work-runtime-ktx:$rootProject.work_version"
+	implementation("androidx.work:work-runtime-ktx:$rootProject.work_version")
 
 
 	// Lifecycle
 	// Annotation processor
-	implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version"
-	implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycle_version"
-	implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_version"
-	implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycle_version"
+	implementation("androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version")
+	implementation("androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycle_version")
+	implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_version")
+	implementation("androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycle_version")
 
-	implementation "androidx.activity:activity-ktx:$rootProject.activity_version"
-	implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerview_version"
-	implementation "androidx.preference:preference-ktx:$rootProject.preference_version"
-	implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+	implementation("androidx.activity:activity-ktx:$rootProject.activity_version")
+	implementation("androidx.recyclerview:recyclerview:$rootProject.recyclerview_version")
+	implementation("androidx.preference:preference-ktx:$rootProject.preference_version")
+	implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
-	implementation "androidx.room:room-runtime:$rootProject.room_version"
-	kapt "androidx.room:room-compiler:$rootProject.room_version"
+	implementation("androidx.room:room-runtime:$rootProject.room_version")
+	annotationProcessor("androidx.room:room-compiler:$rootProject.room_version")
+	ksp("androidx.room:room-compiler:$rootProject.room_version")
 
-	implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines_version"
-	implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines_version")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version")
 
 	// Mapbox dependencies for maps
-	implementation "com.mapbox.maps:android:$rootProject.mapbox_sdk_version"
-	implementation "com.mapbox.search:place-autocomplete:$rootProject.mapbox_search_version"
-	implementation "com.mapbox.search:offline:$rootProject.mapbox_search_version"
-	implementation "com.mapbox.search:mapbox-search-android:$rootProject.mapbox_search_version"
-	implementation "com.mapbox.search:mapbox-search-android-ui:$rootProject.mapbox_search_version"
+	implementation("com.mapbox.maps:android:$rootProject.mapbox_sdk_version")
+	implementation("com.mapbox.search:place-autocomplete:$rootProject.mapbox_search_version")
+	implementation("com.mapbox.search:offline:$rootProject.mapbox_search_version")
+	implementation("com.mapbox.search:mapbox-search-android:$rootProject.mapbox_search_version")
+	implementation("com.mapbox.search:mapbox-search-android-ui:$rootProject.mapbox_search_version")
 
-	implementation "com.jakewharton.timber:timber:$rootProject.timber_version"
-	debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanary_version"
+	implementation("com.jakewharton.timber:timber:$rootProject.timber_version")
+	debugImplementation("com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanary_version")
 
-	implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
-	implementation "com.squareup.retrofit2:converter-scalars:$rootProject.retrofit_version"
-	implementation "com.google.code.gson:gson:$rootProject.gson_version"
-	implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_version"
-	implementation "com.github.bumptech.glide:glide:$rootProject.glide_version"
-	// Skip this if you don't want to use integration libraries or configure Glide.
-	kapt "com.github.bumptech.glide:compiler:$rootProject.glide_version"
+	implementation("com.squareup.retrofit2:retrofit:$rootProject.retrofit_version")
+	implementation("com.squareup.retrofit2:converter-scalars:$rootProject.retrofit_version")
+	implementation("com.squareup.moshi:moshi:$rootProject.moshi_version")
+	ksp("com.squareup.moshi:moshi-kotlin-codegen:$rootProject.moshi_version")
+	implementation("com.squareup.retrofit2:converter-moshi:$rootProject.retrofit_version")
+	implementation("com.github.bumptech.glide:glide:$rootProject.glide_version")
+	// Skip this if you don"t want to use integration libraries or configure Glide.
+	ksp("com.github.bumptech.glide:compiler:$rootProject.glide_version")
 
 
-	testImplementation "junit:junit:$rootProject.junit_version"
-	androidTestImplementation "androidx.test:core:$rootProject.test_version"
-	androidTestImplementation "androidx.test:rules:$rootProject.test_version"
-	androidTestImplementation "androidx.test:runner:$rootProject.test_version"
-	androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espresso_version"
-
+	testImplementation("junit:junit:$rootProject.junit_version")
+	androidTestImplementation("androidx.test:core:$rootProject.test_version")
+	androidTestImplementation("androidx.test:rules:$rootProject.test_version")
+	androidTestImplementation("androidx.test:runner:$rootProject.test_version")
+	androidTestImplementation("androidx.test.espresso:espresso-core:$rootProject.espresso_version")
 }

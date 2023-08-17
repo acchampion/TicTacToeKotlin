@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model
 
 import android.content.Context
+import androidx.annotation.Keep
 import androidx.preference.PreferenceManager
 
 /**
@@ -9,6 +10,7 @@ import androidx.preference.PreferenceManager
  * Created by adamcchampion on 2017/08/14.
  */
 
+@Keep
 object Settings {
     private const val OPT_NAME = "name"
     private const val OPT_NAME_DEF = "Player"

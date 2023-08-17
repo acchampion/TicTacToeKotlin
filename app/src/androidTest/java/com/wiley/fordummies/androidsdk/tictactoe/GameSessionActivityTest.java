@@ -10,9 +10,9 @@ import android.view.View;
 import androidx.test.annotation.UiThreadTest;
 import androidx.test.rule.ActivityTestRule;
 
-import com.wiley.fordummies.androidsdk.tictactoe.ui.Board;
-import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.GameSessionActivity;
-import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.GameSessionFragment;
+import ui.Board;
+import ui.activity.GameSessionActivity;
+import ui.fragment.GameSessionFragment;
 
 import org.junit.Test;
 

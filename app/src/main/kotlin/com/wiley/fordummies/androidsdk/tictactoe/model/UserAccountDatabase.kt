@@ -1,6 +1,7 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model
 
 import android.content.Context
+import androidx.annotation.Keep
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -14,6 +15,7 @@ import java.util.concurrent.Executors
  *
  * Created by acc on 2021/08/04.
  */
+@Keep
 @Database(entities = [UserAccount::class], version = 1, exportSchema = false)
 abstract class UserAccountDatabase : RoomDatabase() {
     abstract val userAccountDao: UserAccountDao
