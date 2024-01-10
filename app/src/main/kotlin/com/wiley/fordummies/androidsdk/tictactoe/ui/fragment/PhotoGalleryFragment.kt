@@ -27,15 +27,21 @@ import com.bumptech.glide.Glide
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.VisibleFragment
 import com.wiley.fordummies.androidsdk.tictactoe.model.GalleryItem
-import com.wiley.fordummies.androidsdk.tictactoe.model.QueryPreferences
+import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
+import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore
 import com.wiley.fordummies.androidsdk.tictactoe.model.viewmodel.PhotoGalleryViewModel
 import com.wiley.fordummies.androidsdk.tictactoe.network.PollWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Keep
 class PhotoGalleryFragment : VisibleFragment() {
 	private val mPhotoGalleryViewModel: PhotoGalleryViewModel by viewModels()
+	private lateinit var mDataStore: SettingsDataStore
 	private lateinit var mPhotoRecyclerView: RecyclerView
 
 	private val classTag = javaClass.simpleName
@@ -45,7 +51,7 @@ class PhotoGalleryFragment : VisibleFragment() {
 		super.onCreate(savedInstanceState)
 		retainInstance = true
 		setHasOptionsMenu(true)
-
+		mDataStore = SettingsDataStore(context?.applicationContext!!)
 	}
 
 	override fun onCreateView(
@@ -115,15 +121,18 @@ class PhotoGalleryFragment : VisibleFragment() {
 			}
 		}
 
-
 		val toggleItem = menu.findItem(R.id.menu_item_toggle_polling)
-		val isPolling = QueryPreferences.isPolling(requireContext())
-		val toggleItemTitle: Int = if (isPolling) {
-			R.string.stop_polling
-		} else {
-			R.string.start_polling
+		CoroutineScope(Dispatchers.IO).launch {
+			val isPolling = mDataStore.getBoolean(Settings.Keys.PREF_IS_POLLING, false)
+			withContext(Dispatchers.Main) {
+				val toggleItemTitle: Int = if (isPolling) {
+					R.string.stop_polling
+				} else {
+					R.string.start_polling
+				}
+				toggleItem.setTitle(toggleItemTitle)
+			}
 		}
-		toggleItem.setTitle(toggleItemTitle)
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -133,27 +142,29 @@ class PhotoGalleryFragment : VisibleFragment() {
 				true
 			}
 			R.id.menu_item_toggle_polling -> {
-				val isPolling = QueryPreferences.isPolling(requireContext())
-				if (isPolling) {
-					WorkManager.getInstance(requireContext()).cancelUniqueWork(pollWork)
-					QueryPreferences.setPolling(requireContext(), false)
-				} else {
-					val constraints = Constraints.Builder()
-						.setRequiredNetworkType(NetworkType.UNMETERED)
-						.build()
-					val periodicRequest = PeriodicWorkRequest.Builder(
-						PollWorker::class.java,
-						15,
-						TimeUnit.MINUTES
-					)
-						.setConstraints(constraints)
-						.build()
-					WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
-						pollWork,
-						ExistingPeriodicWorkPolicy.KEEP,
-						periodicRequest
-					)
-					QueryPreferences.setPolling(requireContext(), true)
+				CoroutineScope(Dispatchers.IO).launch {
+					val isPolling = mDataStore.getBoolean(Settings.Keys.PREF_IS_POLLING, false)
+					if (isPolling) {
+						WorkManager.getInstance(requireContext()).cancelUniqueWork(pollWork)
+						mDataStore.putBoolean(Settings.Keys.PREF_IS_POLLING, false)
+					} else {
+						val constraints = Constraints.Builder()
+							.setRequiredNetworkType(NetworkType.UNMETERED)
+							.build()
+						val periodicRequest = PeriodicWorkRequest.Builder(
+							PollWorker::class.java,
+							15,
+							TimeUnit.MINUTES
+						)
+							.setConstraints(constraints)
+							.build()
+						WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+							pollWork,
+							ExistingPeriodicWorkPolicy.KEEP,
+							periodicRequest
+						)
+						mDataStore.putBoolean(Settings.Keys.PREF_IS_POLLING, true)
+					}
 				}
 
 				requireActivity().invalidateOptionsMenu()

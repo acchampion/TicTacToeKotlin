@@ -1,8 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe.model
 
-import android.content.Context
 import androidx.annotation.Keep
-import androidx.preference.PreferenceManager
 
 /**
  * Class for reading settings from SharedPreferences.
@@ -12,18 +10,21 @@ import androidx.preference.PreferenceManager
 
 @Keep
 object Settings {
-    private const val OPT_NAME = "name"
-    private const val OPT_NAME_DEF = "Player"
-    private const val OPT_PLAY_FIRST = "human_starts"
-    private const val OPT_PLAY_FIRST_DEF = true
+	val NAME = "settings.db"
+	val ERROR = "error"
 
-    fun getName(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(OPT_NAME, OPT_NAME_DEF)!!
-    }
+	object Keys {
+		val OPT_NAME = "name"
+		val OPT_NAME_DEFAULT = ""
+		val OPT_PLAY_FIRST = "human_starts"
+		val OPT_PLAY_FIRST_DEF = true
 
-    fun doesHumanPlayFirst(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(OPT_PLAY_FIRST, OPT_PLAY_FIRST_DEF)
-    }
+		val SCOREPLAYERONEKEY = "ScorePlayerOne"
+		val SCOREPLAYERTWOKEY = "ScorePlayerTwo"
+		val GAMEKEY = "Game"
+
+		val PREF_SEARCH_QUERY = "searchQuery"
+		val PREF_LAST_RESULT_ID = "lastResultId"
+		val PREF_IS_POLLING = "isPolling"
+	}
 }

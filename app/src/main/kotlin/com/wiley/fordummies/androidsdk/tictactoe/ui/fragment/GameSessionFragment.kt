@@ -1,14 +1,20 @@
 package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.Surface
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -19,11 +25,16 @@ import com.wiley.fordummies.androidsdk.tictactoe.GameGrid
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.Symbol
 import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
+import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore
 import com.wiley.fordummies.androidsdk.tictactoe.ui.Board
 import com.wiley.fordummies.androidsdk.tictactoe.ui.GameView
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.HelpActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
+import java.util.Objects
+import java.util.Random
 
 /**
  * Fragment where user plays Tic-Tac-Toe.
@@ -33,6 +44,7 @@ import java.util.*
 class GameSessionFragment : Fragment() {
 
 	var mActiveGame: Game = Game()
+	private var mIsTestMode = false
 	private lateinit var mBoard: Board
 	private lateinit var mTurnStatusView: TextView
 	private lateinit var mScoreView: TextView
@@ -44,6 +56,16 @@ class GameSessionFragment : Fragment() {
 	private val mTestMode = false
 	private lateinit var mContainer: ViewGroup
 	private lateinit var mSavedInstanceState: Bundle
+
+	private val TAG = javaClass.simpleName
+	private val mDataStore = SettingsDataStore(context?.applicationContext!!)
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		CoroutineScope(Dispatchers.IO).launch {
+			mIsTestMode = mDataStore.getBoolean("is_test_mode", false)
+		}
+	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -65,7 +87,9 @@ class GameSessionFragment : Fragment() {
 
 		retainInstance = true
 
-		loadGameFromPrefs()
+		// loadGameFromPrefs()
+		loadGameScores()
+
 		setupBoard(v)
 
 		setHasOptionsMenu(true)
@@ -132,16 +156,16 @@ class GameSessionFragment : Fragment() {
 		Timber.d("onDestroy()")
 	}
 
-/*
-    fun startSession() {
-        Timber.d("In startSession()")
-        mScorePlayerOne = 0
-        mScorePlayerTwo = 0
-    }
+	/*
+		fun startSession() {
+			Timber.d("In startSession()")
+			mScorePlayerOne = 0
+			mScorePlayerTwo = 0
+		}
 
-    val playCount: Int
-        get() = mActiveGame.playCount
-*/
+		val playCount: Int
+			get() = mActiveGame.playCount
+	*/
 
 	private fun playNewGame() {
 		// If Android is the first player, give it its turn
@@ -149,16 +173,58 @@ class GameSessionFragment : Fragment() {
 	}
 
 	private fun setPlayers(theGame: Game) {
-
-		if (Settings.doesHumanPlayFirst(activity as Context)) {
+		/* if (Settings.doesHumanPlayFirst(activity as Context)) {
 			mFirstPlayerName = Settings.getName(activity as Context)
 			mSecondPlayerName = "Android"
 		} else {
 			mFirstPlayerName = "Android"
 			mSecondPlayerName = Settings.getName(activity as Context)
+		} */
+		CoroutineScope(Dispatchers.IO).launch {
+			val humanPlaysFirst = mDataStore.getBoolean(Settings.Keys.OPT_PLAY_FIRST, Settings.Keys.OPT_PLAY_FIRST_DEF)
+
+			if (humanPlaysFirst) {
+				mFirstPlayerName = mDataStore.getString(Settings.Keys.OPT_NAME, Settings.Keys.OPT_NAME_DEFAULT)
+				mSecondPlayerName = "Android"
+			} else {
+				mFirstPlayerName = "Android"
+				mSecondPlayerName = mDataStore.getString(Settings.Keys.OPT_NAME, Settings.Keys.OPT_NAME_DEFAULT)
+			}
+			theGame.setPlayerNames(mFirstPlayerName, mSecondPlayerName)
 		}
-		theGame.setPlayerNames(mFirstPlayerName, mSecondPlayerName)
 	}
+
+	private fun loadGameScores() {
+		CoroutineScope(Dispatchers.IO).launch {
+			Timber.tag(TAG).d("Coroutine: Fetching player scores from DataStore")
+			mScorePlayerOne = mDataStore.getInt(SCOREPLAYERONEKEY, 0)
+			mScorePlayerTwo = mDataStore.getInt(SCOREPLAYERTWOKEY, 0)
+			Timber.tag(TAG).d(
+				"Coroutine: mScorePlayerOne = %d; mScorePlayerTwo = %d",
+				mScorePlayerOne, mScorePlayerTwo
+			)
+		}
+	}
+
+	private fun saveGameScores() {
+		val gameStr = mActiveGame.toString()
+
+		Timber.tag(TAG)
+			.d("Player 1 score: %d; player 2 score: %d", mScorePlayerOne, mScorePlayerTwo)
+		Timber.tag(TAG).d("Game string: %s", gameStr)
+
+		CoroutineScope(Dispatchers.IO).launch {
+			mDataStore.putInt(SCOREPLAYERONEKEY, mScorePlayerOne)
+			Timber.tag(TAG)
+				.i("Coroutine: wrote Player 1 score %d successfully to DataStore", mScorePlayerOne)
+			mDataStore.putInt(SCOREPLAYERTWOKEY, mScorePlayerTwo)
+			Timber.tag(TAG)
+				.i("Coroutine: Wrote Player 2 score %d successfully to DataStore", mScorePlayerTwo)
+			mDataStore.putString(GAMEKEY, gameStr)
+			Timber.tag(TAG).i("Coroutine: Wrote game string %s to DataStore", gameStr)
+		}
+	}
+
 
 	fun scheduleAndroidsTurn() {
 		Timber.d("Thread ID in scheduleAndroidsTurn: %s", Thread.currentThread().id)
@@ -242,6 +308,7 @@ class GameSessionFragment : Fragment() {
 	}
 
 
+
 	private fun proceedToFinish() {
 		val winningPlayerName: String
 		val alertMessage: String
@@ -251,7 +318,8 @@ class GameSessionFragment : Fragment() {
 				alertMessage = "$winningPlayerName Wins!"
 				mGameView.setGameStatus(alertMessage)
 				accumulateScores(winningPlayerName)
-				saveScoresToPrefs()
+				// saveScoresToPrefs()
+				saveGameScores()
 
 				mGameView.showScores(
 					mFirstPlayerName,
@@ -260,10 +328,12 @@ class GameSessionFragment : Fragment() {
 					mScorePlayerTwo
 				)
 			}
+
 			mActiveGame.isDrawn -> {
 				alertMessage = "DRAW!"
 				mGameView.setGameStatus(alertMessage)
 			}
+
 			else -> {
 				// Control flow should never reach this block, but if it does, show a default text string.
 				alertMessage = "Info"
@@ -275,7 +345,8 @@ class GameSessionFragment : Fragment() {
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setPositiveButton("Yes") { _, _ ->
 				run {
-					saveScoresToPrefs()
+					// saveScoresToPrefs()
+					saveGameScores()
 					val inflater = LayoutInflater.from(activity)
 					if (mContainer != null) {
 						Timber.d("Calling setupBoard() again")
@@ -300,7 +371,8 @@ class GameSessionFragment : Fragment() {
 				run {
 					mScorePlayerOne = 0
 					mScorePlayerTwo = 0
-					saveScoresToPrefs()
+					saveGameScores()
+					// saveScoresToPrefs()
 					activity?.finish()
 				}
 			}
@@ -356,18 +428,22 @@ class GameSessionFragment : Fragment() {
 				startActivity(Intent(activity?.applicationContext, HelpActivity::class.java))
 				return true
 			}
+
 			R.id.menu_exit -> {
 				quitGame()
 				return true
 			}
+
 			R.id.menu_email -> {
 				sendScoresViaEmail()
 				return true
 			}
+
 			R.id.menu_sms -> {
 				sendScoresViaSMS()
 				return true
 			}
+
 			R.id.menu_call -> {
 				callTicTacToeHelp()
 				return true

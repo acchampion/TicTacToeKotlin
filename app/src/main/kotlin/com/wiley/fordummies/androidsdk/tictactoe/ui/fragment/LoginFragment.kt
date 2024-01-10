@@ -15,12 +15,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.StringUtils
+import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
+import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore
 import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccount
 import com.wiley.fordummies.androidsdk.tictactoe.model.viewmodel.UserAccountViewModel
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.GameOptionsActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -38,11 +42,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	private lateinit var mPasswordEditText: EditText
 
 	private val mUserAccountViewModel: UserAccountViewModel by viewModels()
+	private val mDataStore = SettingsDataStore(context?.applicationContext!!)
 	private var mUserAccountList = CopyOnWriteArrayList<UserAccount>()
 
 	private val classTag = javaClass.simpleName
-	private val OPT_NAME = "name"
-
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -79,7 +82,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 		val activity = requireActivity() as AppCompatActivity
 
 		// Here's a dummy observer object that indicates when the UserAccounts change in the database.
-		mUserAccountViewModel.allUserAccounts.observe((activity as LifecycleOwner)
+		mUserAccountViewModel.allUserAccounts.observe(
+			(activity as LifecycleOwner)
 		) { userAccounts ->
 			Timber.tag(classTag)
 				.d("The list of UserAccounts just changed; it has %s elements", userAccounts.size)
@@ -115,12 +119,17 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
 			// if (accountList.size > 0 && hasMatchingAccount) {
 			if (mUserAccountList.contains(userAccount)) {
-				// Save username as the name of the player
+				CoroutineScope(Dispatchers.IO).launch {
+					mDataStore.putString(Settings.Keys.OPT_NAME, username)
+					Timber.tag(classTag).d("Wrote username successfully to DataStore")
+				}
+
+				/*  Save username as the name of the player
 				val settings =
 					PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
 				val editor = settings.edit()
 				editor.putString(OPT_NAME, username)
-				editor.apply()
+				editor.apply() */
 
 				// Bring up the GameOptions screen
 				startActivity(Intent(activity, GameOptionsActivity::class.java))

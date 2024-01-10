@@ -1,16 +1,26 @@
 plugins {
-	id 'com.android.application' version '8.1.0'
-	id 'kotlin-android'
-	id 'com.google.devtools.ksp' version '1.9.0-1.0.13'
+	id 'com.android.application' version '8.2.1'
+	id 'org.jetbrains.kotlin.android' version '1.9.22'
+	id 'com.google.devtools.ksp' version '1.9.22-1.0.16'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+kotlin {
+	jvmToolchain(17)
 }
 
 android {
 	defaultConfig {
-		compileSdk = 33
+		compileSdk = 34
 		buildToolsVersion = "34.0.0"
 		applicationId("com.wiley.fordummies.androidsdk.tictactoe")
-		minSdkVersion(24)
-		targetSdkVersion(33)
+		minSdkVersion(26)
+		targetSdkVersion(34)
 		versionCode = 1
 		versionName = "1.0"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -18,7 +28,7 @@ android {
 	}
 	compileOptions {
 		// Flag to enable support for the new language APIs
-		coreLibraryDesugaringEnabled true
+		coreLibraryDesugaringEnabled = true
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
 	}
@@ -57,7 +67,7 @@ dependencies {
 		}
 	}
 
-	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:$rootProject.desugar_version")
 
 	// Kotlin Symbol Processing libraries
 	implementation("com.google.devtools.ksp:symbol-processing-api:$rootProject.ksp_version")
@@ -72,6 +82,8 @@ dependencies {
 	implementation("androidx.browser:browser:$rootProject.browser_version")
 
 	implementation("androidx.core:core-splashscreen:$rootProject.splash_version")
+	implementation("androidx.datastore:datastore-core:$rootProject.datastore_version")
+	implementation("androidx.datastore:datastore-preferences:$rootProject.datastore_version")
 
 	implementation("androidx.work:work-runtime-ktx:$rootProject.work_version")
 
@@ -86,7 +98,7 @@ dependencies {
 	implementation("androidx.activity:activity-ktx:$rootProject.activity_version")
 	implementation("androidx.recyclerview:recyclerview:$rootProject.recyclerview_version")
 	implementation("androidx.preference:preference-ktx:$rootProject.preference_version")
-	implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
+	implementation("androidx.localbroadcastmanager:localbroadcastmanager:$rootProject.broadcast_mgr_version")
 
 	implementation("androidx.room:room-runtime:$rootProject.room_version")
 	annotationProcessor("androidx.room:room-compiler:$rootProject.room_version")
@@ -118,6 +130,11 @@ dependencies {
 	testImplementation("junit:junit:$rootProject.junit_version")
 	androidTestImplementation("androidx.test:core:$rootProject.test_version")
 	androidTestImplementation("androidx.test:rules:$rootProject.test_version")
-	androidTestImplementation("androidx.test:runner:$rootProject.test_version")
+	androidTestImplementation("androidx.test:runner:$rootProject.test_runner_version")
 	androidTestImplementation("androidx.test.espresso:espresso-core:$rootProject.espresso_version")
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 }
