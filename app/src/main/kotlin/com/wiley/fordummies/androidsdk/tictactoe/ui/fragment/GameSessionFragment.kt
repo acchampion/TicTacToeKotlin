@@ -58,7 +58,7 @@ class GameSessionFragment : Fragment() {
 	private lateinit var mSavedInstanceState: Bundle
 
 	private val TAG = javaClass.simpleName
-	private val mDataStore = SettingsDataStore(context?.applicationContext!!)
+	private lateinit var mDataStore: SettingsDataStore
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -71,15 +71,10 @@ class GameSessionFragment : Fragment() {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? {
+	): View {
 		Timber.d("onCreateView()")
-		val v: View
+		val v: View = inflater.inflate(R.layout.fragment_game_session, container, false)
 		val rotation = requireActivity().windowManager.defaultDisplay.rotation
-		v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-			inflater.inflate(R.layout.fragment_gamesession_land, container, false)
-		} else {
-			inflater.inflate(R.layout.fragment_game_session, container, false)
-		}
 
 		if (container != null) {
 			mContainer = container
@@ -88,9 +83,6 @@ class GameSessionFragment : Fragment() {
 		retainInstance = true
 
 		// loadGameFromPrefs()
-		loadGameScores()
-
-		setupBoard(v)
 
 		setHasOptionsMenu(true)
 
@@ -102,6 +94,11 @@ class GameSessionFragment : Fragment() {
 		if (savedInstanceState != null) {
 			mSavedInstanceState = savedInstanceState
 		}
+		mDataStore = SettingsDataStore(context?.applicationContext!!)
+
+		loadGameScores()
+
+		setupBoard(view)
 	}
 
 

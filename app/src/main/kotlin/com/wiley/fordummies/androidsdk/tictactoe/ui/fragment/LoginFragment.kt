@@ -42,7 +42,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	private lateinit var mPasswordEditText: EditText
 
 	private val mUserAccountViewModel: UserAccountViewModel by viewModels()
-	private val mDataStore = SettingsDataStore(context?.applicationContext!!)
+	private lateinit var mDataStore: SettingsDataStore
 	private var mUserAccountList = CopyOnWriteArrayList<UserAccount>()
 
 	private val classTag = javaClass.simpleName
@@ -55,11 +55,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 		val v: View
 		val activity = requireActivity()
 		val rotation = activity.windowManager.defaultDisplay.rotation
-		v = if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-			inflater.inflate(R.layout.fragment_login_land, container, false)
-		} else {
-			inflater.inflate(R.layout.fragment_login, container, false)
-		}
+		v = inflater.inflate(R.layout.fragment_login, container, false)
 
 		mUsernameEditText = v.findViewById(R.id.username_text)
 		mPasswordEditText = v.findViewById(R.id.password_text)
@@ -90,6 +86,12 @@ class LoginFragment : Fragment(), View.OnClickListener {
 			mUserAccountList.clear()
 			mUserAccountList.addAll(userAccounts)
 		}
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		val activity: Activity = requireActivity()
+		mDataStore = SettingsDataStore(activity.applicationContext)
 	}
 
 

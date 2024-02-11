@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.annotation.Keep
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.network.PollWorker
 import timber.log.Timber
@@ -28,11 +29,11 @@ open class VisibleFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         val filter = IntentFilter(PollWorker.ACTION_SHOW_NOTIFICATION)
-        requireActivity().registerReceiver(
+        ContextCompat.registerReceiver(
+            requireContext(),
             mOnShowNotification,
             filter,
-            PollWorker.PERM_PRIVATE,
-            null
+            ContextCompat.RECEIVER_NOT_EXPORTED
         )
     }
 
