@@ -6,6 +6,8 @@ import androidx.annotation.Keep
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.wiley.fordummies.androidsdk.tictactoe.R
+import com.wiley.fordummies.androidsdk.tictactoe.TicTacToeApplication
 import com.wiley.fordummies.androidsdk.tictactoe.api.PhotoInterceptor
 import com.wiley.fordummies.androidsdk.tictactoe.model.GalleryItem
 import okhttp3.OkHttpClient
@@ -23,6 +25,7 @@ class FlickrFetchr {
 	private val mClient: OkHttpClient = OkHttpClient.Builder()
 		.addInterceptor(mPhotoInterceptor)
 		.build()
+	private val mFlickrAccessToken = TicTacToeApplication.getContext().resources.getString(R.string.flickr_access_token)
 	private val mFlickrApi: com.wiley.fordummies.androidsdk.tictactoe.api.FlickrApi
 	private val mRetrofit: Retrofit = Retrofit.Builder()
 		.baseUrl("https://api.flickr.com/")
@@ -36,12 +39,12 @@ class FlickrFetchr {
 	}
 
 	fun fetchPhotosRequest(): Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse> {
-		return mFlickrApi.fetchPhotos()
+		return mFlickrApi.fetchPhotos(mFlickrAccessToken)
 	}
 
 	fun fetchPhotosOld(): LiveData<List<GalleryItem>> {
 		val responseLiveData = MutableLiveData<List<GalleryItem>>()
-		val flickrRequest = mFlickrApi.fetchPhotos()
+		val flickrRequest = mFlickrApi.fetchPhotos(mFlickrAccessToken)
 		flickrRequest.enqueue(object : Callback<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?> {
 			override fun onResponse(
 				call: Call<com.wiley.fordummies.androidsdk.tictactoe.api.FlickrResponse?>,

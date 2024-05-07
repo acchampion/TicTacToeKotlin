@@ -1,8 +1,11 @@
 package com.wiley.fordummies.androidsdk.tictactoe;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.os.Build;
 
 import androidx.annotation.Keep;
@@ -19,10 +22,17 @@ import timber.log.Timber;
 public class TicTacToeApplication extends Application implements Configuration.Provider {
 	public static final String NOTIFICATION_CHANNEL_ID = "flickr_poll";
 
+	@SuppressLint("StaticFieldLeak")
+	private static Context mContext;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		if (BuildConfig.DEBUG) {
+		mContext = this;
+
+		final boolean mIsDebuggable = ( 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ));
+
+		if (mIsDebuggable) {
 			Timber.DebugTree debugTree = new Timber.DebugTree();
 			Timber.plant(debugTree);
 			// LeakCanary.setConfig(LeakCanary.getConfig());
@@ -45,5 +55,15 @@ public class TicTacToeApplication extends Application implements Configuration.P
 		return new Configuration.Builder()
 				.setMinimumLoggingLevel(android.util.Log.INFO)
 				.build();
+	}
+
+	public static Context getContext() {
+		return TicTacToeApplication.mContext;
+	}
+
+	@Override
+	public void onTerminate() {
+		super.onTerminate();
+		mContext = null;
 	}
 }

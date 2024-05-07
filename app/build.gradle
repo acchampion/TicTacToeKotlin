@@ -1,17 +1,7 @@
 plugins {
-	id 'com.android.application' version '8.2.2'
+	id 'com.android.application' version '8.4.0'
 	id 'org.jetbrains.kotlin.android' version '1.9.22'
 	id 'com.google.devtools.ksp' version '1.9.22-1.0.16'
-}
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-}
-
-kotlin {
-	jvmToolchain(17)
 }
 
 android {
@@ -29,19 +19,15 @@ android {
 	compileOptions {
 		// Flag to enable support for the new language APIs
 		coreLibraryDesugaringEnabled = true
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
 	}
 	buildTypes {
 		debug {
-			buildConfigField "String", "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
-			buildConfigField "String", "FlickrAccessToken", FLICKR_ACCESS_TOKEN
 			minifyEnabled = false
 			shrinkResources = false
 		}
 		release {
-			buildConfigField "String", "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
-			buildConfigField "String", "FlickrAccessToken", FLICKR_ACCESS_TOKEN
 			minifyEnabled = true
 			shrinkResources = true
 		}

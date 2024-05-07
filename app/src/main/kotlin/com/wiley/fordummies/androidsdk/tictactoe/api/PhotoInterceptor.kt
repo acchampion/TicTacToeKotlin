@@ -1,7 +1,6 @@
 package com.wiley.fordummies.androidsdk.tictactoe.api
 
 import androidx.annotation.Keep
-import com.wiley.fordummies.androidsdk.tictactoe.BuildConfig
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -10,13 +9,11 @@ import timber.log.Timber
 
 @Keep
 class PhotoInterceptor : Interceptor {
-    private val apiKey: String = BuildConfig.FlickrAccessToken
     private val classTag = javaClass.simpleName
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest: Request = chain.request()
         val newUrl: HttpUrl = originalRequest.url.newBuilder()
-            .addQueryParameter("api_key", apiKey)
             .addQueryParameter("format", "json")
             .addQueryParameter("nojsoncallback", "1")
             .addQueryParameter("extras", "url_s")
