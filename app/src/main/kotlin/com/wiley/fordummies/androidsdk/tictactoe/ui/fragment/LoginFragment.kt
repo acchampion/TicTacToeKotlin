@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.StringUtils
+import com.wiley.fordummies.androidsdk.tictactoe.TicTacToeApplication
 import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
 import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore
 import com.wiley.fordummies.androidsdk.tictactoe.model.UserAccount
@@ -42,6 +43,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	private lateinit var mPasswordEditText: EditText
 
 	private val mUserAccountViewModel: UserAccountViewModel by viewModels()
+
 	private lateinit var mDataStore: SettingsDataStore
 	private var mUserAccountList = CopyOnWriteArrayList<UserAccount>()
 
@@ -56,6 +58,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 		val activity = requireActivity()
 		val rotation = activity.windowManager.defaultDisplay.rotation
 		v = inflater.inflate(R.layout.fragment_login, container, false)
+
+		mDataStore = TicTacToeApplication.getDataStore()
 
 		mUsernameEditText = v.findViewById(R.id.username_text)
 		mPasswordEditText = v.findViewById(R.id.password_text)
@@ -91,7 +95,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		val activity: Activity = requireActivity()
-		mDataStore = SettingsDataStore(activity.applicationContext)
 	}
 
 

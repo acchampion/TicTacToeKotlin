@@ -11,13 +11,13 @@ class Game {
 
     private var currentSymbol: Symbol
 
-    private enum class PLAYER { Player1, Player2}
+    private enum class PLAYER { Player1, Player2 }
 
     private var currentPlayer = PLAYER.Player1
     private var winningPlayer = PLAYER.Player1
 
-    lateinit var playerOneName: String
-    lateinit var playerTwoName: String
+    var playerOneName: String = ""
+    var playerTwoName: String = ""
 
     var gameGrid: GameGrid = GameGrid()
 
@@ -56,13 +56,13 @@ class Game {
             if (gameState == STATE.Active) { // if the game is still active
                 // Swap symbols and players
                 currentSymbol = if (currentSymbol === Symbol.SymbolXCreate())
-					Symbol.SymbolOCreate()
+                    Symbol.SymbolOCreate()
                 else
-					Symbol.SymbolXCreate()
+                    Symbol.SymbolXCreate()
                 currentPlayer = if (currentPlayer === PLAYER.Player1)
-					PLAYER.Player2
+                    PLAYER.Player2
                 else
-					PLAYER.Player1
+                    PLAYER.Player1
             }
         }
         return successfulPlay
@@ -70,13 +70,14 @@ class Game {
 
     private fun checkResultAndSetState() {
         if (gameGrid.isRowFilled(0) ||
-                gameGrid.isRowFilled(1) ||
-                gameGrid.isRowFilled(2) ||
-                gameGrid.isColumnFilled(0) ||
-                gameGrid.isColumnFilled(1) ||
-                gameGrid.isColumnFilled(2) ||
-                gameGrid.isLeftToRightDiagonalFilled ||
-                gameGrid.isRightToLeftDiagonalFilled) {
+            gameGrid.isRowFilled(1) ||
+            gameGrid.isRowFilled(2) ||
+            gameGrid.isColumnFilled(0) ||
+            gameGrid.isColumnFilled(1) ||
+            gameGrid.isColumnFilled(2) ||
+            gameGrid.isLeftToRightDiagonalFilled ||
+            gameGrid.isRightToLeftDiagonalFilled
+        ) {
             winningPlayer = currentPlayer
             gameState = STATE.Won
         } else if (playCount == 9) {

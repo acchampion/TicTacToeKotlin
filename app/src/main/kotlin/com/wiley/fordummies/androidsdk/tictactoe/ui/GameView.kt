@@ -27,7 +27,7 @@ class GameView(board: Board, statusView: TextView, sessionScoresView: TextView) 
     }
 
     fun showScores(player1Name: String, player1Score: Int, player2Name: String, player2Score: Int) {
-        val scoresText = "$player1Name:$player1Score....$player2Name:$player2Score"
+        val scoresText = "$player1Name: $player1Score....$player2Name: $player2Score"
         mSessionScoresView.text = scoresText
     }
 

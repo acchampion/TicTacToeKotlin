@@ -14,7 +14,11 @@ import androidx.startup.AppInitializer;
 import androidx.work.Configuration;
 
 import com.mapbox.maps.loader.MapboxMapsInitializer;
+import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore;
 
+import kotlin.coroutines.CoroutineContext;
+import kotlinx.coroutines.CoroutineScope;
+import kotlinx.coroutines.Dispatchers;
 import leakcanary.LeakCanary;
 import timber.log.Timber;
 
@@ -24,11 +28,20 @@ public class TicTacToeApplication extends Application implements Configuration.P
 
 	@SuppressLint("StaticFieldLeak")
 	private static Context mContext;
+	private static CoroutineScope mScope = new CoroutineScope() {
+		@NonNull
+		@Override
+		public CoroutineContext getCoroutineContext() {
+			return Dispatchers.getDefault();
+		}
+	};
+	private static SettingsDataStore mDataStore;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		mContext = this;
+		mDataStore = new SettingsDataStore(this, mScope);
 
 		final boolean mIsDebuggable = ( 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ));
 
@@ -61,9 +74,12 @@ public class TicTacToeApplication extends Application implements Configuration.P
 		return TicTacToeApplication.mContext;
 	}
 
+	public static SettingsDataStore getDataStore() { return mDataStore; }
+
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
 		mContext = null;
+		mDataStore = null;
 	}
 }

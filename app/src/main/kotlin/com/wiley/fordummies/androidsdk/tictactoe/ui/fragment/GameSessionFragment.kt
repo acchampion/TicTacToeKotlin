@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -24,6 +23,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.Game
 import com.wiley.fordummies.androidsdk.tictactoe.GameGrid
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.Symbol
+import com.wiley.fordummies.androidsdk.tictactoe.TicTacToeApplication
 import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
 import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore
 import com.wiley.fordummies.androidsdk.tictactoe.ui.Board
@@ -58,14 +58,8 @@ class GameSessionFragment : Fragment() {
 	private lateinit var mSavedInstanceState: Bundle
 
 	private val TAG = javaClass.simpleName
+	private val mScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 	private lateinit var mDataStore: SettingsDataStore
-
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		CoroutineScope(Dispatchers.IO).launch {
-			mIsTestMode = mDataStore.getBoolean("is_test_mode", false)
-		}
-	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -74,7 +68,6 @@ class GameSessionFragment : Fragment() {
 	): View {
 		Timber.d("onCreateView()")
 		val v: View = inflater.inflate(R.layout.fragment_game_session, container, false)
-		val rotation = requireActivity().windowManager.defaultDisplay.rotation
 
 		if (container != null) {
 			mContainer = container
@@ -94,8 +87,12 @@ class GameSessionFragment : Fragment() {
 		if (savedInstanceState != null) {
 			mSavedInstanceState = savedInstanceState
 		}
-		mDataStore = SettingsDataStore(context?.applicationContext!!)
+		mDataStore = TicTacToeApplication.getDataStore()
 
+		CoroutineScope(Dispatchers.IO).launch {
+			mIsTestMode = mDataStore.getBoolean("is_test_mode", false)
+		}
+		setPlayers(mActiveGame)
 		loadGameScores()
 
 		setupBoard(view)
@@ -112,7 +109,7 @@ class GameSessionFragment : Fragment() {
 		mBoard.setGrid(gameGrid)
 		mGameView = GameView(mBoard, turnStatusView, scoreView)
 		mGameView.setGameViewComponents(mBoard, turnStatusView, scoreView)
-		this.setPlayers(mActiveGame)
+		//this.setPlayers(mActiveGame)
 		mGameView.showScores(
 			mActiveGame.playerOneName,
 			mScorePlayerOne,
@@ -188,6 +185,13 @@ class GameSessionFragment : Fragment() {
 				mSecondPlayerName = mDataStore.getString(Settings.Keys.OPT_NAME, Settings.Keys.OPT_NAME_DEFAULT)
 			}
 			theGame.setPlayerNames(mFirstPlayerName, mSecondPlayerName)
+			requireActivity().runOnUiThread(Runnable {
+				mGameView.showScores(
+					mFirstPlayerName, mScorePlayerOne,
+					mSecondPlayerName, mScorePlayerTwo
+				)
+				mGameView.setGameStatus(mActiveGame.currentPlayerName + " to play.")
+			})
 		}
 	}
 

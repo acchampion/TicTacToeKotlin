@@ -25,6 +25,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.wiley.fordummies.androidsdk.tictactoe.R
+import com.wiley.fordummies.androidsdk.tictactoe.TicTacToeApplication
 import com.wiley.fordummies.androidsdk.tictactoe.VisibleFragment
 import com.wiley.fordummies.androidsdk.tictactoe.model.GalleryItem
 import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
@@ -51,7 +52,7 @@ class PhotoGalleryFragment : VisibleFragment() {
 		super.onCreate(savedInstanceState)
 		retainInstance = true
 		setHasOptionsMenu(true)
-		mDataStore = SettingsDataStore(context?.applicationContext!!)
+		mDataStore = TicTacToeApplication.getDataStore()
 	}
 
 	override fun onCreateView(

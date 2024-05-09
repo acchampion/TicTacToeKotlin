@@ -9,9 +9,11 @@ import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.wiley.fordummies.androidsdk.tictactoe.R
+import com.wiley.fordummies.androidsdk.tictactoe.TicTacToeApplication
 import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
 import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.PhotoGalleryActivity.Companion.newIntent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -20,7 +22,7 @@ import timber.log.Timber
 class PollWorker(private val mContext: Context, workerParams: WorkerParameters) : CoroutineWorker(
 	mContext, workerParams
 ) {
-	private val mDataStore = SettingsDataStore(mContext.applicationContext!!)
+	private val mDataStore = TicTacToeApplication.getDataStore()
 	private val TAG = javaClass.simpleName
 	override suspend fun doWork(): Result {
 		withContext(Dispatchers.IO) {

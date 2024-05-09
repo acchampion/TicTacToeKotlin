@@ -4,6 +4,10 @@ plugins {
 	id 'com.google.devtools.ksp' version '1.9.22-1.0.16'
 }
 
+kotlin {
+	jvmToolchain(17)
+}
+
 android {
 	defaultConfig {
 		compileSdk = 34
@@ -19,8 +23,8 @@ android {
 	compileOptions {
 		// Flag to enable support for the new language APIs
 		coreLibraryDesugaringEnabled = true
-		sourceCompatibility = JavaVersion.VERSION_21
-		targetCompatibility = JavaVersion.VERSION_21
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 	buildTypes {
 		debug {

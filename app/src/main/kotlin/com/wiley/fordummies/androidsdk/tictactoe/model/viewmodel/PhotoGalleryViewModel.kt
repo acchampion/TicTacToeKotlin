@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.wiley.fordummies.androidsdk.tictactoe.TicTacToeApplication
 import com.wiley.fordummies.androidsdk.tictactoe.model.GalleryItem
 import com.wiley.fordummies.androidsdk.tictactoe.model.Settings
 import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 class PhotoGalleryViewModel(private val app: Application) : AndroidViewModel(app) {
 	val galleryItemLiveData: LiveData<List<GalleryItem>>
 	private val mFlickrFetchr = FlickrFetchr()
-	private val mDataStore = SettingsDataStore(app)
+	private val mDataStore = TicTacToeApplication.getDataStore()
 	private val mMutableSearchTerm = MutableLiveData<String>()
 	val searchTerm: String
 		get() = mMutableSearchTerm.value ?: ""
