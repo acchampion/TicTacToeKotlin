@@ -129,13 +129,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 					Timber.tag(classTag).d("Wrote username successfully to DataStore")
 				}
 
-				/*  Save username as the name of the player
-				val settings =
-					PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
-				val editor = settings.edit()
-				editor.putString(OPT_NAME, username)
-				editor.apply() */
-
 				// Bring up the GameOptions screen
 				startActivity(Intent(activity, GameOptionsActivity::class.java))
 				activity.finish()

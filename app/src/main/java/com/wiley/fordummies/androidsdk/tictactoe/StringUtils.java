@@ -24,4 +24,5 @@ public class StringUtils {
 		}
 		return new String(hexChars);
 	}
+
 }

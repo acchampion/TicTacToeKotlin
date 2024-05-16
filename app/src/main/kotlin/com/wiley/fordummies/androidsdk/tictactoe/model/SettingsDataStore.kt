@@ -18,7 +18,7 @@ class SettingsDataStore(val context: Context, val scope: CoroutineScope) {
 	suspend fun getInt(key: String, value: Int): Int {
 		val prefKey = intPreferencesKey(key)
 		return context.dataStore.data
-			.map { preferences -> preferences[prefKey] ?: 0 }
+			.map { preferences -> preferences[prefKey] ?: value }
 			.first()
 	}
 
@@ -32,7 +32,7 @@ class SettingsDataStore(val context: Context, val scope: CoroutineScope) {
 	suspend fun getString(key: String, value: String): String {
 		val prefKey = stringPreferencesKey(key)
 		return context.dataStore.data
-			.map { preferences -> preferences[prefKey] ?: "" }
+			.map { preferences -> preferences[prefKey] ?: value }
 			.first()
 	}
 
@@ -46,7 +46,7 @@ class SettingsDataStore(val context: Context, val scope: CoroutineScope) {
 	suspend fun getBoolean(key: String, value: Boolean): Boolean {
 		val prefKey = booleanPreferencesKey(key)
 		return context.dataStore.data
-			.map { preferences -> preferences[prefKey] ?: false }
+			.map { preferences -> preferences[prefKey] ?: value }
 			.first()
 	}
 

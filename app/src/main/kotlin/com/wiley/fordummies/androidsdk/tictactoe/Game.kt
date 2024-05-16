@@ -1,6 +1,9 @@
 package com.wiley.fordummies.androidsdk.tictactoe
 
+import android.text.TextUtils
 import androidx.annotation.Keep
+import androidx.core.text.TextUtilsCompat
+import timber.log.Timber
 
 @Keep
 class Game {
@@ -11,10 +14,10 @@ class Game {
 
     private var currentSymbol: Symbol
 
-    private enum class PLAYER { Player1, Player2 }
+    enum class PLAYER { Player1, Player2 }
 
-    private var currentPlayer = PLAYER.Player1
-    private var winningPlayer = PLAYER.Player1
+    var currentPlayer = PLAYER.Player1
+    var winningPlayer = PLAYER.Player1
 
     var playerOneName: String = ""
     var playerTwoName: String = ""
@@ -29,22 +32,27 @@ class Game {
         currentSymbol = Symbol.SymbolXCreate()
     }
 
-    fun setPlayerNames(FirstPlayer: String, SecondPlayer: String) {
-        playerOneName = FirstPlayer
-        playerTwoName = SecondPlayer
+    fun setPlayerNames(firstPlayer: String, secondPlayer: String) {
+        Timber.tag("Game").d("Setting first player name to $firstPlayer, second player name to $secondPlayer")
+        playerOneName = firstPlayer
+        playerTwoName = secondPlayer
     }
 
-    val currentPlayerName: String
-        get() = if (currentPlayer == PLAYER.Player1)
-            playerOneName
-        else
-            playerTwoName
+    fun getCurrentPlayerName(): String {
+        if (currentPlayer === PLAYER.Player1) {
+            return playerOneName
+        } else {
+            return playerTwoName
+        }
+    }
 
-    val winningPlayerName: String
-        get() = if (winningPlayer == PLAYER.Player1)
-            playerOneName
-        else
-            playerTwoName
+    fun getOtherPlayerName(): String {
+        if (currentPlayer === PLAYER.Player1) {
+            return playerTwoName
+        } else {
+            return playerOneName
+        }
+    }
 
     fun play(x: Int, y: Int): Boolean {
         var successfulPlay = false

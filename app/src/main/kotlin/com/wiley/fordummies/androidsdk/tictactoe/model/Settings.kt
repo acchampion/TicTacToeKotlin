@@ -3,7 +3,7 @@ package com.wiley.fordummies.androidsdk.tictactoe.model
 import androidx.annotation.Keep
 
 /**
- * Class for reading settings from SharedPreferences.
+ * Class for reading settings from SharedPreferences (now the DataStore).
  *
  * Created by adamcchampion on 2017/08/14.
  */
