@@ -28,7 +28,7 @@ public class TicTacToeApplication extends Application implements Configuration.P
 
 	@SuppressLint("StaticFieldLeak")
 	private static Context mContext;
-	private static CoroutineScope mScope = new CoroutineScope() {
+	private static final CoroutineScope mScope = new CoroutineScope() {
 		@NonNull
 		@Override
 		public CoroutineContext getCoroutineContext() {

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +21,8 @@ import androidx.lifecycle.MutableLiveData
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import timber.log.Timber
 import java.io.File
-import java.io.FileDescriptor
 import java.io.IOException
+import kotlin.math.max
 
 
 /**
@@ -36,30 +37,50 @@ class ImagesFragment : Fragment(), View.OnClickListener {
     private lateinit var mImageView: ImageView
     private lateinit var mImageFilePath: String
     private val mBitmapLiveData = MutableLiveData<Bitmap?>()
+    private var mBitmap: Bitmap? = null
+
+    private val TAG: String = javaClass.simpleName
 
     private var mCapturePhotoLaunch = registerForActivityResult(
         TakePicturePreview()
     ) { result ->
-		Runnable {
-			mBitmapLiveData.postValue(result)
-			val bitmap = mBitmapLiveData.value
-			mImageView.setImageBitmap(bitmap)
-		}
+        val dstWidth = mImageView.width
+        val dstHeight = mImageView.height
+        if (result != null) {
+            Runnable {
+                val placeholder = BitmapFactory.decodeResource(
+                    requireActivity().resources,
+                    R.drawable.image_placeholder
+                )
+                mBitmapLiveData.postValue(placeholder)
+                mImageView.setImageBitmap(placeholder)
+                mBitmap = Bitmap.createScaledBitmap(result, dstWidth, dstHeight, false)
+                mBitmapLiveData.postValue(mBitmap)
+                mImageView.setImageBitmap(mBitmap)
+            }
+        }
 	}
 
     private var mPickImageResult = registerForActivityResult(
         GetContent()
     ) { result ->
-		val uriString = result.toString()
-		val imageUri = Uri.parse(uriString)
-		val runnable = Runnable {
-			val bitmap: Bitmap? = uriToBitmap(imageUri)
-			if (bitmap != null) {
-				mBitmapLiveData.postValue(bitmap)
-				mImageView.setImageURI(imageUri)
-			}
-		}
-		runnable.run()
+        if (result != null) {
+            val uriString = result.toString()
+            val imageUri = Uri.parse(uriString)
+            val runnable = Runnable {
+                val placeholder = BitmapFactory.decodeResource(
+                    requireActivity().resources,
+                    R.drawable.image_placeholder
+                )
+                mBitmapLiveData.postValue(placeholder)
+                mImageView.setImageBitmap(placeholder)
+                mBitmap = uriToBitmap(imageUri)
+                mBitmapLiveData.postValue(mBitmap)
+                mImageView.setImageBitmap(mBitmap)
+                mImageView.contentDescription = "Image was set"
+            }
+            runnable.run()
+        }
     }
 
     override fun onCreateView(
@@ -119,18 +140,68 @@ class ImagesFragment : Fragment(), View.OnClickListener {
         }
     }
 
-	private fun uriToBitmap(selectedFileUri: Uri): Bitmap? {
-		var image: Bitmap? = null
-		try {
-			val activity: Activity = requireActivity()
-			val parcelFileDescriptor =
-				activity.contentResolver.openFileDescriptor(selectedFileUri, "r")
-			val fileDescriptor: FileDescriptor = parcelFileDescriptor!!.fileDescriptor
-			image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
-			parcelFileDescriptor.close()
-		} catch (e: IOException) {
-			e.printStackTrace()
-		}
-		return image
-	}
+    /**
+     * Decodes the Bitmap captured by the Camera, and returns the Bitmap. Adapted from Chapter 16
+     * in the "Big Nerd Ranch Guide to Android Development", fourth edition.
+     *
+     * @param selectedFileUri Uri corresponding to the Bitmap to decode
+     * @return The scaled Bitmap for the ImageView
+     */
+    private fun uriToBitmap(selectedFileUri: Uri): Bitmap? {
+        var image: Bitmap? = null
+        var parcelFileDescriptor: ParcelFileDescriptor? = null
+
+        try {
+            val activity: Activity = requireActivity()
+            parcelFileDescriptor = activity.contentResolver.openFileDescriptor(selectedFileUri, "r")
+            if (parcelFileDescriptor != null) {
+                val fileDescriptor = parcelFileDescriptor.fileDescriptor
+
+                // Get the bounds
+                val optionsForBounds = BitmapFactory.Options()
+                optionsForBounds.inJustDecodeBounds = true
+
+                val dstWidth = mImageView.width
+                val dstHeight = mImageView.height
+                Timber.tag(TAG).d("dstWidth = %d; dstHeight = %d", dstWidth, dstHeight)
+
+                BitmapFactory.decodeFileDescriptor(
+                    fileDescriptor,
+                    mImageView.drawable.bounds,
+                    optionsForBounds
+                )
+
+                val srcWidth = optionsForBounds.outWidth.toFloat()
+                val srcHeight = optionsForBounds.outHeight.toFloat()
+                Timber.tag(TAG).d("srcWidth = %f; srcHeight = %f", srcWidth, srcHeight)
+
+                var inSampleSize = 1
+
+                if (srcWidth > dstWidth || srcHeight > dstHeight) {
+                    val widthScale = srcWidth / dstWidth
+                    val heightScale = srcHeight / dstHeight
+
+                    val sampleScale =
+                        max(widthScale.toDouble(), heightScale.toDouble()).toFloat()
+                    inSampleSize = Math.round(sampleScale)
+                    Timber.tag(TAG).d("inSampleSize = %d", inSampleSize)
+                }
+
+                val actualOptions = BitmapFactory.Options()
+                actualOptions.inSampleSize = inSampleSize
+
+                image = BitmapFactory.decodeFileDescriptor(
+                    fileDescriptor,
+                    mImageView.drawable.bounds,
+                    actualOptions
+                )
+                // largeBitmap.recycle();
+                parcelFileDescriptor.close()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return image
+    }
+
 }
