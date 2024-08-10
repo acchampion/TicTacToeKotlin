@@ -33,7 +33,7 @@ class PhotoGalleryViewModel(private val app: Application) : AndroidViewModel(app
 
 	init {
 		CoroutineScope(Dispatchers.IO).launch {
-			mMutableSearchTerm.value = mDataStore.getString(Settings.Keys.PREF_SEARCH_QUERY, "")
+			mMutableSearchTerm.postValue(mDataStore.getString(Settings.Keys.PREF_SEARCH_QUERY, ""))
 		}
 
 		// mGalleryItemLiveData = flickrFetchr.fetchPhotosOld();

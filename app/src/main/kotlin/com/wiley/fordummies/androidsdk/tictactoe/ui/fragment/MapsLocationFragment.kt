@@ -11,7 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.android.gestures.MoveGestureDetector
@@ -38,7 +41,7 @@ import timber.log.Timber
  *   Mapbox example app/a>.
  */
 @Keep
-class MapsLocationFragment : Fragment(), PermissionsListener {
+class MapsLocationFragment : Fragment(), PermissionsListener, MenuProvider {
 	private val permissionsManager = PermissionsManager(this)
 
 	private lateinit var mapView: MapView
@@ -74,9 +77,8 @@ class MapsLocationFragment : Fragment(), PermissionsListener {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? {
+	): View {
 		super.onCreateView(inflater, container, savedInstanceState)
-		setHasOptionsMenu(true)
 
 		val v: View = inflater.inflate(R.layout.fragment_maps_location, container, false)
 
@@ -87,23 +89,10 @@ class MapsLocationFragment : Fragment(), PermissionsListener {
 		return v
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-		super.onCreateOptionsMenu(menu, inflater)
-		inflater.inflate(R.menu.menu_maps, menu)
-	}
-
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		val itemId = item.itemId
-		val activity: Activity = requireActivity()
-		if (itemId == R.id.menu_showcurrentlocation) {
-			if (!PermissionsManager.areLocationPermissionsGranted(requireContext())) {
-				permissionsManager.requestLocationPermissions(activity)
-			} else {
-				val map: MapboxMap = mapView.getMapboxMap()
-				setupMap(map)
-			}
-		}
-		return false
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		val menuHost: MenuHost = requireActivity()
+		menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 	}
 
 	override fun onDestroyView() {
@@ -111,6 +100,8 @@ class MapsLocationFragment : Fragment(), PermissionsListener {
 		gesturesPlugin.removeOnMoveListener(onMoveListener)
 		locationPlugin.removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
 		locationPlugin.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+		val menuHost: MenuHost = requireActivity()
+		menuHost.removeMenuProvider(this)
 	}
 
 
@@ -201,5 +192,23 @@ class MapsLocationFragment : Fragment(), PermissionsListener {
 			Toast.makeText(ctx, "You must enable location permissions", Toast.LENGTH_SHORT).show()
 			Timber.tag(TAG).d( "User denied location permission")
 		}
+	}
+
+	override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+		menuInflater.inflate(R.menu.menu_maps, menu)
+	}
+
+	override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+		val itemId = menuItem.itemId
+		val activity: Activity = requireActivity()
+		if (itemId == R.id.menu_showcurrentlocation) {
+			if (!PermissionsManager.areLocationPermissionsGranted(requireContext())) {
+				permissionsManager.requestLocationPermissions(activity)
+			} else {
+				val map: MapboxMap = mapView.getMapboxMap()
+				setupMap(map)
+			}
+		}
+		return false
 	}
 }

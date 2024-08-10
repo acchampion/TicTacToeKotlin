@@ -17,7 +17,10 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.Game
 import com.wiley.fordummies.androidsdk.tictactoe.GameGrid
@@ -42,7 +45,7 @@ import java.util.Random
  *
  * Created by adamcchampion on 2017/08/19.
  */
-class GameSessionFragment : Fragment() {
+class GameSessionFragment : Fragment(), MenuProvider {
     var mHumanPlaysFirst: Boolean = false
     var mActiveGame: Game = Game()
     private var mIsTestMode = false
@@ -77,8 +80,6 @@ class GameSessionFragment : Fragment() {
 
         retainInstance = true
 
-        setHasOptionsMenu(true)
-
         return v
     }
 
@@ -95,6 +96,9 @@ class GameSessionFragment : Fragment() {
         setPlayers(mActiveGame)
         loadGameScores()
         setupBoard(view)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
 
@@ -142,6 +146,9 @@ class GameSessionFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         Timber.d("onDestroyView()")
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.removeMenuProvider(this)
     }
 
     override fun onDestroy() {
@@ -397,13 +404,21 @@ class GameSessionFragment : Fragment() {
         startActivity(phoneIntent)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_ingame, menu)
+    fun getPlayCount(): Int {
+        return Objects.requireNonNull(mActiveGame).getPlayCount()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    companion object {
+        private const val ANDROID_TIMEOUT_BASE = 500
+        private const val ANDROID_TIMEOUT_SEED = 2000
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_ingame, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
             R.id.menu_help -> {
                 startActivity(Intent(activity?.applicationContext, HelpActivity::class.java))
                 return true
@@ -430,14 +445,6 @@ class GameSessionFragment : Fragment() {
             }
         }
         return false
-    }
 
-    fun getPlayCount(): Int {
-        return Objects.requireNonNull(mActiveGame).getPlayCount()
-    }
-
-    companion object {
-        private const val ANDROID_TIMEOUT_BASE = 500
-        private const val ANDROID_TIMEOUT_SEED = 2000
     }
 }

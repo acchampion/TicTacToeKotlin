@@ -13,7 +13,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import com.wiley.fordummies.androidsdk.tictactoe.MediaPlaybackService
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.AudioActivity
@@ -35,7 +38,7 @@ import timber.log.Timber
  * Created by adamcchampion on 2017/08/05.
  */
 @Keep
-class GameOptionsFragment : Fragment(), View.OnClickListener {
+class GameOptionsFragment : Fragment(), View.OnClickListener, MenuProvider {
 
 	private val classTag = javaClass.simpleName
 
@@ -71,8 +74,6 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 		val btnExit: Button = v.findViewById(R.id.buttonExit)
 		btnExit.setOnClickListener(this)
 
-		setHasOptionsMenu(true)
-
 		return v
 	}
 
@@ -84,41 +85,23 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 		}
 	}
 
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+
+		val menuHost: MenuHost = requireActivity()
+		menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+	}
+
+
 	override fun onDestroyView() {
 		super.onDestroyView()
 		val activity: Activity = requireActivity()
 		val appContext: Context = activity.applicationContext
 		activity.stopService(Intent(appContext, MediaPlaybackService::class.java))
-	}
 
-	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-		super.onCreateOptionsMenu(menu, inflater)
-		inflater.inflate(R.menu.menu, menu)
+		val menuHost: MenuHost = requireActivity()
+		menuHost.removeMenuProvider(this)
 	}
-
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		val activity = requireActivity()
-		when (item.itemId) {
-			R.id.menu_settings -> {
-				startActivity(Intent(activity.applicationContext, SettingsActivity::class.java))
-				return true
-			}
-			R.id.menu_help -> {
-				startActivity(Intent(activity.applicationContext, HelpActivity::class.java))
-				return true
-			}
-			R.id.menu_exit -> {
-				showQuitAppDialog()
-				return true
-			}
-			R.id.menu_contacts -> {
-				startActivity(Intent(activity.applicationContext, ContactsActivity::class.java))
-				return true
-			}
-		}
-		return false
-	}
-
 
 	override fun onClick(v: View) {
 		val activity = requireActivity()
@@ -202,4 +185,30 @@ class GameOptionsFragment : Fragment(), View.OnClickListener {
 		fragment.show(manager, "quit_app")
 	}
 
+	override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+		menuInflater.inflate(R.menu.menu, menu)
+	}
+
+	override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+		val activity = requireActivity()
+		when (menuItem.itemId) {
+			R.id.menu_settings -> {
+				startActivity(Intent(activity.applicationContext, SettingsActivity::class.java))
+				return true
+			}
+			R.id.menu_help -> {
+				startActivity(Intent(activity.applicationContext, HelpActivity::class.java))
+				return true
+			}
+			R.id.menu_exit -> {
+				showQuitAppDialog()
+				return true
+			}
+			R.id.menu_contacts -> {
+				startActivity(Intent(activity.applicationContext, ContactsActivity::class.java))
+				return true
+			}
+		}
+		return false
+	}
 }

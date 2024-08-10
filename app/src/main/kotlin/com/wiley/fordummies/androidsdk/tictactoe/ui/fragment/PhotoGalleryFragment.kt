@@ -15,7 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
@@ -40,7 +43,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Keep
-class PhotoGalleryFragment : VisibleFragment() {
+class PhotoGalleryFragment : VisibleFragment(), MenuProvider {
 	private val mPhotoGalleryViewModel: PhotoGalleryViewModel by viewModels()
 	private lateinit var mDataStore: SettingsDataStore
 	private lateinit var mPhotoRecyclerView: RecyclerView
@@ -51,7 +54,6 @@ class PhotoGalleryFragment : VisibleFragment() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		retainInstance = true
-		setHasOptionsMenu(true)
 		mDataStore = TicTacToeApplication.getDataStore()
 	}
 
@@ -87,92 +89,18 @@ class PhotoGalleryFragment : VisibleFragment() {
 			adapter.notifyDataSetChanged()
 			mPhotoRecyclerView.adapter = adapter
 		}
+		val menuHost: MenuHost = requireActivity()
+		menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 	}
 
 	override fun onDestroyView() {
 		super.onDestroyView()
+		val menuHost: MenuHost = requireActivity()
+		menuHost.removeMenuProvider(this)
 	}
 
 	override fun onDestroy() {
 		super.onDestroy()
-	}
-
-	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-		super.onCreateOptionsMenu(menu, inflater)
-		inflater.inflate(R.menu.menu_photo_gallery, menu)
-		val searchItem = menu.findItem(R.id.menu_item_search)
-		val searchView = searchItem.actionView as SearchView
-
-		searchView.apply {
-			setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-				override fun onQueryTextSubmit(query: String): Boolean {
-					Timber.tag(classTag).d("QueryTextSubmit: %s", query)
-					mPhotoGalleryViewModel.fetchPhotos(query)
-					return true
-				}
-
-				override fun onQueryTextChange(newText: String): Boolean {
-					Timber.tag(classTag).d("QueryTextChange: %s", newText)
-					return false
-				}
-			})
-
-			setOnSearchClickListener {
-				searchView.setQuery(mPhotoGalleryViewModel.searchTerm, false)
-			}
-		}
-
-		val toggleItem = menu.findItem(R.id.menu_item_toggle_polling)
-		CoroutineScope(Dispatchers.IO).launch {
-			val isPolling = mDataStore.getBoolean(Settings.Keys.PREF_IS_POLLING, false)
-			withContext(Dispatchers.Main) {
-				val toggleItemTitle: Int = if (isPolling) {
-					R.string.stop_polling
-				} else {
-					R.string.start_polling
-				}
-				toggleItem.setTitle(toggleItemTitle)
-			}
-		}
-	}
-
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		return when (item.itemId) {
-			R.id.menu_item_clear -> {
-				mPhotoGalleryViewModel.fetchPhotos()
-				true
-			}
-			R.id.menu_item_toggle_polling -> {
-				CoroutineScope(Dispatchers.IO).launch {
-					val isPolling = mDataStore.getBoolean(Settings.Keys.PREF_IS_POLLING, false)
-					if (isPolling) {
-						WorkManager.getInstance(requireContext()).cancelUniqueWork(pollWork)
-						mDataStore.putBoolean(Settings.Keys.PREF_IS_POLLING, false)
-					} else {
-						val constraints = Constraints.Builder()
-							.setRequiredNetworkType(NetworkType.UNMETERED)
-							.build()
-						val periodicRequest = PeriodicWorkRequest.Builder(
-							PollWorker::class.java,
-							15,
-							TimeUnit.MINUTES
-						)
-							.setConstraints(constraints)
-							.build()
-						WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
-							pollWork,
-							ExistingPeriodicWorkPolicy.KEEP,
-							periodicRequest
-						)
-						mDataStore.putBoolean(Settings.Keys.PREF_IS_POLLING, true)
-					}
-				}
-
-				requireActivity().invalidateOptionsMenu()
-				true
-			}
-			else -> super.onOptionsItemSelected(item)
-		}
 	}
 
 	private inner class PhotoHolder(val itemImageView: ImageView) :
@@ -225,6 +153,87 @@ class PhotoGalleryFragment : VisibleFragment() {
 
 		override fun getItemCount(): Int {
 			return mGalleryItems.size
+		}
+	}
+
+	override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+		menuInflater.inflate(R.menu.menu_photo_gallery, menu)
+		val searchItem = menu.findItem(R.id.menu_item_search)
+		val searchView = searchItem.actionView as SearchView
+
+		searchView.apply {
+			setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+				override fun onQueryTextSubmit(query: String): Boolean {
+					Timber.tag(classTag).d("QueryTextSubmit: %s", query)
+					mPhotoGalleryViewModel.fetchPhotos(query)
+					return true
+				}
+
+				override fun onQueryTextChange(newText: String): Boolean {
+					Timber.tag(classTag).d("QueryTextChange: %s", newText)
+					return false
+				}
+			})
+
+			setOnSearchClickListener {
+				searchView.setQuery(mPhotoGalleryViewModel.searchTerm, false)
+			}
+		}
+
+		val toggleItem = menu.findItem(R.id.menu_item_toggle_polling)
+		CoroutineScope(Dispatchers.IO).launch {
+			val isPolling = mDataStore.getBoolean(Settings.Keys.PREF_IS_POLLING, false)
+			withContext(Dispatchers.Main) {
+				val toggleItemTitle: Int = if (isPolling) {
+					R.string.stop_polling
+				} else {
+					R.string.start_polling
+				}
+				toggleItem.setTitle(toggleItemTitle)
+			}
+		}
+
+	}
+
+	override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+		return when (menuItem.itemId) {
+			R.id.menu_item_clear -> {
+				mPhotoGalleryViewModel.fetchPhotos()
+				true
+			}
+			R.id.menu_item_toggle_polling -> {
+				CoroutineScope(Dispatchers.IO).launch {
+					val isPolling = mDataStore.getBoolean(Settings.Keys.PREF_IS_POLLING, false)
+					if (isPolling) {
+						WorkManager.getInstance(requireContext()).cancelUniqueWork(pollWork)
+						mDataStore.putBoolean(Settings.Keys.PREF_IS_POLLING, false)
+					} else {
+						val constraints = Constraints.Builder()
+							.setRequiredNetworkType(NetworkType.UNMETERED)
+							.build()
+						val periodicRequest = PeriodicWorkRequest.Builder(
+							PollWorker::class.java,
+							15,
+							TimeUnit.MINUTES
+						)
+							.setConstraints(constraints)
+							.build()
+						WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+							pollWork,
+							ExistingPeriodicWorkPolicy.KEEP,
+							periodicRequest
+						)
+						mDataStore.putBoolean(Settings.Keys.PREF_IS_POLLING, true)
+					}
+				}
+
+				requireActivity().invalidateOptionsMenu()
+				true
+			}
+			else -> {
+				Timber.tag("PhotoGalleryFragment").e("Invalid menu item selected")
+				false
+			}
 		}
 	}
 }
