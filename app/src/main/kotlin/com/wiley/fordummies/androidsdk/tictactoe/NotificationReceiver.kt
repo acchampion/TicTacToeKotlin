@@ -24,19 +24,19 @@ class NotificationReceiver : BroadcastReceiver() {
         val requestCode = intent.getIntExtra(PollWorker.REQUEST_CODE, 0)
         val notification = intent.getParcelableExtra<Notification>(PollWorker.NOTIFICATION)
         val notificationManager = NotificationManagerCompat.from(context)
-		if (ActivityCompat.checkSelfPermission(
-				context,
-				Manifest.permission.POST_NOTIFICATIONS
-			) != PackageManager.PERMISSION_GRANTED
-		) {
-			// TODO: Consider calling ActivityCompat#requestPermissions
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
-			// to handle the case where the user grants the permission. See the documentation
-			// for ActivityCompat#requestPermissions for more details.
-			return
-		}
-		notificationManager.notify(requestCode, notification!!)
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        notificationManager.notify(requestCode, notification!!)
     }
 }

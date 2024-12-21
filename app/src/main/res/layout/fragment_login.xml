@@ -78,8 +78,8 @@
 				android:layout_width="100dp"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="16dp"
-				android:layout_marginLeft="16dp"
-				android:layout_marginRight="16dp"
+				android:layout_marginLeft="8dp"
+				android:layout_marginRight="8dp"
 				android:text="@string/login"/>
 
 			<Button
@@ -87,8 +87,8 @@
 				android:layout_width="100dp"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="16dp"
-				android:layout_marginLeft="16dp"
-				android:layout_marginRight="16dp"
+				android:layout_marginLeft="8dp"
+				android:layout_marginRight="8dp"
 				android:text="@string/exit"/>
 
 			<Button
@@ -96,8 +96,8 @@
 				android:layout_width="100dp"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="16dp"
-				android:layout_marginLeft="16dp"
-				android:layout_marginRight="16dp"
+				android:layout_marginLeft="8dp"
+				android:layout_marginRight="8dp"
 				android:text="@string/new_user"/>
 		</LinearLayout>
 

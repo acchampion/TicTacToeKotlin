@@ -53,11 +53,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? {
-		val v: View
+	): View {
 		val activity = requireActivity()
 		val rotation = activity.windowManager.defaultDisplay.rotation
-		v = inflater.inflate(R.layout.fragment_login, container, false)
+		val v: View = inflater.inflate(R.layout.fragment_login, container, false)
 
 		mDataStore = TicTacToeApplication.getDataStore()
 
@@ -94,7 +93,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		val activity: Activity = requireActivity()
 	}
 
 

@@ -17,7 +17,7 @@
 	<item 
 		android:title="@string/exit"
 		android:id="@+id/menu_exit"
-		android:icon="@android:drawable/ic_menu_close_clear_cancel" 
+		android:icon="@android:drawable/ic_menu_close_clear_cancel"
 		/>
 	<item 
 		android:title="@string/contacts"

@@ -47,7 +47,7 @@ class ImagesFragment : Fragment(), View.OnClickListener {
         val dstWidth = mImageView.width
         val dstHeight = mImageView.height
         if (result != null) {
-            Runnable {
+            val runnable = Runnable {
                 val placeholder = BitmapFactory.decodeResource(
                     requireActivity().resources,
                     R.drawable.image_placeholder
@@ -58,6 +58,7 @@ class ImagesFragment : Fragment(), View.OnClickListener {
                 mBitmapLiveData.postValue(mBitmap)
                 mImageView.setImageBitmap(mBitmap)
             }
+            runnable.run()
         }
 	}
 
