@@ -107,4 +107,7 @@
 	<string name="address_autofill_address_state_hint">State</string>
 	<string name="address_autofill_error_pin_correction">Unable to locate selected coordinate</string>
 	<string name="address_autofill_error_select">Unable to resolve selected suggestion</string>
+    <string name="place_autocomplete_query_hint">Search for places</string>
+    <string name="place_autocomplete_reverse_geocoding_error_message">Error locating selected coordinates</string>
+    <string name="place_autocomplete_selection_error">Autocomplete error occurred during request</string>
 </resources>

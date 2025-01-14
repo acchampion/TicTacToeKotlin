@@ -3,7 +3,7 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.activity
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.ui.SingleFragmentActivity
-import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.MapsSearchFragment
+import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.MapsSearchAutocompleteFragment
 
 /**
  * Activity that lets the user search for a location on a map.
@@ -14,6 +14,6 @@ import com.wiley.fordummies.androidsdk.tictactoe.ui.fragment.MapsSearchFragment
 class MapsSearchActivity : SingleFragmentActivity() {
 
 	override fun createFragment(): Fragment {
-		return MapsSearchFragment()
+		return MapsSearchAutocompleteFragment()
 	}
 }

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Keep
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -21,16 +20,15 @@ import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.Style.Companion.MAPBOX_STREETS
-import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.interpolate
-import com.mapbox.maps.plugin.LocationPuck2D
-import com.mapbox.maps.plugin.Plugin.Companion.MAPBOX_GESTURES_PLUGIN_ID
-import com.mapbox.maps.plugin.Plugin.Companion.MAPBOX_LOCATION_COMPONENT_PLUGIN_ID
-import com.mapbox.maps.plugin.gestures.GesturesPlugin
+import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.gestures.OnMoveListener
-import com.mapbox.maps.plugin.locationcomponent.LocationComponentPlugin
+import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
+import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
+import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.plugin.viewport.viewport
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import timber.log.Timber
 
@@ -45,20 +43,17 @@ class MapsLocationFragment : Fragment(), PermissionsListener, MenuProvider {
 	private val permissionsManager = PermissionsManager(this)
 
 	private lateinit var mapView: MapView
-	private lateinit var locationPuck: LocationPuck2D
-	private lateinit var locationPlugin: LocationComponentPlugin
-	private lateinit var gesturesPlugin: GesturesPlugin
 
 	private val TAG = javaClass.simpleName
 
 	private val onIndicatorBearingChangedListener = OnIndicatorBearingChangedListener {
-		mapView.getMapboxMap().setCamera(CameraOptions.Builder().bearing(it).build())
+		mapView.mapboxMap.setCamera(CameraOptions.Builder().bearing(it).build())
 	}
 
 	private val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
-		val map: MapboxMap = mapView.getMapboxMap()
-		mapView.getMapboxMap().setCamera(CameraOptions.Builder().center(it).build())
-		gesturesPlugin.focalPoint = map.pixelForCoordinate(it)
+		val mapboxMap: MapboxMap = mapView.mapboxMap
+		mapboxMap.setCamera(CameraOptions.Builder().center(it).build())
+		mapView.gestures.focalPoint = mapboxMap.pixelForCoordinate(it)
 	}
 
 	private val onMoveListener = object : OnMoveListener {
@@ -81,10 +76,8 @@ class MapsLocationFragment : Fragment(), PermissionsListener, MenuProvider {
 		super.onCreateView(inflater, container, savedInstanceState)
 
 		val v: View = inflater.inflate(R.layout.fragment_maps_location, container, false)
-
 		mapView = v.findViewById<View>(R.id.map_view_location) as MapView
-		val mMapboxMap: MapboxMap = mapView.getMapboxMap()
-		setupMap(mMapboxMap)
+		setupMap(mapView)
 
 		return v
 	}
@@ -97,85 +90,52 @@ class MapsLocationFragment : Fragment(), PermissionsListener, MenuProvider {
 
 	override fun onDestroyView() {
 		super.onDestroyView()
-		gesturesPlugin.removeOnMoveListener(onMoveListener)
-		locationPlugin.removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
-		locationPlugin.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+		with (mapView) {
+			location.enabled = false
+			location.puckBearingEnabled = false
+			location.removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+			location.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+			gestures.removeOnMoveListener(onMoveListener)
+		}
 		val menuHost: MenuHost = requireActivity()
 		menuHost.removeMenuProvider(this)
 	}
 
 
-	private fun setupMap(map: MapboxMap) {
+	private fun setupMap(mapView: MapView) {
 		val cameraOptions = CameraOptions.Builder()
 			.zoom(14.0)
 			.build()
-		map.setCamera(cameraOptions)
-		map.loadStyleUri(MAPBOX_STREETS) {
-			initLocation()
-			setupGesturesListener()
+		val mapboxMap = mapView.mapboxMap
+		mapboxMap.setCamera(cameraOptions)
+		mapboxMap.loadStyle(Style.STANDARD)
+
+		with (mapView) {
+			location.locationPuck = createDefault2DPuck(withBearing = true)
+			location.enabled = true
+			location.puckBearing = PuckBearing.COURSE
+			location.puckBearingEnabled = true
+			viewport.transitionTo(
+				targetState = viewport.makeFollowPuckViewportState(),
+				transition = viewport.makeImmediateViewportTransition()
+			)
+			location.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+			location.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+			gestures.addOnMoveListener(onMoveListener)
 		}
 	}
-
-	private fun setupGesturesListener() {
-		gesturesPlugin = mapView.getPlugin(MAPBOX_GESTURES_PLUGIN_ID)!!
-		gesturesPlugin.addOnMoveListener(onMoveListener)
-	}
-
-
-	private fun initLocation() {
-		val activity: Activity = requireActivity()
-		locationPuck = LocationPuck2D(
-			bearingImage = AppCompatResources.getDrawable(
-				activity,
-				com.mapbox.maps.plugin.locationcomponent.R.drawable.mapbox_user_puck_icon
-			),
-			shadowImage = AppCompatResources.getDrawable(
-				activity,
-				com.mapbox.maps.plugin.locationcomponent.R.drawable.mapbox_user_icon_shadow
-			)
-		)
-		locationPlugin = mapView.getPlugin(MAPBOX_LOCATION_COMPONENT_PLUGIN_ID)!!
-		locationPlugin.updateSettings {
-			this.enabled = true
-			this.locationPuck = LocationPuck2D(
-				bearingImage = AppCompatResources.getDrawable(
-					activity,
-					com.mapbox.maps.plugin.locationcomponent.R.drawable.mapbox_user_puck_icon,
-				),
-				shadowImage = AppCompatResources.getDrawable(
-					activity,
-					com.mapbox.maps.plugin.locationcomponent.R.drawable.mapbox_user_icon_shadow,
-				),
-				scaleExpression = interpolate {
-					linear()
-					zoom()
-					stop {
-						literal(0.0)
-						literal(0.6)
-					}
-					stop {
-						literal(20.0)
-						literal(1.0)
-					}
-				}.toJson()
-			)
-		}
-		locationPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
-		locationPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-	}
-
 
 	private fun onCameraTrackingDismissed() {
 		Timber.tag(TAG).d("onCameraTrackingDismissed()")
 		Toast.makeText(requireActivity(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
-		locationPlugin.removeOnIndicatorPositionChangedListener(
-			onIndicatorPositionChangedListener
-		)
-		locationPlugin.removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
-		gesturesPlugin.removeOnMoveListener(onMoveListener)
+		with (mapView) {
+			location.removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+			location.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+			gestures.removeOnMoveListener(onMoveListener)
+		}
 	}
 
-	override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
+	override fun onExplanationNeeded(permissionsToExplain: List<String>) {
 		val ctx = requireContext()
 		Timber.tag(TAG).d("onExplanationNeeded()")
 		Toast.makeText(ctx, "You must enable location permissions", Toast.LENGTH_SHORT).show()
@@ -184,9 +144,7 @@ class MapsLocationFragment : Fragment(), PermissionsListener, MenuProvider {
 	override fun onPermissionResult(granted: Boolean) {
 		val ctx = requireContext()
 		if (granted) {
-			setupMap(mapView.getMapboxMap())
-			initLocation()
-			setupGesturesListener()
+			setupMap(mapView)
 			Timber.tag(TAG).e( "User granted location permission")
 		} else {
 			Toast.makeText(ctx, "You must enable location permissions", Toast.LENGTH_SHORT).show()
@@ -205,8 +163,7 @@ class MapsLocationFragment : Fragment(), PermissionsListener, MenuProvider {
 			if (!PermissionsManager.areLocationPermissionsGranted(requireContext())) {
 				permissionsManager.requestLocationPermissions(activity)
 			} else {
-				val map: MapboxMap = mapView.getMapboxMap()
-				setupMap(map)
+				setupMap(mapView)
 			}
 		}
 		return false

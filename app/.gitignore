@@ -51,3 +51,6 @@ build-cache/
 # Profiling
 profile*/
 gradle-user-home/
+
+# Dependency tracking
+dependencies.*

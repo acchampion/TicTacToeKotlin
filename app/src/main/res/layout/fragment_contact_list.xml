@@ -4,4 +4,4 @@
 	android:layout_height="match_parent"
 	android:layout_margin="8dp"
 	android:id="@+id/contact_recycler_view"
-	xmlns:android="http://schemas.android.com/apk/res/android"/>
+	xmlns:android="http://schemas.android.com/apk/res/android" />

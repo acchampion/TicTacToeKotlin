@@ -4,7 +4,7 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:baselineAligned="false"
+	android:layout_marginTop="?attr/actionBarSize"
 	tools:ignore="MissingDefaultResource">
 
     <ScrollView
@@ -16,16 +16,17 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp">
+            android:layout_margin="8dp"
+			android:layout_marginTop="?attr/actionBarSize">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/login"
-                android:layout_marginTop="16dp"
+
                 android:layout_marginBottom="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
 
 			<TextView
 				android:layout_width="wrap_content"

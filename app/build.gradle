@@ -49,10 +49,10 @@ dependencies {
 	implementation 'androidx.test.ext:junit-ktx:1.2.1'
 
 	constraints {
-		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0") {
+		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.21") {
 			because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
 		}
-		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0") {
+		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.21") {
 			because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
 		}
 	}
@@ -99,9 +99,6 @@ dependencies {
 
 	// Mapbox dependencies for maps
 	implementation("com.mapbox.maps:android:$rootProject.mapbox_sdk_version")
-	implementation("com.mapbox.search:place-autocomplete:$rootProject.mapbox_search_version")
-	implementation("com.mapbox.search:offline:$rootProject.mapbox_search_version")
-	implementation("com.mapbox.search:mapbox-search-android:$rootProject.mapbox_search_version")
 	implementation("com.mapbox.search:mapbox-search-android-ui:$rootProject.mapbox_search_version")
 
 	implementation("com.jakewharton.timber:timber:$rootProject.timber_version")
