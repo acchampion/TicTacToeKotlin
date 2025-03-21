@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -39,8 +40,12 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 @Keep
 class LoginFragment : Fragment(), View.OnClickListener {
+	private lateinit var mHeaderTextView: TextView
 	private lateinit var mUsernameEditText: EditText
 	private lateinit var mPasswordEditText: EditText
+	private lateinit var mLoginButton: Button
+	private lateinit var mCancelButton: Button
+	private lateinit var mNewUserButton: Button
 
 	private val mUserAccountViewModel: UserAccountViewModel by viewModels()
 
@@ -60,17 +65,18 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
 		mDataStore = TicTacToeApplication.getDataStore()
 
+		mHeaderTextView = v.findViewById(R.id.login_header)
 		mUsernameEditText = v.findViewById(R.id.username_text)
 		mPasswordEditText = v.findViewById(R.id.password_text)
 
-		val loginButton: Button = v.findViewById(R.id.login_button)
-		loginButton.setOnClickListener(this)
-		val cancelButton: Button = v.findViewById(R.id.cancel_button)
-		cancelButton.setOnClickListener(this)
+		mLoginButton = v.findViewById(R.id.login_button)
+		mLoginButton.setOnClickListener(this)
+		mCancelButton = v.findViewById(R.id.cancel_button)
+		mCancelButton.setOnClickListener(this)
 
 		if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-			val newUserButton: Button = v.findViewById(R.id.new_user_button)
-			newUserButton.setOnClickListener(this)
+			mNewUserButton = v.findViewById(R.id.new_user_button)
+			mNewUserButton.setOnClickListener(this)
 		}
 
 		return v

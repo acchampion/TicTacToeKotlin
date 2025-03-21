@@ -6,7 +6,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:minHeight="48dp"
             android:hint="@string/enter_username"
             android:textColorHint="@color/light"
             android:textColor="@color/light" />
@@ -47,6 +49,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:textColorHint="@color/light"
+            android:minHeight="48dp"
             android:hint="@string/enter_password"
             android:textColor="@color/light" />
 
@@ -64,22 +67,26 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:hint="@string/confirm_password"
+            android:minHeight="48dp"
             android:textColor="@color/light"
             android:textColorHint="@color/light" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
             <Button
                 android:id="@+id/cancel_button"
                 android:text="@string/clear"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"/>
             <Button
                 android:id="@+id/done_button"
                 android:text="@string/create"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

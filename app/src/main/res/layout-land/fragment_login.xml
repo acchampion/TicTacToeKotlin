@@ -4,12 +4,11 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-	android:layout_marginTop="?attr/actionBarSize"
 	tools:ignore="MissingDefaultResource">
 
     <ScrollView
         android:orientation="vertical"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -64,16 +63,25 @@
 				android:textColorHint="#546E7A"
 				android:autofillHints="password" />
 
-            <Button
-                android:id="@+id/login_button"
-                android:text="@string/login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <Button
-                android:id="@+id/cancel_button"
-                android:text="@string/exit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_margin="8dp">
+				<Button
+					android:id="@+id/login_button"
+					android:text="@string/login"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_margin="8dp"/>
+				<Button
+					android:id="@+id/cancel_button"
+					android:text="@string/exit"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_margin="8dp"/>
+			</LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

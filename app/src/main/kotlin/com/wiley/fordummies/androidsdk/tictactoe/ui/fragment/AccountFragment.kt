@@ -50,6 +50,10 @@ class AccountFragment : Fragment(), View.OnClickListener {
 		return v
 	}
 
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+	}
+
 	override fun onResume() {
 		super.onResume()
 		val activity = requireActivity() as AppCompatActivity

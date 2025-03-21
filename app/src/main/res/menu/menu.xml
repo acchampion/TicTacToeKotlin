@@ -18,10 +18,11 @@
 		android:title="@string/exit"
 		android:id="@+id/menu_exit"
 		android:icon="@android:drawable/ic_menu_close_clear_cancel"
+		app:showAsAction="ifRoom"
 		/>
 	<item 
 		android:title="@string/contacts"
 		android:id="@+id/menu_contacts"
-		android:icon="@android:drawable/ic_menu_view" 
+		android:icon="@android:drawable/ic_menu_view"
 	/>
 </menu>

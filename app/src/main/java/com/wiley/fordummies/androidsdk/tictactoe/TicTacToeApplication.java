@@ -19,7 +19,6 @@ import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore;
 import kotlin.coroutines.CoroutineContext;
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.Dispatchers;
-import leakcanary.LeakCanary;
 import timber.log.Timber;
 
 @Keep

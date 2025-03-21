@@ -86,7 +86,7 @@ class MapsSearchAutocompleteFragment : Fragment(), PermissionsListener {
             showLocation()
         } else {
             // The user denied permission to read contacts, so show them a message.
-            Timber.e("Error: Permission denied to read contacts")
+            Timber.tag(javaClass.simpleName).e("Error: Permission denied to read contacts")
             if (lacksLocationPermission()) {
                 val activity = requireActivity() as AppCompatActivity
                 val fm = activity.supportFragmentManager
@@ -252,7 +252,7 @@ class MapsSearchAutocompleteFragment : Fragment(), PermissionsListener {
                     openPlaceCard(suggestions.first())
                 }
             }.onError { error ->
-                Timber.d(LOG_TAG, "Reverse geocoding error", error)
+                Timber.tag(LOG_TAG).e("Reverse geocoding error + ${error}")
                 showToast(R.string.place_autocomplete_reverse_geocoding_error_message)
             }
         }
@@ -312,7 +312,7 @@ class MapsSearchAutocompleteFragment : Fragment(), PermissionsListener {
 
                 searchResultsView.isVisible = false
             }.onError { error ->
-                Timber.d(LOG_TAG, "Suggestion selection error", error)
+                Timber.tag(LOG_TAG).e("Suggestion selection error: ${error}")
                 showToast(R.string.place_autocomplete_selection_error)
             }
         }
@@ -375,7 +375,7 @@ class MapsSearchAutocompleteFragment : Fragment(), PermissionsListener {
         if (result.isValue) {
             locationProvider = result.value!!
         } else {
-            Timber.e(LOG_TAG, "Failed to get device location provider")
+            Timber.tag(LOG_TAG).e("Failed to get device location provider")
         }
 
         locationProvider?.addLocationObserver(locationObserver)
@@ -384,7 +384,7 @@ class MapsSearchAutocompleteFragment : Fragment(), PermissionsListener {
     }
 
     val locationObserver = LocationObserver { locations ->
-        Timber.i(LOG_TAG, "Location update, received: $locations")
+        Timber.tag(LOG_TAG).e("Location update, received: $locations")
         if (locations.size > 0) {
             val location: Location = locations.first()
             val point: Point = Point.fromLngLat(location.longitude, location.latitude)
