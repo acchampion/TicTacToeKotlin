@@ -1,5 +1,5 @@
 plugins {
-	id 'com.android.application' version '8.9.0'
+	id 'com.android.application' version '8.10.0'
 	id 'org.jetbrains.kotlin.android' version '2.0.21'
 	id 'com.google.devtools.ksp' version '2.0.21-1.0.28'
 }
@@ -9,7 +9,7 @@ android {
 		compileSdk = 35
 		buildToolsVersion = "35.0.0"
 		applicationId("com.wiley.fordummies.androidsdk.tictactoe")
-		minSdkVersion(26)
+		minSdkVersion(27)
 		targetSdkVersion(35)
 		versionCode = 1
 		versionName = "1.0"
@@ -41,7 +41,7 @@ android {
 			kotlin.srcDirs = ["src/main/kotlin"]
 		}
 	}
-	namespace("com.wiley.fordummies.androidsdk.tictactoe")
+	namespace = "com.wiley.fordummies.androidsdk.tictactoe"
 }
 
 dependencies {

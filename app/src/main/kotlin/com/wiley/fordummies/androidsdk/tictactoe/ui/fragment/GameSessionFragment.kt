@@ -3,7 +3,6 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,15 +12,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import com.wiley.fordummies.androidsdk.tictactoe.Game
 import com.wiley.fordummies.androidsdk.tictactoe.GameGrid
 import com.wiley.fordummies.androidsdk.tictactoe.R
@@ -36,7 +32,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.nio.charset.Charset
 import java.util.Objects
 import java.util.Random
 
@@ -128,12 +123,7 @@ class GameSessionFragment : Fragment(), MenuProvider {
             subtitle = resources.getString(R.string.game)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            (activity as AppCompatActivity).setShowWhenLocked(true)
-        } else {
-            (activity as AppCompatActivity).window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
-            (activity as AppCompatActivity).window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
-        }
+        (activity as AppCompatActivity).setShowWhenLocked(true)
 
         playNewGame()
     }
