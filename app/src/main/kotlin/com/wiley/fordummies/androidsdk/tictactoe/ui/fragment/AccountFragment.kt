@@ -30,6 +30,8 @@ class AccountFragment : Fragment(), View.OnClickListener {
 	private lateinit var mEtUsername: EditText
 	private lateinit var mEtPassword: EditText
 	private lateinit var mEtConfirm: EditText
+	private lateinit var mBtnAdd: Button
+	private lateinit var mBtnCancel: Button
 	private val mUserAccountViewModel: UserAccountViewModel by viewModels()
 
 	override fun onCreateView(
@@ -42,10 +44,10 @@ class AccountFragment : Fragment(), View.OnClickListener {
 		mEtUsername = v.findViewById(R.id.username)
 		mEtPassword = v.findViewById(R.id.password)
 		mEtConfirm = v.findViewById(R.id.password_confirm)
-		val btnAdd: Button = v.findViewById(R.id.done_button)
-		btnAdd.setOnClickListener(this)
-		val btnCancel: Button = v.findViewById(R.id.cancel_button)
-		btnCancel.setOnClickListener(this)
+		mBtnAdd = v.findViewById(R.id.done_button)
+		mBtnAdd.setOnClickListener(this)
+		mBtnCancel = v.findViewById(R.id.cancel_button)
+		mBtnCancel.setOnClickListener(this)
 
 		return v
 	}
@@ -91,7 +93,7 @@ class AccountFragment : Fragment(), View.OnClickListener {
 				mUserAccountViewModel.insert(userAccount)
 				Toast.makeText(
 					activity.applicationContext,
-					"New UserAccount added",
+					"New UserAccount $username added",
 					Toast.LENGTH_SHORT
 				).show()
 
