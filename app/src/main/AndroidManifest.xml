@@ -111,9 +111,6 @@
 		<activity
 			android:name="com.wiley.fordummies.androidsdk.tictactoe.ui.activity.MapsLocationActivity"
 			android:parentActivityName="com.wiley.fordummies.androidsdk.tictactoe.ui.activity.GameOptionsActivity" />
-		<activity
-			android:name="com.wiley.fordummies.androidsdk.tictactoe.ui.activity.MapsSearchActivity"
-			android:parentActivityName="com.wiley.fordummies.androidsdk.tictactoe.ui.activity.GameOptionsActivity" />
 
 		<service
 			android:name="com.wiley.fordummies.androidsdk.tictactoe.MediaPlaybackService"
