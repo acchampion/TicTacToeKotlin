@@ -2,7 +2,6 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -15,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.MediaPlaybackService
 import com.wiley.fordummies.androidsdk.tictactoe.R
@@ -35,6 +35,9 @@ class AudioFragment : Fragment(), View.OnClickListener {
     private val mRecordAudioIntent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
     private lateinit var mButtonStart: Button
     private lateinit var mButtonStop: Button
+    private lateinit var mButtonRecord: Button
+    private lateinit var mButtonSelect: Button
+    private lateinit var mAudioIntent: Intent
 
     private var mRecordAudioResult = registerForActivityResult(
         StartActivityForResult()
@@ -53,7 +56,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
         GetContent()
     ) { result ->
         val uriString = result.toString()
-        mAudioFileUri = Uri.parse(uriString)
+        mAudioFileUri = uriString.toUri()
     }
 
     override fun onCreateView(
@@ -66,10 +69,10 @@ class AudioFragment : Fragment(), View.OnClickListener {
         mButtonStart.setOnClickListener(this)
         mButtonStop = v.findViewById(R.id.buttonAudioStop)
         mButtonStop.setOnClickListener(this)
-        val buttonRecord = v.findViewById<Button>(R.id.buttonAudioRecord)
-        buttonRecord.setOnClickListener(this)
-        val buttonSelect = v.findViewById<Button>(R.id.buttonAudioSelect)
-        buttonSelect.setOnClickListener(this)
+        mButtonRecord = v.findViewById<Button>(R.id.buttonAudioRecord)
+        mButtonRecord.setOnClickListener(this)
+        mButtonSelect = v.findViewById<Button>(R.id.buttonAudioSelect)
+        mButtonSelect.setOnClickListener(this)
 
         // Guard against no audio recorder app (disable the "record" button).
         val activity: Activity = requireActivity()
@@ -96,7 +99,7 @@ class AudioFragment : Fragment(), View.OnClickListener {
             // Audio file doesn't exist, so load sample audio from resources.
             val audioResourceName = "android.resource://" + ctx.packageName +
                     File.separator + R.raw.sample_audio
-            Uri.parse(audioResourceName)
+            audioResourceName.toUri()
         }
     }
 
@@ -111,6 +114,16 @@ class AudioFragment : Fragment(), View.OnClickListener {
         } catch (npe: NullPointerException) {
             Timber.e("Could not set subtitle")
         }
+
+        mAudioIntent = Intent(requireActivity().applicationContext, MediaPlaybackService::class.java)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mButtonStart.setOnClickListener(null)
+        mButtonStop.setOnClickListener(null)
+        mButtonSelect.setOnClickListener(null)
+        mButtonRecord.setOnClickListener(null)
     }
 
     override fun onClick(view: View) {
@@ -118,22 +131,15 @@ class AudioFragment : Fragment(), View.OnClickListener {
         val viewId = view.id
         if (viewId == R.id.buttonAudioStart) {
             if (!mStarted) {
-                val musicIntent =
-                    Intent(activity.applicationContext, MediaPlaybackService::class.java)
-                musicIntent.putExtra("URIString", mAudioFileUri.toString())
+                mAudioIntent.putExtra("UriString", mAudioFileUri.toString())
                 Timber.d("URI: %s", mAudioFileUri.toString())
-                activity.startService(musicIntent)
+                activity.startService(mAudioIntent)
                 mStarted = true
                 mButtonStart.isEnabled = false
                 mButtonStop.isEnabled = true
             }
         } else if (viewId == R.id.buttonAudioStop) {
-            activity.stopService(
-                Intent(
-                    activity.applicationContext,
-                    MediaPlaybackService::class.java
-                )
-            )
+            activity.stopService(mAudioIntent)
             mStarted = false
             mButtonStart.isEnabled = true
             mButtonStop.isEnabled = false

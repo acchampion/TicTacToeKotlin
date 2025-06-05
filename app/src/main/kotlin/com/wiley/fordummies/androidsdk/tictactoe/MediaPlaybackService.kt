@@ -3,9 +3,9 @@ package com.wiley.fordummies.androidsdk.tictactoe
 import android.app.Service
 import android.content.Intent
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.IBinder
 import androidx.annotation.Keep
+import androidx.core.net.toUri
 import timber.log.Timber
 
 @Keep
@@ -25,16 +25,18 @@ class MediaPlaybackService : Service() {
 		super.onStartCommand(intent, flags, startId)
 		val extras = intent.extras
 		if (extras != null) {
-			val audioFileURIString = extras.getString("URIString")
-			val audioFileURI = Uri.parse(audioFileURIString)
-			Timber.d("URI = $audioFileURI")
-			try {
-				player.reset()
-				player.setDataSource(this.applicationContext, audioFileURI)
-				player.prepare()
-				player.start()
-			} catch (e: Exception) {
-				e.printStackTrace()
+			val audioFileUriString = extras.getString("UriString")
+			if (audioFileUriString != null) {
+				val audioFileUri = audioFileUriString.toUri()
+				Timber.d("URI = $audioFileUri")
+				try {
+					player.reset()
+					player.setDataSource(this.applicationContext, audioFileUri)
+					player.prepare()
+					player.start()
+				} catch (e: Exception) {
+					e.printStackTrace()
+				}
 			}
 		}
 

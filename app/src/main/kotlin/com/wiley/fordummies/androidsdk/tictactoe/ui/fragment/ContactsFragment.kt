@@ -2,6 +2,7 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
@@ -102,8 +104,8 @@ class ContactsFragment : Fragment() {
 	}
 
 	private fun lacksReadContactPermission(): Boolean {
-		val activity: Activity = requireActivity()
-		return activity.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED
+		val context: Context = requireContext()
+		return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED
 	}
 
 	private fun showContacts() {

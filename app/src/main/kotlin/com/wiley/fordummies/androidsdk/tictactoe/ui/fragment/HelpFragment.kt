@@ -3,7 +3,6 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.wiley.fordummies.androidsdk.tictactoe.R
 import com.wiley.fordummies.androidsdk.tictactoe.ui.activity.HelpWebViewActivity
@@ -55,7 +55,7 @@ class HelpFragment : Fragment(), View.OnClickListener {
 	}
 
 	private fun launchBrowser(url: String) {
-		val theUri = Uri.parse(url)
+		val theUri = url.toUri()
 		val launchBrowserIntent = Intent(Intent.ACTION_VIEW, theUri)
 		startActivity(launchBrowserIntent)
 	}

@@ -2,6 +2,7 @@ package com.wiley.fordummies.androidsdk.tictactoe.model
 
 import android.net.Uri
 import androidx.annotation.Keep
+import androidx.core.net.toUri
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -14,7 +15,7 @@ data class GalleryItem(
 	@Json(name = "owner") var owner: String = "") {
 
 	val photoPageUri: Uri
-        get() = Uri.parse("https://www.flickr.com/photos/")
+        get() = "https://www.flickr.com/photos/".toUri()
             .buildUpon()
             .appendPath(owner)
             .appendPath(id)

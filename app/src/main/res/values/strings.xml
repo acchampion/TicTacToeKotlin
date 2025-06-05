@@ -70,6 +70,8 @@
     <string name="no">No</string>
     <string name="permission_notice">This app asks permission to access contacts and to get location. Please grant these permissions.</string>
     <string name="read_contacts_permission_denied">User denied permission to read contacts.</string>
+    <string name="read_image_permission_denied">User denied permission to read images.</string>
+    <string name="read_video_permission_denied">User denied permission to read videos.</string>
     <string name="abandon_game">Abandon this game?</string>
     <string name="play_another_game">Play another game?</string>
 

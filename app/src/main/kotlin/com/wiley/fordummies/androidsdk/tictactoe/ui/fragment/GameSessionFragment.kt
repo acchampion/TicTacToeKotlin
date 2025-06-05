@@ -2,7 +2,6 @@ package com.wiley.fordummies.androidsdk.tictactoe.ui.fragment
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -390,7 +390,7 @@ class GameSessionFragment : Fragment(), MenuProvider {
         val phoneIntent = Intent(Intent.ACTION_DIAL)
         val phoneNumber = "842-822-4357" // TIC TAC HELP
         val uri = "tel:" + phoneNumber.trim { it <= ' ' }
-        phoneIntent.data = Uri.parse(uri)
+        phoneIntent.data = uri.toUri()
         startActivity(phoneIntent)
     }
 
