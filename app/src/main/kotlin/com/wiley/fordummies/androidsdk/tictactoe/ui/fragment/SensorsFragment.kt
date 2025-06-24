@@ -155,6 +155,7 @@ class SensorsFragment : Fragment(), SensorEventListener {
 		private val mSensorRangeTv: TextView = itemView.findViewById(R.id.sensor_range)
 		private val mSensorPowerTv: TextView = itemView.findViewById(R.id.sensor_power)
 		private val mSensorResTv: TextView = itemView.findViewById(R.id.sensor_res)
+
 		fun bind(sensor: Sensor) {
 			val name = String.format(Locale.getDefault(), "%-34s", sensor.name.trim { it <= ' ' })
 			mSensorNameTv.text = name

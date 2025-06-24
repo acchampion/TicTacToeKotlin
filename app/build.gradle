@@ -104,8 +104,6 @@ dependencies {
 	implementation("com.jakewharton.timber:timber:$rootProject.timber_version")
 	debugImplementation("com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanary_version")
 
-	implementation("com.squareup.okio:okio:$rootProject.okio_version")
-	implementation("com.squareup.okhttp3:okhttp:$rootProject.okhttp_version")
 	implementation("com.squareup.retrofit2:retrofit:$rootProject.retrofit_version")
 	implementation("com.squareup.retrofit2:converter-scalars:$rootProject.retrofit_version")
 	implementation("com.squareup.moshi:moshi:$rootProject.moshi_version")
