@@ -251,7 +251,7 @@ class GameSessionFragment : Fragment(), MenuProvider {
         mGameView.placeSymbol(pickedX, pickedY)
         mBoard.enableInput()
         if (mActiveGame.isActive) {
-            if (mFirstPlayerName.equals("Android")) {
+            if (mFirstPlayerName == "Android") {
                 mCurrentPlayerName = mSecondPlayerName
             } else {
                 mCurrentPlayerName = mFirstPlayerName

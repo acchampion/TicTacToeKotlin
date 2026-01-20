@@ -10,21 +10,21 @@ import androidx.annotation.Keep
 
 @Keep
 object Settings {
-	val NAME = "settings.db"
-	val ERROR = "error"
+	const val NAME = "settings.db"
+	const val ERROR = "error"
 
 	object Keys {
-		val OPT_NAME = "name"
-		val OPT_NAME_DEFAULT = ""
-		val OPT_PLAY_FIRST = "human_starts"
-		val OPT_PLAY_FIRST_DEF = true
+		const val OPT_NAME = "name"
+		const val OPT_NAME_DEFAULT = ""
+		const val OPT_PLAY_FIRST = "human_starts"
+		const val OPT_PLAY_FIRST_DEF = true
 
-		val SCOREPLAYERONEKEY = "ScorePlayerOne"
-		val SCOREPLAYERTWOKEY = "ScorePlayerTwo"
-		val GAMEKEY = "Game"
+		const val SCOREPLAYERONEKEY = "ScorePlayerOne"
+		const val SCOREPLAYERTWOKEY = "ScorePlayerTwo"
+		const val GAMEKEY = "Game"
 
-		val PREF_SEARCH_QUERY = "searchQuery"
-		val PREF_LAST_RESULT_ID = "lastResultId"
-		val PREF_IS_POLLING = "isPolling"
+		const val PREF_SEARCH_QUERY = "searchQuery"
+		const val PREF_LAST_RESULT_ID = "lastResultId"
+		const val PREF_IS_POLLING = "isPolling"
 	}
 }

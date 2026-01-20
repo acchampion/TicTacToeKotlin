@@ -6,7 +6,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.os.Build;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -19,6 +18,7 @@ import com.wiley.fordummies.androidsdk.tictactoe.model.SettingsDataStore;
 import kotlin.coroutines.CoroutineContext;
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.Dispatchers;
+import leakcanary.LeakCanary;
 import timber.log.Timber;
 
 @Keep
@@ -41,6 +41,12 @@ public class TicTacToeApplication extends Application implements Configuration.P
 		super.onCreate();
 		mContext = this;
 		mDataStore = new SettingsDataStore(this, mScope);
+
+        LeakCanary.Config config = LeakCanary.getConfig()
+                .newBuilder()
+                .retainedVisibleThreshold(5)
+                .build();
+        LeakCanary.setConfig(config);
 
 		final boolean mIsDebuggable = ( 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ));
 

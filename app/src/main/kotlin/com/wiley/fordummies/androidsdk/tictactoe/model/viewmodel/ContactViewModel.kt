@@ -21,74 +21,76 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 @Keep
 class ContactViewModel(application: Application) : AndroidViewModel(application) {
-	private var mRepository: ContactRepository
-	private var mAllContactsData: ContactLiveData
-	lateinit var mAllContactsList: List<Contact>
-	var mContactList: MutableList<Contact> = CopyOnWriteArrayList()
+    private var mRepository: ContactRepository
+    private var mAllContactsData: ContactLiveData
+    lateinit var mAllContactsList: List<Contact>
+    var mContactList: MutableList<Contact> = CopyOnWriteArrayList()
 
-	private val classTag = javaClass.simpleName
+    private val classTag = javaClass.simpleName
 
-	private val PROJECTION = arrayOf(
-		ContactsContract.Contacts._ID,
-		ContactsContract.Contacts.LOOKUP_KEY,
-		ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
-	)
+    private val PROJECTION = arrayOf(
+        ContactsContract.Contacts._ID,
+        ContactsContract.Contacts.LOOKUP_KEY,
+        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
+    )
 
-	init {
-		mRepository = ContactRepository(application)
-		mAllContactsData = ContactLiveData(application)
-	}
+    init {
+        mRepository = ContactRepository(application)
+        mAllContactsData = ContactLiveData(application)
+    }
 
-	fun getContactsLiveData(resolver: ContentResolver): ContactLiveData {
-		mContactList = loadContacts(resolver)
-		mAllContactsData.value = mContactList
-		assert(mAllContactsData.value != null)
-		return mAllContactsData
-	}
+    fun getContactsLiveData(resolver: ContentResolver): ContactLiveData {
+        mContactList = loadContacts(resolver)
+        mAllContactsData.value = mContactList
+        assert(mAllContactsData.value != null)
+        return mAllContactsData
+    }
 
-	fun loadContacts(mResolver: ContentResolver): MutableList<Contact> {
-		val cursor: Cursor? = mResolver.query(
-			ContactsContract.Contacts.CONTENT_URI,
-			PROJECTION,
-			null,
-			null,
-			ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"
-		)
+    fun loadContacts(mResolver: ContentResolver): MutableList<Contact> {
+        val cursor: Cursor? = mResolver.query(
+            ContactsContract.Contacts.CONTENT_URI,
+            PROJECTION,
+            null,
+            null,
+            ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"
+        )
 
-		try {
-			if (cursor != null) {
-				cursor.moveToFirst()
-				val count = cursor.count
-				var position = cursor.position
-				while (position < count) {
-					if (cursor.columnCount > 1) {
-						val nameIndex =
-							cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-						if (nameIndex >= 0) {
-							val contactName = cursor.getString(nameIndex)
-							val contact = Contact(contactName)
-							mContactList.add(contact)
-							cursor.moveToNext()
-							position = cursor.position
-						} else {
-							Timber.tag(classTag).e("Invalid column index")
-						}
-					}
-				}
-			}
-		} finally {
-			if (cursor != null && cursor.count > 0) {
-				cursor.close()
-			}
-		}
+        try {
+            if (cursor != null) {
+                cursor.moveToFirst()
+                val count = cursor.count
+                var position = cursor.position
+                while (position < count) {
+                    if (cursor.columnCount > 1) {
+                        val nameIndex =
+                            cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+                        if (nameIndex >= 0) {
+                            val contactName = cursor.getString(nameIndex)
+                            if (contactName != null) {
+                                val contact = Contact(contactName)
+                                mContactList.add(contact)
+                            }
+                            cursor.moveToNext()
+                            position = cursor.position
+                        } else {
+                            Timber.tag(classTag).e("Invalid column index")
+                        }
+                    }
+                }
+            }
+        } finally {
+            if (cursor != null && cursor.count > 0) {
+                cursor.close()
+            }
+        }
 
-		return mContactList
-	}
+        return mContactList
+    }
 
-	fun getAllContacts(): ContactLiveData {
-		mAllContactsList = mRepository.mContactList
-		mAllContactsData.value = mAllContactsList
-		assert(mAllContactsData.value != null)
-		return mAllContactsData
-	}
+    fun getAllContacts(): ContactLiveData {
+        mAllContactsList = mRepository.mContactList
+        mAllContactsData.value = mAllContactsList
+        assert(mAllContactsData.value != null)
+        return mAllContactsData
+    }
 }

@@ -52,7 +52,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fragment_container)) { v, windowInsets ->
-            var sysBarsCutout = windowInsets.getInsets(
+            val sysBarsCutout = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or
                         WindowInsetsCompat.Type.displayCutout() or
                         WindowInsetsCompat.Type.systemGestures()
