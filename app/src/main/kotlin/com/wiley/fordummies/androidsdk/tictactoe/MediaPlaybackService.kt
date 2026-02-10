@@ -3,6 +3,7 @@ package com.wiley.fordummies.androidsdk.tictactoe
 import android.app.Service
 import android.content.Intent
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.IBinder
 import androidx.annotation.Keep
 import androidx.core.net.toUri
@@ -17,7 +18,9 @@ class MediaPlaybackService : Service() {
 	}
 
 	override fun onCreate() {
-		player = MediaPlayer.create(this, R.raw.sample_audio)
+        val audioAttributionContext =
+            if (Build.VERSION.SDK_INT >= 30) createAttributionContext("audioPlayback") else this
+        player = MediaPlayer.create(audioAttributionContext, R.raw.sample_audio)
 		player.apply { isLooping = true }
 	}
 
