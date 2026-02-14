@@ -105,9 +105,7 @@ class FlickrFetchr {
 					val photoResponse = flickrResponse.photos
 					val galleryItems = photoResponse.galleryItems
 					val validGalleryItems: MutableList<GalleryItem> = ArrayList()
-					for (item in galleryItems) {
-						validGalleryItems.add(item)
-					}
+					validGalleryItems.addAll(galleryItems)
 					responseLiveData.value = validGalleryItems
 				}
 			}

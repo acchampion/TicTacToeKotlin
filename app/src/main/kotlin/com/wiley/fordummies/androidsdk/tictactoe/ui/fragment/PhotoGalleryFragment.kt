@@ -146,7 +146,7 @@ class PhotoGalleryFragment : VisibleFragment(), MenuProvider {
 				R.drawable.image_placeholder
 			) ?: ColorDrawable()
 			Glide.with(requireContext())
-				.load(galleryItem.url)
+				.load(galleryItem.photoUri)
 				.placeholder(placeholder)
 				.into(holder.itemImageView)
 		}

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id 'com.android.application' version '9.0.0'
+    id 'com.android.application' version '9.0.1'
     id 'com.google.devtools.ksp' version '2.3.2'
 }
 
@@ -117,6 +117,7 @@ dependencies {
     implementation("com.squareup.moshi:moshi:$rootProject.moshi_version")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:$rootProject.moshi_version")
     implementation("com.squareup.retrofit2:converter-moshi:$rootProject.retrofit_version")
+
     implementation("com.github.bumptech.glide:glide:$rootProject.glide_version")
     implementation("com.github.bumptech.glide:cronet-integration:$rootProject.glide_version")
     // Skip this if you don"t want to use integration libraries or configure Glide.

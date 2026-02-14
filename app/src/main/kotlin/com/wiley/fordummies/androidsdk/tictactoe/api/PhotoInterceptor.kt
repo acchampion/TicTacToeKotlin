@@ -17,7 +17,6 @@ class PhotoInterceptor : Interceptor {
             .addQueryParameter("format", "json")
             .addQueryParameter("nojsoncallback", "1")
             .addQueryParameter("extras", "url_s")
-            .addQueryParameter("safesearch", "1")
             .build()
         Timber.tag(classTag).d("Generated new Url: %s", newUrl)
         val newRequest: Request = originalRequest.newBuilder()
