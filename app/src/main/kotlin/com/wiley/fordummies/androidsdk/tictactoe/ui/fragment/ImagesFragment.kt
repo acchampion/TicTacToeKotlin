@@ -74,7 +74,7 @@ class ImagesFragment : Fragment(), View.OnClickListener {
                 mBitmapLiveData.postValue(mBitmap)
                 mImageView.setImageBitmap(mBitmap)
             }
-            runnable.run()
+            requireActivity().runOnUiThread(runnable)
         }
     }
 
@@ -94,7 +94,7 @@ class ImagesFragment : Fragment(), View.OnClickListener {
                     mImageView.setImageBitmap(mBitmap)
                     mImageView.contentDescription = "Image was set"
                 }
-                runnable.run()
+                requireActivity().runOnUiThread(runnable)
             } else {
                 Timber.tag("PhotoPicker").d("No media selected")
             }

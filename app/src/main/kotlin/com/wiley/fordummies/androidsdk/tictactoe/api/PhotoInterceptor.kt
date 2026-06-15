@@ -14,9 +14,6 @@ class PhotoInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest: Request = chain.request()
         val newUrl: HttpUrl = originalRequest.url.newBuilder()
-            .addQueryParameter("format", "json")
-            .addQueryParameter("nojsoncallback", "1")
-            .addQueryParameter("extras", "url_s")
             .build()
         Timber.tag(classTag).d("Generated new Url: %s", newUrl)
         val newRequest: Request = originalRequest.newBuilder()

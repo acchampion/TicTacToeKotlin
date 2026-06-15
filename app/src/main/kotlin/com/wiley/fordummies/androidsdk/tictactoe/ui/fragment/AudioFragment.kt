@@ -75,7 +75,6 @@ class AudioFragment : Fragment(), View.OnClickListener {
         mButtonSelect.setOnClickListener(this)
 
         // Guard against no audio recorder app (disable the "record" button).
-        val activity: Activity = requireActivity()
 //        val packageManager = activity.packageManager
 //        if (packageManager.resolveActivity(
 //                mRecordAudioIntent,

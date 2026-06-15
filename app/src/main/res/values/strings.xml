@@ -5,7 +5,7 @@
     <string name="permission_launch_activity">"This permission allows launching an activity in this application "</string>
 	<string name="permission_show_notification">This permission allows notifications about new photos.</string>
     <string name="audio_playback_attribution">"This app plays audio"</string>
-    <string name="empty_string"></string>
+    <string name="empty_string" translatable="false"></string>
 
     <!-- UI Text -->
     <string name="sources_title">Sources</string>

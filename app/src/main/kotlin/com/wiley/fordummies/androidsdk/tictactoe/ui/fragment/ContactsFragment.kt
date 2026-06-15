@@ -128,6 +128,7 @@ class ContactsFragment : Fragment() {
 	private class ContactHolder constructor(inflater: LayoutInflater, parent: ViewGroup?) :
 		RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_contact, parent, false)) {
 		private val mContactTextView: TextView = itemView.findViewById(R.id.contact_info)
+
 		fun bind(contact: Contact) {
 			val name = contact.name
 			mContactTextView.text = name
