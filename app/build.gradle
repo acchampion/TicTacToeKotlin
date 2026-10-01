@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id 'com.android.application' version '9.2.1'
-    id 'com.google.devtools.ksp' version '2.3.2'
+    id 'com.android.application' version '9.4.1'
+    id 'com.google.devtools.ksp' version '2.3.6'
 }
 
 android {

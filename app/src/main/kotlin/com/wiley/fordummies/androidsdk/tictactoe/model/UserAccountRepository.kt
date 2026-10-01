@@ -24,20 +24,20 @@ class UserAccountRepository internal constructor(application: Application) {
         return mUserAccountDao.findByName(account.name, account.password)
     }
 
-    // You MUST call this on a non-UI thread or the app will throw an exception.
-    // I'm passing a Runnable object to the database.
-    fun insert(account: UserAccount) {
-        UserAccountDatabase.databaseWriteExecutor.execute {
-			mUserAccountDao.insert(
+	// Similarly, I'm calling update() on a non-UI thread.
+	fun update(account: UserAccount) {
+		UserAccountDatabase.databaseWriteExecutor.execute {
+			mUserAccountDao.update(
 				account
 			)
 		}
 	}
 
-	// Similarly, I'm calling update() on a non-UI thread.
-	fun update(account: UserAccount) {
+	// You MUST call this on a non-UI thread or the app will throw an exception.
+	// I'm passing a Runnable object to the database.
+	fun insert(account: UserAccount) {
 		UserAccountDatabase.databaseWriteExecutor.execute {
-			mUserAccountDao.update(
+			mUserAccountDao.insert(
 				account
 			)
 		}
